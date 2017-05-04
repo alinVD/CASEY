@@ -1,0 +1,23 @@
+file_search_maxima: ["~/cvs/CASEY/maxima/###.mac","C:\\cygwin\\home\\dp2\\cvs\\CASEY\\maxima\\###.mac"];
+load("delta");
+load("dsimplify");
+load("dRewrite");
+expectations : [ 	expectation(x(T,R)) = 1/n,
+			expectation(x(T,R)*x(A,B)) = Cases(	
+								Case(In(Df(Eq(T,R)), Df(Eq(A,B))), 1/n),
+								Case(In(Df(Eq(T,R)),Df(Eq(A),Eq(B))), 0) ,
+								Case(In(Df(Eq(T),Eq(R)),Df(Eq(A,B))), (g-n)/(n^2*(g-1))), 
+								Case(In(Df(Eq(T),Eq(R)),Df(Eq(A),Eq(B))), (g)/(n^2*(g-1))))];
+makeRVFamily(x, randomHistogram, [f], expectations );
+makeRV(x1,randomHistogram,[f]);
+
+expression : sum(x1(i1,r)*f(i1),i1, 1, n);
+res1 : var (expression);
+print("Result of var: ",res1);
+
+res2 : dsimplify (res1);
+print("Result of dsimplify: ",res2);
+res4 : drewrite (res2);
+print("Result of drewrite: ",res4);
+res3 : factor (res4);
+print("Result of factorize: ",res3);

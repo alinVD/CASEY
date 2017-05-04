@@ -1,0 +1,31 @@
+deep_caseslist:[];
+deep_copy(caseslist, level):=
+block(
+ [temp_list:[]],
+/* print("In deep_copy - caseslist is ", caseslist),
+   print("In deep_copy - length(caseslist) is ", length(caseslist)), 
+debug comment*/ 
+ for i:1 step 1 thru length(caseslist) do
+ (
+   if not atom(caseslist[i]) then 
+   (
+     /* print("In deep_copy_ not-atom case - caseslist[i] = ",caseslist[i]),
+     debug comment */
+     deep_copy( args(args(caseslist[i])), level + 1) 
+   )  
+   /* 
+   else 
+   (
+      print("the atom is ", caseslist[i])
+   )
+   debug comment */
+ ),
+  if equal(level, 0) then
+  (
+     deep_caseslist:append(deep_caseslist, caseslist)
+  ), 
+  /*  print( apply(op(caseslist), caseslist)),
+  debug comment */
+  return (apply(op(caseslist), caseslist))
+);
+ 

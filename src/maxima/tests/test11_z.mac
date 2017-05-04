@@ -1,0 +1,29 @@
+file_search_maxima: ["/home/zaki/maxima_prgs/###.mac","~/cvs/CASEY/maxima/###.mac","C:\\cygwin\\home\\dp2\\cvs\\CASEY\\maxima\\###.mac"];
+load("delta_new");
+load("can");
+load("dsimplify");
+load("dRewrite");
+P : 1/b;
+expectations : [ 	 
+			expectation(X(I,K)) = Cases( 
+								Case(In(K), P)
+		)];
+
+makeRVFamily(X, randomHistogram, [P], expectations );
+makeRV(X,randomHistogram,[P]);
+
+sumexpand:true;
+
+Z : sum(sum(f(i)*g(j)*X(i,j),i,1,n),j,1,n);
+
+print("Input : ",Z);
+
+res : ex1(Z);
+res2 : dRewrite ( dsimplify (res) );
+print("Result of ex: ",res2);
+
+res1 : var (Z);
+res3 : dRewrite (dsimplify (res1));
+print("Result of var: ",res3);
+
+

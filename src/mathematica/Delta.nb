@@ -1,0 +1,659 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.1'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     21998,        618]*)
+(*NotebookOutlinePosition[     22661,        641]*)
+(*  CellTagsIndexPosition[     22617,        637]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["\<\
+Clear[MakeRVFamily,MakeRVFamily2,DeleteRVFamily,DeleteRVFamily2,\
+ExecuteRules,
+    ExecuteRules2,DeleteRules,InitRV,ListRules,MakeRV,MakeRV2,DeleteRV,
+    DeleteRV2];
+MakeRVFamily[X_,NAME_,VARS_,RULES_] := 
+  Module[{TEMP},TEMP = RVFLIST; Clear[RVFLIST];
+    RVFLIST=MakeRVFamily2[X,NAME,VARS,TEMP,RULES]]
+(* Add new rule for existing variable *)
+
+MakeRVFamily2[X_,NAME_,
+    VARS1_,{L___,{X_,NAME_,VARS2_,{H__}},R___}, {RULES__}] := 
+  MakeRVFamily2[X,NAME,
+    Union[VARS1,VARS2],{L,{X,NAME,Union[VARS1,VARS2],{H,RULES}},R},{}]
+MakeRVFamily2[X_,NAME_,VARS_,{L__},{}] := {L}
+(* Add new variable & its rules *)
+
+MakeRVFamily2[X_,NAME_,VARS_,{LIST___},{H__}]:=
+  MakeRVFamily2[X,NAME,VARS,{LIST,{X,NAME,VARS,{H}}},{}]
+DeleteRVFamily[NAME_] := 
+  Module[{TEMP},TEMP=RVFLIST;Clear[RVFLIST];
+    RVFLIST=DeleteRVFamily2[NAME,TEMP];]
+DeleteRVFamily2[NAME_,{L___,{X_,NAME_,VARS_,RULES_},R___}] := {L,R}
+DeleteRVFamily2[NAME_,{L___}] :={L}
+InitRV[L___] := Module[{},RVFLIST={};RVLIST={};Clear[ExBase];]
+
+MakeRV[X_,NAME_,VARS_] := MakeRV2[X,NAME,VARS,RVLIST]
+MakeRV2[X_,NAME_,
+    VARS_,{L___,X_,
+      R___}] := \"Error: That random variable is already defined.\"
+MakeRV2[X_,NAME_,VARS_,{L___}]:=
+  Module[{TEMP},TEMP=RVLIST;Clear[RVLIST];RVLIST=Join[TEMP,{X,NAME}];
+    ExecuteRules[X,NAME,VARS,RVFLIST];]
+ExecuteRules[X_,
+    NAME_,{VARS1___},{L___,{Y_,
+        NAME_,{VARS2___},{Equal[Expectation[A_],B_],T___}},R___}] := 
+  Module[{REPLACELIST},
+    REPLACELIST=Join[{Y\\[Rule]X},ListRules[{VARS1},{VARS2}]];
+    ExecuteRules2[(A/.REPLACELIST),B/.REPLACELIST];
+    ExecuteRules[X,NAME,{VARS1},{L,{Y,NAME,{VARS2},{T}}}]]
+ExecuteRules[X_,NAME_,VARS1_,{L,{Y_,NAME,{VARS2},{}}}] := \"Done\"
+ExecuteRules[L___] := \"Error Did Not Find Specified Random Variable\"
+ExecuteRules2[A_,B_] := Module[{},ExBase[A]:=B;]
+DeleteRV[X_,NAME_] := 
+  Module[{TEMP},TEMP=RVLIST;Clear[RVLIST];RVLIST=DeleteRV2[X,TEMP];
+    DeleteRules[X,NAME,RVFLIST];]
+DeleteRV2[X_,{L___,X_,NAME_,R___}]:={L,R}
+DeleteRules[X_,
+    NAME_,{L1___,{Y_,NAME_,VARS_,{Equal[Expectation[L_],R_],T___}},R1___}]:=
+  Module[{},Unset[ExBase[L/.{Y\\[Rule]X}]];
+    DeleteRules[X,NAME,{{Y,NAME,VARS,{T}}}];]
+DeleteRules[L__] := Done
+
+ListRules[{A_,B___},{C_,D___}] := Join[{C\\[Rule]A},ListRules[{B},{D}]]
+ListRules[{},{}] := {}
+
+Clear[d];
+d[i_, j_] := 1 /; i == j
+d[i_, j_] := 0 /; i != j
+SetAttributes[d, Orderless]
+
+Clear[dsimpf, dExp, dRewrite, dsmpf, dsmpfCheck, dsmpfLook, dsmpfLookCheck, 
+    dsmpfTimesCheck, dsmpfNoRecur, splitProduct, dBreakSum];
+
+(*Break a product into terms that depend on i and terms that do not depend on \
+\\
+\\
+i
+    The function returns a list with two elements, 
+  the first is the pruduct of elements
+    free of i the rest are elements depending on i*)
+
+splitProduct[ i_, {h_, t__}] :=  
+  Module[{f, d}, {f, d} = splitProduct[i, {t}]; 
+    If[FreeQ[h, i], {f*h, d}, {f, d*h} ]]
+splitProduct[ i_, {h_}] := {h, 1} /; FreeQ[h, i]
+splitProduct[ i_, {h_}] := {1, h} (* otherwise *)
+
+(* rewriting rules to simplify formulas; can apply only on clean formulas *)
+
+dRewrite[HoldPattern[Sum[f_[i_], {i_, N__}]]] := S[f]
+dRewrite[HoldPattern[Sum[f_[i_]^2, {i_, N__}]]] := SJ[f]
+dRewrite[HoldPattern[Sum[f_[i_]g_[i_], {i_, N__}]]] := P[f g]
+dRewrite[HoldPattern[Sum[f_[i_]^n_ g_[i_], {i_, N__}]]] := P[f^n g]
+dRewrite[HoldPattern[Sum[f_[i_]^n_ g_[i_]^m_, {i_, N__}]]] := P[f^n g^m]
+(* If none of the patterns matches go inside the sums *)
+
+dRewrite[HoldPattern[Sum[x_, {i_, N__}]]] := 
+  Sum[ Evaluate[dRewrite[x], {i, N}]]
+dRewrite[HoldPattern[Sum[x_, {i_, N__}, L__]]] := 
+  dRewrite[Sum[Sum[x, L], {i, N}]]
+dRewrite[x : Times[_, __]] := Map[dRewrite, x]
+dRewrite[x : Plus[_, __]] :=  Map[dRewrite, x]
+dRewrite[x_^n_] := dRewrite[x]^n /; n > 0
+dRewrite[x_] := x
+
+dRewriteCleanIndex[HoldPattern[Sum[x_, {i_, N__}]], {h_, t__}] := 
+  Sum[Evaluate[dRewriteCleanIndex[x /. {i -> h}, {t}]], {h, N}]
+dRewriteCleanIndex[HoldPattern[Sum[x_, {i_, N__}, R__]], {h_, t__}] := 
+  Sum[Evaluate[dRewriteCleanIndex[Sum[x /. {i -> h}, R], {t}]], {h, N}]
+dRewriteCleanIndex[x_ y_, l__] := 
+  dRewriteCleanIndex[x, l] dRewriteCleanIndex[y, l]
+dRewriteCleanIndex[x_ + y_, l__] := 
+  dRewriteCleanIndex[x, l] + dRewriteCleanIndex[y, l]
+dRewriteCleanIndex[x_^n_Integer, l__] := dRewriteCleanIndex[x, l]^n
+dRewriteCleanIndex[x_, __] := x
+
+(* Main simplification method *)
+
+(* rewrite sums in better form *)
+
+dsmpf[HoldPattern[Sum[x_, {i_, N__}, L__]]] := dsmpf[Sum[Sum[x, L], {i, N}]]
+
+(* look for delta functions that can be reduced *)
+
+dsmpf[d[i_, j_]^n_] := d[i, j] /; n > 0
+(*dsmpf[d[i_, i_]] :=  1*)
+(*dsmpf[Sum[x : Times[a___, d[i_, j_]^n_, b___], L__]] := 
+    dsmpf[Sum[Times[a, d[i, j], b], L]] /; n > 0 *)
+
+dsmpf[HoldPattern[Sum[ d[i_, j_], {i_, N__}]]] := 1
+dsmpf[HoldPattern[Sum[x : Times[a___, d[i_, j_], b___], {i_, N__}]]] := 
+  dsmpf[Times[a, b] /. {i -> j}] 
+
+(* pull factors out of sums *)
+
+dsmpf[HoldPattern[Sum[Times[c_, x__], {i_, N__}]]] := 
+  Module[{f, d}, {f, d} = splitProduct[i, {x}]; 
+      c f  Sum[Evaluate[dsmpf[Evaluate[d]]], {i, N}]] /; FreeQ[c, i]
+
+(* separate pluses inside sums *)
+
+dsmpf[HoldPattern[Sum[Plus[x__], L__]]] := 
+  Map[ Function[y, dsmpf[Sum[Evaluate[y], L]]], Plus[x]]
+dsmpf[HoldPattern[Sum[c_ Plus[x__], L__]]] := 
+  Map[ Function[y, dsmpf[Sum[c Evaluate[y], L]]], Plus[x]]
+
+ (* give up and look inside *)
+ 
+dsmpf[HoldPattern[Sum[x_ , L__]]] := Sum[Evaluate[dsmpf[Expand[x]]], L]
+
+(* need fixed point call otherwise some simplifications are missed *)
+
+dsmpf[x : Times[_, __]] := Map[dsmpf, x]
+dsmpf[x : Plus[_, __]] := Map[dsmpf, x]
+dsmpf[x_^n_] := dsmpf[x]^n /; n > 0
+dsmpf[x_] := x
+
+(* Checking algorithm - 
+    make sure indices in deltas are summed over same ranges *)
+
+(* Change form of suns *)
+
+dsmpfCheck[Sum[x_, {i_, N__}, L__], L2___] := 
+  dsmpfCheck[Sum[Sum[x, L], {i, N}], L2]
+(* Indices are summed over same ranges *)
+
+dsmpfCheck[x : Times[d[i_, j_]], L1___, {i_, N__}, M1___, {j_, N__}, 
+    R1___] := \"\"
+
+dsmpfCheck[x : Times[d[j_, i_]], L1___, {i_, N__}, M1___, {j_, N__}, 
+    R1___] := \"\"
+(* or not *)
+
+dsmpfCheck[x : Times[d[j_, i_]], L___] := 
+  Hold[\"Error: indices \" i \" and \" j \" do not have proper ranges.\"]
+(* Same ranges, need to recur and keep looking *)
+
+dsmpfCheck[x : Times[a___, d[i_, j_], b___], L1___, {i_, N__}, 
+    M1___, {j_, N__}, R1___] := 
+  dsmpfCheck[Times[a, b], L1, {i, N}, M1, {j, N}, R1]
+dsmpfCheck[x : Times[a___, d[j_, i_], b___], L1___, {i_, N__}, 
+    M1___, {j_, N__}, R1___] := 
+  dsmpfCheck[Times[a, b], L1, {i, N}, M1, {j, N}, R1]
+dsmpfCheck[x : Times[a___, d[j_, i_], b___], L___] := 
+  Hold[\"Error: indices \" i \" and \" j \" do not have proper ranges.\"]
+
+(*dsmpfCheck[Sum[x_, {i_, s_, j_}], L___, {j_, s_, N_}, R___] := \"\"*)
+(* 
+  Ex : If j = 1 : N and i = 1 : j, replace with i = 1 : N *)
+
+dsmpfCheck[Sum[x_, {i_, s_, j_}], L___, {j_, s_, N_}, R___] := 
+  dsmpfCheck[x, {i, s, N}, L, {j, s, N}, R]
+(* Same thing, necessary to deal with limits including[brackets] *)
+
+dsmpfCheck[Sum[x_, {i_, s_, r_[j_]}], L___, {j_, s_, N_}, R___] := 
+  dsmpfCheck[x, {i, s, N}, L, {j, s, N}, R]
+
+(* Recursive checks *)
+dsmpfCheck[Sum[x_, L__], V___] := dsmpfCheck[x, L, V]
+
+dsmpfCheck[a_ + b_, L___] := dsmpfCheck[a, L] dsmpfCheck[b, L]
+dsmpfCheck[a_*b_, L___] := dsmpfCheck[a, L] dsmpfCheck[b, L]
+dsmpfCheck[x_^n_, L___] := dsmpfCheck[x, L] /; n > 0
+dsmpfCheck[x_, L___] := \"\"
+
+(* DSimplify - run fixed point call on dsmpf, 
+  then dRewrite to clean up *)
+Clear[DSimplify]
+(* DSimplify[x_] := 
+    Module[ {y, z}, y = FixedPoint[dExp, x]; z = FixedPoint[dsmpf, y]; 
+      Simplify[dRewrite[Simplify[z]]] ] *)
+
+DSimplify[x_] := 
+  Module[ {z}, z = FixedPoint[dsmpf, x]; Simplify[dRewrite[Simplify[z]]] ]
+
+
+DSimplifyCI[x_] := 
+  Module[{y, z}, y = FixedPoint[dExp, x]; z = FixedPoint[dsmpf, y]; 
+    Simplify[dRewriteCleanIndex[
+        dRewrite[Simplify[z]], {i, j, k, l, m, n, o, p, q}]]]
+
+
+DSimplifySJ[x_] := Simplify[ rewriteSJ[DSimplify[x]]]
+rewriteSJ[x_] := x /. SJ[y_] -> SqErr[y] + S[y]^2/N
+
+
+(*********************************************************************
+* In order for expectation to work properly, all range variables should 
+* be unique. This functions achieve this.
+**********************************************************************)
+Clear[ SubstitutionRange, SubstitutionList, MakeVariablesUnique ];
+SubstitutionRange[ {j_,N___} ] := j->Unique[i];
+
+SubstitutionList[L__] := Map[ SubstitutionRange, {L} ];
+
+MakeVariablesUnique[ HoldPattern[ Sum[x_, L__] ] ] := Module[ {y,s,z,Lp}, \
+y=MakeVariablesUnique[x]; 
+\ts=SubstitutionList[L]; z=y/. s; Lp=L/.s; Sum[ Evaluate[z], Evaluate[Lp]]]
+MakeVariablesUnique[ x_ + y_] := MakeVariablesUnique[x] + \
+MakeVariablesUnique[y];
+MakeVariablesUnique[ x_ * y_] := MakeVariablesUnique[x] * \
+MakeVariablesUnique[y];
+MakeVariablesUnique[ x_^ n_Integer ] := Module[{rez,i}, rez = 1; For[ i=0, \
+i<n, rez = rez * MakeVariablesUnique[x]; i++]; rez ] /; n>0
+MakeVariablesUnique[ f_[ L__ ] ] := Map[ MakeVariablesUnique, f[L] ];
+MakeVariablesUnique[ x_ ] := x;
+\t
+
+(* Definition of expectation; Random variable sets are listed in RVLIST. 
+Each set is considered independent of eachother.
+*)
+
+Clear[Ex, ExUnique, Var,ExFreeQ]
+
+ExFreeQ[c_,{X_,NAME_,R___}] := ExFreeQ[c,{R}] /; FreeQ[c,X]
+ExFreeQ[c_,{}] := 1
+ExFreeQ[c_,L_] := 0
+
+Ex[x_] := Module[ {ux}, ux=MakeVariablesUnique[x]; ExUnique[ux] ]
+
+ExUnique[HoldPattern[Sum[x_, L__]]] := Sum[Evaluate[ExUnique[x]], L]
+(*Push everything inside and collapse multiple sums*)
+
+ExUnique[x_ HoldPattern[Sum[y_, L__]],LI___] := Sum[Evaluate[ExUnique[x y]], \
+L]
+ExUnique[Sum[x_, {i_, N_}]^2,L___] := 
+  Sum[ Evaluate[ExUnique[x (x /. i -> ip)]], {i, N}, {ip, N}]
+ExUnique[x_ y_] := Ex[x y, RVLIST]
+Ex[x_ y_, {L___,X_,NAME_,R___}] := ExUnique[x] ExUnique[y] /; \
+MemberQ[x,X[__]] && \\
+FreeQ[y,X[__]]
+Ex[x_ + y_,L___] := ExUnique[x] + ExUnique[y]
+ExUnique[c_] := Ex[c,RVLIST]
+Ex[c_  x_,L_] := 
+  c ExUnique[x] /; ExFreeQ[c,L]==1
+Ex[c_,L___] := c /; ExFreeQ[c,L]==1
+
+Ex[x_,L___] := Module[ {y},  y = Expand[x]; If[ x === y, ExBase[x] , \
+ExUnique[y]] ] \\
+\\
+
+(* 
+  apply the base rules if no simplification works *)
+
+(* defining variance. 
+      Need to hold the evaluation of x since otherwise index renaming does 
+not kick in and two sums go over the same index (mess) *)
+SetAttributes[Var,HoldAll]
+Var[x_] := Ex[Evaluate[x] Evaluate[x]] - Ex[Evaluate[x]]^2
+
+SetAttributes[Cov, HoldAll]
+Cov[x_, y_] := 
+  Ex[ Evaluate[x] Evaluate[y] ] - Ex[Evaluate[x]] Ex[Evaluate[y]]
+
+Clear[Eq, EqRed, EqSet, EqDot, EqCross, EqReplace];
+
+(* EqAdd - combine lists *)
+EqAdd[{A__}, {B__}, R___] := EqAdd[{A, B}, R]
+EqAdd[{A__}, {}, R___] := EqAdd[{A}, R]
+EqAdd[{A__}] := {A}
+
+(* EqDot - 
+    add a new equivalence class Eq[
+        A] to each equivalence set in the given list *)
+
+EqDot[Eq[A__], {EqSet[H__], R___}] := 
+  EqAdd[{EqSet[Eq[A], H]}, EqDot[Eq[A], {R}]]
+EqDot[Eq[A__], {}] := {}
+(*EqDot[Eq[A__], EqSet[H__]] := EqSet[Eq[A], H]*)
+
+(* EqCross - 
+    Generate all new equivalence sets that can be made by adding element A to \
+\\
+\\
+
+all the sets in the list *)
+
+EqCross[Eq[A_], {EqSet[Eq[H__], T___], R___}] := 
+  EqAdd[{EqSet[Eq[A], Eq[H], T], EqSet[Eq[A, H], T]}, 
+    EqDot[Eq[H], EqCross2[Eq[A], {EqSet[T]}]], EqCross[Eq[A], {R}]]
+EqCross2[Eq[A_], {EqSet[Eq[H__], T___], R___}] := 
+  EqAdd[{EqSet[Eq[A, H], T]}, EqDot[Eq[H], EqCross2[Eq[A], {EqSet[T]}]], 
+    EqCross[Eq[A], {R}]]
+EqCross[Eq[A_]] := {}
+EqCross[Eq[A_], {}] := {}
+EqCross[Eq[A_], {EqSet[]}] := {}
+EqCross2[Eq[A_]] := {}
+EqCross2[Eq[A_], {}] := {}
+EqCross2[Eq[A_], {EqSet[]}] := {}
+
+(* EqGen - Generate all possible equivalence sets from the given list *)
+
+EqGen[A_, B___] := EqGen[{EqSet[Eq[A]]}, B]
+EqGen[{L__}, A_, B___] := EqGen[EqCross[Eq[A], {L}], B]
+EqGen[{L__}] := {L}
+
+(* EqRed - convert an equivalence set to delta functions *)
+(* 
+  Also deals with symmetry *)
+
+(* Cover different types of input *)
+EqRed[{L__}] := EqRed[L]
+EqRed[EqSet[L__], R__] := EqRed[L] + EqRed[R]
+EqRed[EqSet[L__]] := EqRed[L]
+(* For symmetric cases - 
+    match sets in list to original set and make same swaps in given formula f \
+\\
+\\
+- then reduce sets to delta functions *)
+
+EqRed[f_, {EqSet[L__]}, {EqSet[R__], R2__}] := 
+  EqReplace[f, EqMatch[EqSet[L], EqSet[R]]]*EqRed[R] + 
+    EqRed[f, {EqSet[L]}, {R2}]
+EqRed[f_, {EqSet[L__]}, {EqSet[R__]}] := 
+  EqReplace[f, EqMatch[EqSet[L], EqSet[R]]]*EqRed[R]
+(* No symmetric cases but still given a formula, just pull it out *)
+
+EqRed[f_, R__] := f*EqRed[R]
+EqRed[f_, {R__}] := f*EqRed[R]
+(* d[i, j] for variables in same equivalence class *)
+
+EqRed[Eq[H_, M_, T___], R___] := d[H, M]*EqRed[Eq[M, T], R]
+(* 1 - d[i, j] for variables in different eq. classes *)
+
+EqRed[Eq[H1_], Eq[H2_, T2___], R___] := (1 - d[H1, H2])*EqRed[Eq[H2, T2], R]*
+    EqRed2[Eq[H1], R]
+EqRed2[Eq[H1_], Eq[H2_, T2___], R___] := (1 - d[H1, H2])*EqRed2[Eq[H1], R]
+EqRed[Eq[H_]] := 1
+EqRed2[Eq[H_]] := 1
+
+(* Calls Mathematica's Replace /. 
+    for a list of replacements which must be done in order, 
+  i.e. {{A -> B, B -> A}, {B -> C, C -> B}} *)
+
+EqReplace[f__, {H_, L___}] := EqReplace[(f /. H), {L}]
+EqReplace[f__, {}] := f
+
+Clear[EqForm, EqForm2, EqCheckForm, EqMakeList, EqCheckInput, EqSymGen, 
+    EqSymGen2];
+Clear[EqFormAllows, EqUniqueGen, EqCheckUniqueForm];
+
+(* EqForm - 
+    Returns a sorted list of the sizes of each equivalence class in the given \
+\\
+\\
+equivalence set *)
+EqForm[R__] := Sort[EqForm2[{0}, R], Greater]
+EqForm2[{I_}, Eq[A_, B__], R___] := EqForm2[{I + 1}, Eq[B], R]
+EqForm2[{I_}, Eq[A_], R__] := Join[{I + 1}, EqForm2[{0}, R]]
+EqForm2[{I_}, Eq[A_]] := {I + 1}
+
+(* EqFormAllows - 
+    tells whether the second form given is the same as or included by the \\
+first form *)
+(* 
+  Ex : (2, 1, 1) includes (1, 1, 1) and (2) but not (3) or (1, 1, 1, 1) *)
+
+EqFormAllows[{F___}, {}] := TRUE
+EqFormAllows[{FH_, FT___}, {LH_, LT___}] := 
+  EqFormAllows[{FT}, {LT}] /; FH >= LH
+EqFormAllows[{F___}, {L___}] := FALSE
+
+(* Removes all eq. sets in the given list inconsistent with the given form *)
+
+EqCheckForm[EqSet[F__], {EqSet[L__], R___}]  := 
+  EqCheckForm[EqForm[F], {EqSet[L], R}]
+EqCheckForm[{FORM__}, {EqSet[L__], R___}] := 
+  EqAdd[{EqSet[L]}, EqCheckForm[{FORM}, {R}]] /; 
+    TRUE == EqFormAllows[{FORM}, EqForm[L]]
+EqCheckForm[{FORM__}, {EqSet[L__], R___}] := EqCheckForm[{FORM}, {R}]
+EqCheckForm[{FORM__}, {}] := {}
+
+(* Extracts all the variables from a given equivalence set *)
+
+EqMakeList[Eq[A_, R__], R2___] := Join[{A}, EqMakeList[Eq[R], R2]]
+EqMakeList[Eq[A_], R2__] := Join[{A}, EqMakeList[R2]]
+EqMakeList[Eq[A_]] := {A}
+
+(* Ensure there are no duplicate variables in the given equivalence set *)
+
+EqCheckInput[{A_, L__}] := EqCheckInput[{L}] /; Intersection[{A}, {L}] == {}
+EqCheckInput[{A_}] := TRUE
+EqCheckInput[L__] := EqCheckInput[EqMakeList[L]]
+EqCheckInput[{L__}] := FALSE
+
+(* Generate all equivalence sets symmetric in form to the given set *)
+
+EqSymGen[{L__}] := EqSymGen[L]
+EqSymGen[Eq[L__], R___] := EqSymGen2[EqForm[Eq[L], R],  EqMakeList[Eq[L], R]]
+EqSymGen2[{FORM__}, {L__}] := EqSymGen[{FORM}, L]
+EqSymGen[{FORM__}, A_, B___] := EqSymGen[{FORM}, {EqSet[Eq[A]]}, B]
+EqSymGen[{FORM__}, {L__}, A_, B___] := 
+  EqSymGen[{FORM}, EqCheckForm[{FORM}, EqCross[Eq[A], {L}]], B]
+EqSymGen[{FORM__}, {L__}] := {L}
+
+(* Generate all equivalence sets of unique form from the given variables *)
+
+EqUniqueGen[A_, B___] := EqUniqueGen[{EqSet[Eq[A]]}, B]
+EqUniqueGen[{L__}, A_, B___] := 
+  EqUniqueGen[EqCheckUniqueForm[EqCross[Eq[A], {L}]], B]
+EqUniqueGen[{L__}] := {L}
+
+(* Removes eq. sets in the given list that have duplicate forms *)
+
+EqCheckUniqueForm[{EqSet[F__], EqSet[L__], R___}]  := 
+  EqAdd[{EqSet[F]}, 
+    EqCheckUniqueForm[EqForm[F], EqCheckUniqueForm[{EqSet[L], R}]]]
+EqCheckUniqueForm[{FORM__}, {EqSet[L__], R___}] := 
+  EqAdd[{EqSet[L]}, 
+      EqCheckUniqueForm[{FORM}, {R}]] /; ! ({FORM} === EqForm[L])
+EqCheckUniqueForm[{FORM__}, {EqSet[L__], R___}] := 
+  EqCheckUniqueForm[{FORM}, {R}]
+EqCheckUniqueForm[{EqSet[L__]}] := {EqSet[L]}
+EqCheckUniqueForm[{FORM__}, {}] := {}
+
+Clear[DSwitch, Case, EqTranslate, EqTranslateBack, EqStandard, EqMatch, 
+    EqDif];
+
+(* Translate Case and DSwitch statements into equations *)
+
+Case[Symmetric[{a__}], r_] := 
+  EqRed[r, EqStandard[EqSet[EqTranslate[a]]], 
+    EqStandard[EqSymGen[EqTranslate[a]]]]
+Case[{a__}, r_] := EqRed[r, EqTranslate[a]]
+DSwitch[Case[L__], R__] := Case[L] + DSwitch[R]
+DSwitch[Case[L__]] := Case[L]
+DSwitch[A_, B__] := A + DSwitch[B]
+DSwitch[A_] := A
+
+(* Translate equalities {i = j} into equivalence classes Eq[i, 
+      j] for processing *)
+
+EqTranslate[Equal[i_, j__], L__] := Join[{Eq[i, j]}, EqTranslate[L]]
+EqTranslate[Equal[i_, j__]] := {Eq[i, j]}
+EqTranslate[k_, L__] := Join[{Eq[k]}, EqTranslate[L]]
+EqTranslate[k_] := {Eq[k]}
+
+(* Translate equivalence classes Eq[i, j] into equalities {i = j} for output \
+\\
+\\
+*)
+
+EqTranslateBack[{EqSet[L__], R__}] := 
+  Join[{EqTranslateBack[L]}, EqTranslateBack[{R}]]
+EqTranslateBack[{EqSet[L__]}] := {EqTranslateBack[L]}
+EqTranslateBack[Eq[A_], R__] := Join[{A}, EqTranslateBack[R]]
+EqTranslateBack[Eq[A_]] := {A}
+EqTranslateBack[Eq[L__], R__] := Join[{Equal[L]}, EqTranslateBack[R]]
+EqTranslateBack[Eq[L__]] := {Equal[L]}
+
+(* Standard Form - equivalence classes are of decreasing size *)
+
+EqStandard[{L__}] := EqStandard[L]
+EqStandard[EqSet[L__]] := {EqStandard[L]}
+EqStandard[EqSet[L__], R__] := Join[{EqStandard[L]}, EqStandard[R]]
+EqStandard[L___, Eq[A__], Eq[B__], R___] := 
+  EqStandard[L, Eq[B], Eq[A], R] /; Length[{B}] > Length[{A}]
+EqStandard[L__] := EqSet[L]
+
+(* Generate the swaps needed to go from one equivalence set to the other *)
+
+(*EqMatch[EqSet[L__], EqSet[R__]] := EqMatch[EqMakeList[L], EqMakeList[R]]
+    EqMatch[{L1___, A_, R1___}, {L2___, B_, R2___}] := 
+      Join[{A -> B}, 
+          EqMatch[{L1, A, R1}, ({L2, B, R2} /. {A -> B, B -> A})]] /; 
+        EqDif[{L1, A, R1}, ({L2, B, R2} /. {A -> B, B -> A})] < 
+          EqDif[{L1, A, R1}, {L2, B, R2}]
+      EqMatch[L__] := {}*)
+
+EqMatch[EqSet[MATCH__], 
+    EqSet[L___, Eq[L1___, A_, R1___], M___, Eq[L2___, B_, R2___], R___]] := 
+  Join[{{A -> B, B -> A}}, 
+      EqMatch[EqSet[MATCH], EqSet[L, Eq[L1, B, R1], M, Eq[L2, A, R2], R]]] /; \
+\\
+\\
+
+
+    EqDif[EqSet[MATCH], EqSet[L, Eq[L1, B, R1], M, Eq[L2, A, R2], R]] < 
+      EqDif[EqSet[MATCH], EqSet[L, Eq[L1, A, R1], M, Eq[L2, B, R2], R]]
+EqMatch[L__] := {}
+
+(* Give the number of mismatched elements between two equivalence sets *)
+
+EqDif[EqSet[L__], EqSet[R__]] := EqDif[EqMakeList[L], EqMakeList[R]]
+EqDif[{A_, L___}, {B_, R___}] := EqDif[{L}, {R}] + 1 /; ! (A === B)
+EqDif[{A_, L___}, {B_, R___}] := EqDif[{L}, {R}]
+EqDif[L__] := 0
+
+
+(*
+\\!\\(\\*
+  RowBox[{\\(Sum::\"itform\"\\), \\(\\(:\\)\\(\\ \\)\\), \"\\<\\\"Argument \\\
+\\!\\\\(L__\\\\) at \\
+position \\\\!\\\\(3\\\\) does not have the correct form for an iterator. \\
+\\\\!\\\\(\\\\*ButtonBox[\\\\\\\"More\\[Ellipsis]\\\\\\\", \
+ButtonStyle->\\\\\\\"RefGuideLinkText\\
+\\\\\\\", ButtonFrame->None, \
+ButtonData:>\\\\\\\"General::itform\\\\\\\"]\\\\)\\\"\\>\"}]\\)
+*)
+(*
+\\!\\(\\*
+  RowBox[{\\(Sum::\"itform\"\\), \\(\\(:\\)\\(\\ \\)\\), \"\\<\\\"Argument \\\
+\\!\\\\(L__\\\\) at \\
+position \\\\!\\\\(2\\\\) does not have the correct form for an iterator. \\
+\\\\!\\\\(\\\\*ButtonBox[\\\\\\\"More\\[Ellipsis]\\\\\\\", \
+ButtonStyle->\\\\\\\"RefGuideLinkText\\
+\\\\\\\", ButtonFrame->None, \
+ButtonData:>\\\\\\\"General::itform\\\\\\\"]\\\\)\\\"\\>\"}]\\)
+*)
+(*
+Syntax::sntxf: \"&\" cannot be followed by \"& FreeQ[y,X[__]]\". \
+More\\[Ellipsis]
+*)
+\
+\>", "Input",
+  PageWidth->Infinity,
+  InitializationCell->True,
+  ShowSpecialCharacters->False],
+
+Cell[BoxData[
+    RowBox[{\(Sum::"itform"\), \(\(:\)\(\ \)\), "\<\"Argument \\!\\(L__\\) at \
+position \\!\\(3\\) does not have the correct form for an iterator. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::itform\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Sum::"itform"\), \(\(:\)\(\ \)\), "\<\"Argument \\!\\(L__\\) at \
+position \\!\\(2\\) does not have the correct form for an iterator. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::itform\\\"]\\)\"\>"}]], \
+"Message"]
+}, Open  ]]
+},
+FrontEndVersion->"5.1 for X",
+ScreenRectangle->{{0, 2720}, {0, 1024}},
+AutoGeneratedPackage->Automatic,
+WindowSize->{1272, 994},
+WindowMargins->{{43, Automatic}, {Automatic, 0}}
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[1776, 53, 19542, 548, 7857, "Input",
+  InitializationCell->True],
+Cell[21321, 603, 329, 5, 20, "Message"],
+Cell[21653, 610, 329, 5, 20, "Message"]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

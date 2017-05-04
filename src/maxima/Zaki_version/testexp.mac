@@ -1,0 +1,23 @@
+file_search_maxima: ["/home/zaki/maxima_prgs/###.mac","C:\\cygwin\\home\\dp2\\cvs\\CASEY\\maxima\\###.mac"];
+load("delta");
+load("dsimplify");
+load("dRewrite");
+expectations : [ 	expectation(x(T,R)) = 1/n,
+			expectation(x(T,R)*x(A,B)) = Cases(	
+								Case(In(Df(Eq(T,R)), Df(Eq(A,B))), 1/n),
+								Case(In(Df(Eq(T,R)),Df(Eq(A),Eq(B))), 0) ,
+								Case(In(Df(Eq(T),Eq(R)),Df(Eq(A,B))), (g-n)/(n^2*(g-1))), 
+								Case(In(Df(Eq(T),Eq(R)),Df(Eq(A),Eq(B))), (g)/(n^2*(g-1))))];
+makeRVFamily(x, randomHistogram, [f], expectations );
+makeRV(x1,randomHistogram,[f]);
+
+expression : sum(sum(sum(sum(x1(i1, t)*x1(i2, t)*f(t,r), i2, 1, n), i1, 1, n),t,1,n),r,1,n);
+res1 : ex1 (expression );
+print("Result of ex: ",res1);
+
+res2 : dsimplify (res1);
+print("Result of dsimplify: ",res2);
+res3 : factor (res2);
+res4 : drewrite (res3);
+print("Result of drewrite: ",res4);
+

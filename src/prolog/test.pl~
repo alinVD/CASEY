@@ -1,0 +1,16 @@
+exBase( 
+
+
+
+simplifyEx( ex( sum( X, R) ), sum( ex(X), R) ) . 
+simplifyEx( ex( X+Y ), ex(X) + ex(Y) ).
+ 
+
+% Transforms the product of sums into a single sum
+% takes care of substitutions
+% +expression_to_be_processed, -result
+collateSums( sum( X, R)*sum( Y, P), sum( Z, Q) ) :-
+	
+
+
+test( [  

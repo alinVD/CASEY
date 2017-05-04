@@ -1,0 +1,21 @@
+/* File specifies the AMS +-1 random hashing */
+/* X(i) is the +-1 value for item i */
+
+/* Parameters: NONE */
+
+expectations : [
+  expectation(X[I]) = 0,
+  expectation(X[I]*X[J]) = Cases(
+    Case( In( Df( Eq(I,J) ) ), 1),
+    Case( In( Df( Eq(I), Eq(J) ) ), 0)
+    ),
+  expectation(X[I]*X[J]*X[K]*X[L]) = Cases(
+    SymCase( In( Df( Eq(I,J), Eq(K,L) ) ),1),
+    Case( In( Df( Eq(I,J,K,L) ) ),1)
+    /* the 0 cases do not need encoding since they are eliminated anyway */
+    )
+];
+
+makeRVFamily(X, AMS, [], expectations);
+
+

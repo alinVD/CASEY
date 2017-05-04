@@ -1,0 +1,2349 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.1'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     92803,       1975]*)
+(*NotebookOutlinePosition[     93733,       2004]*)
+(*  CellTagsIndexPosition[     93689,       2000]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell[BoxData[
+    \(\(\( (*\ 
+      Loading\ the\ simplification\ rules\ *) \)\(\[IndentingNewLine]\)\(<< \ \
+"\<Delta.nb\>"\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\( (*Definitions\ for\ the\ probabilistic\ space\ *) \)\(\
+\[IndentingNewLine]\)\(Clear[ExBase, a, a1, \ b, \ b1, \ c, \ c1, \ f, \ 
+      f1\ ]\[IndentingNewLine]\[IndentingNewLine] (*\ X[i, p]\ is\ the\ 0, 
+      1\ random\ variable\ that\ is\ 1\ if\ the\ tuple\ \((i)\)\ is\ in\ \
+partition\ p\ *) \[IndentingNewLine] (*\ 
+      a[p]\ is\ the\ fractional\ size\ of\ partition\ p\ and\ a1[
+            p] = \((a[p] - 1)\)/\((R - 
+              1)\)\ *) \[IndentingNewLine]\[IndentingNewLine]
+    a[p_]\  := \ 1/pp\[IndentingNewLine]
+    a1[p_]\  := \ \((a[p]\ R - 1)\)/\((R - 1)\)\[IndentingNewLine]
+    ExBase[X[i_, p_]] := \ a[p]\[IndentingNewLine]
+    ExBase[X[i_, p_]^n_]\  := \ a[p]\  /; \ n > 0\[IndentingNewLine]
+    ExBase[X[i_, p_] X[l_, r_]] := \ 
+      d[p, r] \((\ 
+            a[p] \((1 - a1[p])\) d[i, l] + a[p] a1[p])\) + \((1 - 
+              d[p, r])\) \((1 - d[i, l])\) a[p] 
+          a[r]\ R/\((R - 1)\)\[IndentingNewLine]\[IndentingNewLine]
+    b[p_]\  := \ 1/pp\[IndentingNewLine]
+    b1[p_]\  := \ \((b[p] S - 1)\)/\((S - 1)\)\[IndentingNewLine]
+    ExBase[Y[i_, p_]] := \ b[p]\[IndentingNewLine]
+    ExBase[Y[i_, p_]^n_]\  := \ b[p]\  /; \ n > 0\[IndentingNewLine]
+    ExBase[Y[i_, p_] Y[l_, r_]] := \ 
+      d[p, r] \((\ 
+            b[p] \((1 - b1[p])\) d[i, l] + b[p] b1[p])\) + \((1 - 
+              d[p, r])\) \((1 - d[i, l])\) b[p] 
+          b[r]\ S/\((S - 1)\)\[IndentingNewLine]\[IndentingNewLine]
+    c[p_]\  := \ 1/pp\n
+    c1[p_]\  := \ \((c[p] T - 1)\)/\((T - 1)\)\n
+    ExBase[Z[i_, p_]] := \ c[p]\n
+    ExBase[Z[i_, p_]^n_]\  := \ c[p]\  /; \ n > 0\n
+    ExBase[Z[i_, p_] Z[l_, r_]] := \ 
+      d[p, r] \((c[p] \((1 - c1[p])\) d[i, l] + c[p] c1[p])\) + \((1 - 
+              d[p, r])\) \((1 - d[i, l])\) c[p] 
+          c[r]\ T/\((T - 1)\)\[IndentingNewLine]\[IndentingNewLine]
+    f[p_]\  := \ 1/pp\n
+    f1[p_]\  := \ \((f[p] U - 1)\)/\((U - 1)\)\n
+    ExBase[W[i_, p_]] := \ f[p]\n
+    ExBase[W[i_, p_]^n_]\  := \ b[p]\  /; \ n > 0\n
+    ExBase[W[i_, p_] W[l_, r_]] := \ 
+      d[p, r] \((\ 
+            f[p] \((1 - f1[p])\) d[i, l] + f[p] f1[p])\) + \((1 - 
+              d[p, r])\) \((1 - d[i, l])\) f[p] 
+          f[r]\ U/\((U - 1)\)\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Clear[M2, \ M3, \ M4, Q, rp, 
+      sp]\[IndentingNewLine]\[IndentingNewLine] (*\ 
+      estimate\ of\ the\ size\ of\ the\ join\ *) \[IndentingNewLine]
+    M[p_] := \ 
+      Module\ [\ {i, j}, 
+        1/\((a[p]\ b[p])\) 
+          Sum[F[i, j] X[i, p] Y[j, p], {i, R}, \ {j, 
+              S}]]\[IndentingNewLine]\[IndentingNewLine] (*\ 
+      w[p]\ is\ the\ weight\ of\ partition\ p, \ 
+      n\ is\ the\ number\ of\ partitions\ *) \[IndentingNewLine]
+    Q := \ Module[{p}, \ 
+        Sum[\ w[p]\ M[p], {p, n}]]\[IndentingNewLine]\[IndentingNewLine] (*\ 
+      Estimates\ for\ joins\ of\ two, \ 
+      three\ and\ four\ relations . \ The\ parts\ p, \ q, 
+      r\ and\ s\ are\ joined\ from\ each\ relation\ *) \n
+    M1[p_]\  := \ 1/a[p]\ Sum[\ F[i]\ X[i, p], \ {i, R}]\[IndentingNewLine]
+    M2[p_, q_] := 
+      1/\((a[p] b[q])\) 
+        Sum[F[i, j] X[i, p] Y[j, q], {i, R}, {j, S}]\[IndentingNewLine]
+    M3[p_, q_, \ r_\ ]\  := \ 
+      1/\((a[p] b[q] c[r])\)\ Sum[\ 
+          F[i, j, k]\ X[i, p]\ Y[j, q]\ Z[k, r], \ {i, R}, \ {j, S}, \ {k, 
+            T}]\[IndentingNewLine]
+    M4[p_, q_, r_, \ s_]\  := \ 
+      1/\((a[p] b[q] c[r] f[s])\)\ Sum[\ 
+          F[i, j, k, l]\ X[i, p]\ Y[j, q]\ Z[k, r]\ W[l, s], \ {i, R}, \ {j, 
+            S}, \ {k, T}, {l, U}]\[IndentingNewLine]\[IndentingNewLine]
+    Clear[\ N1, \ N2, \ N2R, \ N2S]\[IndentingNewLine]
+    N1[p_]\  := \ 1/a[p]\ Sum[\ F[i]^2\ X[i, p], \ {i, R}]\n
+    N2[p_, q_] := 
+      1/\((a[p] b[q])\) Sum[F[i, j]^2  X[i, p] Y[j, q], {i, R}, {j, S}]\n
+    N2R[p_, q_] := 
+      1/\((a[p] b[q]^2)\) 
+        Sum[\ \ Sum[F[i, j] Y[j, q]\ , \ {j, S}]\ \ Sum[
+              F[i, jp] Y[jp, q]\ , \ {jp, S}]\ \ X[i, p], {i, 
+            R}]\[IndentingNewLine]
+    N2S[p_, q_] := 
+      1/\((a[p] b[q]^2)\) 
+        Sum[\ \ Sum[F[i, j] X[i, p]\ , \ {i, R}]\ \ Sum[
+              F[ip, j] X[ip, p]\ , \ {ip, R}]\ Y[j, q], {j, 
+            S}]\n\[IndentingNewLine]
+    N3[p_, q_, \ r_\ ]\  := \ 
+      1/\((a[p] b[q] c[r])\)\ Sum[\ 
+          F[i, j, k]^2\ X[i, p]\ Y[j, q]\ Z[k, r], \ {i, R}, \ {j, S}, \ {k, 
+            T}]\n
+    N4[p_, q_, r_, \ s_]\  := \ 
+      1/\((a[p] b[q] c[r] f[s])\)\ Sum[\ 
+          F[i, j, k, l]\ ^2  X[i, p]\ Y[j, q]\ Z[k, r]\ W[l, s], \ {i, 
+            R}, \ {j, S}, \ {k, T}, {l, U}]\)\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(\(DSimplifyCI[
+      Ex[M2[p, q]]]\)\(\[IndentingNewLine]\)
+    \)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S F[i, j]\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(DSimplifyCI[Ex[M3[p, q, r]]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, 
+            j, k]\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(DSimplifyCI[\ 
+      Ex[\ M4[p, q, r, s]]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k = \
+1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, l]\)\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Rez1 = 
+      DSimplifyCI[\ Ex[M2[p, q]^2]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(-\((\(-1\) + pp)\)\)\ R\ \((pp - S)\)\ \(\[Sum]\+\(i = 1\)\%R\((\
+\[Sum]\+\(j = 1\)\%S F[i, j])\)\^2\) + \((\(-1\) + pp)\)\^2\ R\ S\ \(\[Sum]\+\
+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S F[i, j]\^2\)\) + \((pp - R)\)\ \((\((pp - \
+S)\)\ \((\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S F[i, j]\))\)\^2 - \((\(-1\
+\) + pp)\)\ S\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S F[i, j]\ \(\[Sum]\
+\+\(k = 1\)\%R F[k, j]\)\)\))\)\)\/\(\((\(-1\) + R)\)\ \((\(-1\) + S)\)\)\)], \
+"Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(Expand[
+      Rez1\  /. \ {\ R \[Rule] 10.0^10, \ S \[Rule] 10.0^10, \ 
+          pp \[Rule] 100.0}]\)\(\[IndentingNewLine]\)
+    \)\)], "Input"],
+
+Cell[BoxData[
+    \(\(-1.979999990397`*^-8\)\ \((\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10 F[i, j]\))\)\^2 + 
+      98.9999990298`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\((\[Sum]\+\(j = \
+1\)\%1.`*^10 F[i, j])\)\^2\) + 
+      9801.000001960201`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10 F[i, j]\^2\)\) + 
+      98.9999990298`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10 F[i, j]\ \(\[Sum]\+\(k = 1\)\%1.`*^10 F[k, j]\)\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Expand[
+      Rez1\  /. \ {\ R \[Rule] 10.0^10, \ S \[Rule] 10.0^10, \ 
+          pp \[Rule] 100.0, \ F[__]\  \[Rule] \ 1}]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(2.0561495563910216`*^16\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Rez2\  = \ 
+      DSimplifyCI[\ Var[M3[p, q, r]]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(1\/\(\((\(-1\) + R)\)\ \((\(-1\) + S)\)\ \((\(-1\) + 
+              T)\)\)\)\((\((\(-1\) + 
+            pp)\)\ \((\((\(-1\) - pp\^2 + S + T - S\ T - 
+                  R\ \((\(-1\) + S + T)\) + 
+                  pp\ \((\(-1\) + R + S + 
+                        T)\))\)\ \((\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, k]\)\))\)\^2 + 
+            R\ \((pp - S)\)\ \((pp - 
+                  T)\)\ \(\[Sum]\+\(i = 1\)\%R\((\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T F[i, j, k]\))\)\^2\) + 
+            pp\ R\ S\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\((\[Sum]\+\
+\(k = 1\)\%T F[i, j, k])\)\^2\)\) - 
+            pp\^2\ R\ S\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\((\[Sum]\+\(k = 1\)\%T F[i, j, k])\)\^2\)\) - 
+            R\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\((\[Sum]\+\(k = 1\)\%T F[i, j, k])\)\^2\)\) + 
+            pp\ R\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\((\[Sum]\+\(k = 1\)\%T F[i, j, k])\)\^2\)\) + 
+            R\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, k]\^2\)\)\) - 
+            2\ pp\ R\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T F[i, j, k]\^2\)\)\) + 
+            pp\^2\ R\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T F[i, j, k]\^2\)\)\) + 
+            pp\ R\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, 
+                        k]\ \(\[Sum]\+\(l = 1\)\%S F[i, l, k]\)\)\)\) - 
+            pp\^2\ R\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T F[i, j, k]\ \(\[Sum]\+\(l = 1\)\%S F[i, l, k]\)\)\)\) - 
+            R\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, 
+                        k]\ \(\[Sum]\+\(l = 1\)\%S F[i, l, k]\)\)\)\) + 
+            pp\ R\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T F[i, j, k]\ \(\[Sum]\+\(l = 1\)\%S F[i, l, k]\)\)\)\) + 
+            pp\^2\ S\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\((\[Sum]\+\
+\(k = 1\)\%T F[i, j, k])\)\ \(\[Sum]\+\(k = 1\)\%R\(\[Sum]\+\(l = 1\)\%T F[k, 
+                          j, l]\)\)\)\) - 
+            pp\ R\ S\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\((\[Sum]\+\
+\(k = 1\)\%T F[i, j, k])\)\ \(\[Sum]\+\(k = 1\)\%R\(\[Sum]\+\(l = 1\)\%T F[k, 
+                          j, l]\)\)\)\) - 
+            pp\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\((\[Sum]\+\
+\(k = 1\)\%T F[i, j, k])\)\ \(\[Sum]\+\(k = 1\)\%R\(\[Sum]\+\(l = 1\)\%T F[k, 
+                          j, l]\)\)\)\) + 
+            R\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\((\[Sum]\+\(k = 1\)\%T F[i, j, 
+                          k])\)\ \(\[Sum]\+\(k = 1\)\%R\(\[Sum]\+\(l = 1\)\%T 
+                          F[k, j, l]\)\)\)\) + 
+            pp\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, 
+                        k]\ \(\[Sum]\+\(l = 1\)\%R F[l, j, k]\)\)\)\) - 
+            pp\^2\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T F[i, j, k]\ \(\[Sum]\+\(l = 1\)\%R F[l, j, k]\)\)\)\) - 
+            R\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, 
+                        k]\ \(\[Sum]\+\(l = 1\)\%R F[l, j, k]\)\)\)\) + 
+            pp\ R\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T F[i, j, k]\ \(\[Sum]\+\(l = 1\)\%R F[l, j, k]\)\)\)\) + 
+            pp\^2\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, 
+                        k]\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = 1\)\%S F[l, 
+                            m, k]\)\)\)\)\) - 
+            pp\ R\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, 
+                        k]\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = 1\)\%S F[l, 
+                            m, k]\)\)\)\)\) - 
+            pp\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, 
+                        k]\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = 1\)\%S F[l, 
+                            m, k]\)\)\)\)\) + 
+            R\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, 
+                        k]\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = 1\)\%S F[l, 
+                            m, k]\)\)\)\)\))\))\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Expand[
+      Rez2\  /. \ {\ R \[Rule] 10.0^10, \ S \[Rule] 10.0^10, \ 
+          T \[Rule] 10.0^10, \ pp \[Rule] 100.0}]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(-2.969999970894`*^-8\)\ \((\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, k]\)\))\)\^2 + 
+      98.99999804970001`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\((\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, k]\))\)\^2\) + 
+      9800.999904930299`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\((\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, k])\)\^2\)\) + 
+      970299.0002910896`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, k]\^2\)\)\) + 
+      9800.999904930299`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, 
+                  k]\ \(\[Sum]\+\(l = 1\)\%1.`*^10 F[i, l, k]\)\)\)\) + 
+      98.99999804970001`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\((\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, 
+                    k])\)\ \(\[Sum]\+\(k = 1\)\%1.`*^10\(\[Sum]\+\(l = \
+1\)\%1.`*^10 F[k, j, l]\)\)\)\) + 
+      9800.999904930299`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, 
+                  k]\ \(\[Sum]\+\(l = 1\)\%1.`*^10 F[l, j, k]\)\)\)\) + 
+      98.99999804970001`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, 
+                  k]\ \(\[Sum]\+\(l = 1\)\%1.`*^10\(\[Sum]\+\(m = \
+1\)\%1.`*^10 F[l, m, k]\)\)\)\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(\(Rez3\)\(\ \)\(=\)\(\ \)\(DSimplifyCI[\ 
+        Cov[M2[1, 1], M2[2, 1]]]\)\(\ \)\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\((\(-1\) + R - pp\ R + S)\)\ \((\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S F[i, j]\))\)\^2 + R\ \((\((pp - S)\)\ \(\[Sum]\+\(i = \
+1\)\%R\((\[Sum]\+\(j = 1\)\%S F[i, j])\)\^2\) - \((\(-1\) + pp)\)\ S\ \((\
+\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S F[i, j]\^2\) - \[Sum]\+\(i = \
+1\)\%R\(\[Sum]\+\(j = 1\)\%S F[i, j]\ \(\[Sum]\+\(k = 1\)\%R F[k, \
+j]\)\))\))\)\)\/\(\((\(-1\) + R)\)\ \((\(-1\) + S)\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(Expand[
+      Rez3\  /. \ {\ R \[Rule] 10.0^10, \ S \[Rule] 10.0^10, \ 
+          T \[Rule] 10.0^10, \ pp \[Rule] 100.0}]\)\(\[IndentingNewLine]\)
+    \)\)], "Input"],
+
+Cell[BoxData[
+    \(\(-9.80000000197`*^-9\)\ \((\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = 1\
+\)\%1.`*^10 F[i, j]\))\)\^2 - 
+      0.9999999902`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\((\[Sum]\+\(j = \
+1\)\%1.`*^10 F[i, j])\)\^2\) - 
+      99.0000000198`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10 F[i, j]\^2\)\) + 
+      99.0000000198`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10 F[i, j]\ \(\[Sum]\+\(k = 1\)\%1.`*^10 F[k, j]\)\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Rez4\  = \ 
+      DSimplifyCI[\ Cov[\ M3[1, 1, 1], \ M3[\ 2, 1, 1]]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(1\/\(\((\(-1\) + R)\)\ \((\(-1\) + S)\)\ \((\(-1\) + 
+              T)\)\)\)\((\((\((\(-1\) + pp)\)\ R\ \((1 + pp - S - 
+                    T)\) + \((\(-1\) + S)\)\ \((\(-1\) + 
+                    T)\))\)\ \((\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T F[i, j, k]\)\))\)\^2 + 
+        R\ \((\(-\((pp - S)\)\)\ \((pp - 
+                    T)\)\ \(\[Sum]\+\(i = 1\)\%R\((\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T F[i, j, k]\))\)\^2\) + \((\(-1\) + 
+                    pp)\)\ \((S\ \((pp - 
+                          T)\)\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\((\[Sum]\+\(k = 1\)\%T F[i, j, k])\)\^2\)\) - \((\(-1\) + 
+                          pp)\)\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, k]\^2\)\)\) + 
+                    pp\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T F[i, j, k]\ \(\[Sum]\+\(l = 1\)\%S F[i, l, k]\)\)\)\) - 
+                    S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, 
+                                k]\ \(\[Sum]\+\(l = 1\)\%S F[i, l, 
+                                  k]\)\)\)\) - 
+                    pp\ S\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\((\
+\[Sum]\+\(k = 1\)\%T F[i, j, 
+                                  k])\)\ \(\[Sum]\+\(k = 1\)\%R\(\[Sum]\+\(l \
+= 1\)\%T F[k, j, l]\)\)\)\) + 
+                    S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\((\
+\[Sum]\+\(k = 1\)\%T F[i, j, 
+                                  k])\)\ \(\[Sum]\+\(k = 1\)\%R\(\[Sum]\+\(l \
+= 1\)\%T F[k, j, l]\)\)\)\) - 
+                    S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, 
+                                k]\ \(\[Sum]\+\(l = 1\)\%R F[l, j, 
+                                  k]\)\)\)\) + 
+                    pp\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T F[i, j, k]\ \(\[Sum]\+\(l = 1\)\%R F[l, j, k]\)\)\)\) - 
+                    pp\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T F[i, j, k]\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = 1\)\%S 
+                                    F[l, m, k]\)\)\)\)\) + 
+                    S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, 
+                                k]\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = 1\)\
+\%S F[l, m, k]\)\)\)\)\))\))\))\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(Expand[
+      Rez4\  /. \ {\ R \[Rule] 10.0^10, \ S \[Rule] 10.0^10, \ 
+          T \[Rule] 10.0^10, \ pp \[Rule] 100.0}]\)\(\[IndentingNewLine]\)
+    \)\)], "Input"],
+
+Cell[BoxData[
+    \(\(-1.9699999905939997`*^-8\)\ \((\[Sum]\+\(i = \
+1\)\%1.`*^10\(\[Sum]\+\(j = 1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, \
+k]\)\))\)\^2 - 
+      0.9999999802999999`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\((\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, k]\))\)\^2\) - 
+      98.99999903969999`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\((\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, k])\)\^2\)\) - 
+      9801.0000029403`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, k]\^2\)\)\) - 
+      98.99999903969999`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, 
+                  k]\ \(\[Sum]\+\(l = 1\)\%1.`*^10 F[i, l, k]\)\)\)\) + 
+      98.99999903969999`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\((\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, 
+                    k])\)\ \(\[Sum]\+\(k = 1\)\%1.`*^10\(\[Sum]\+\(l = \
+1\)\%1.`*^10 F[k, j, l]\)\)\)\) + 
+      9801.0000029403`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, 
+                  k]\ \(\[Sum]\+\(l = 1\)\%1.`*^10 F[l, j, k]\)\)\)\) + 
+      98.99999903969999`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, 
+                  k]\ \(\[Sum]\+\(l = 1\)\%1.`*^10\(\[Sum]\+\(m = \
+1\)\%1.`*^10 F[l, m, k]\)\)\)\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Rez5\  = \ 
+      DSimplifyCI[\ Cov[\ M3[1, 1, 1], \ M3[\ 2, 2, 1]]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(1\/\(\((\(-1\) + R)\)\ \((\(-1\) + S)\)\ \((\(-1\) + 
+              T)\)\)\)\((\(-\((\(-1\) + S + 
+                R\ \((1 + \((\(-1\) + pp)\)\ S - T)\) + T - 
+                S\ T)\)\)\ \((\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T F[i, j, k]\)\))\)\^2 + 
+        R\ S\ \((\((pp - 
+                    T)\)\ \(\[Sum]\+\(i = 1\)\%R\((\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T F[i, j, k]\))\)\^2\) + \((\(-pp\) + 
+                    T)\)\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\((\
+\[Sum]\+\(k = 1\)\%T F[i, j, k])\)\^2\)\) - 
+              T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k = \
+1\)\%T F[i, j, k]\^2\)\)\) + 
+              pp\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, k]\^2\)\)\) + 
+              T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k = \
+1\)\%T F[i, j, k]\ \(\[Sum]\+\(l = 1\)\%S F[i, l, k]\)\)\)\) - 
+              pp\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, 
+                          k]\ \(\[Sum]\+\(l = 1\)\%S F[i, l, k]\)\)\)\) + 
+              pp\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\((\[Sum]\+\(k \
+= 1\)\%T F[i, j, k])\)\ \(\[Sum]\+\(k = 1\)\%R\(\[Sum]\+\(l = 1\)\%T F[k, j, 
+                            l]\)\)\)\) - 
+              T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\((\[Sum]\+\(k = \
+1\)\%T F[i, j, k])\)\ \(\[Sum]\+\(k = 1\)\%R\(\[Sum]\+\(l = 1\)\%T F[k, j, 
+                            l]\)\)\)\) + 
+              T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k = \
+1\)\%T F[i, j, k]\ \(\[Sum]\+\(l = 1\)\%R F[l, j, k]\)\)\)\) - 
+              pp\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, 
+                          k]\ \(\[Sum]\+\(l = 1\)\%R F[l, j, k]\)\)\)\) - 
+              T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k = \
+1\)\%T F[i, j, k]\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = 1\)\%S F[l, m, 
+                              k]\)\)\)\)\) + 
+              pp\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, 
+                          k]\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = 1\)\%S F[
+                              l, m, k]\)\)\)\)\))\))\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(Expand[
+      Rez5\  /. \ {\ R \[Rule] 10.0^10, \ S \[Rule] 10.0^10, \ 
+          T \[Rule] 10.0^10, \ pp \[Rule] 100.0}]\)\(\[IndentingNewLine]\)
+    \)\)], "Input"],
+
+Cell[BoxData[
+    \(\(-9.700000002939996`*^-9\)\ \((\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j \
+= 1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, k]\)\))\)\^2 - 
+      0.9999999902999999`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\((\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, k]\))\)\^2\) + 
+      0.9999999902999999`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\((\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, k])\)\^2\)\) + 
+      99.00000002969999`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, k]\^2\)\)\) - 
+      99.00000002969999`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, 
+                  k]\ \(\[Sum]\+\(l = 1\)\%1.`*^10 F[i, l, k]\)\)\)\) - 
+      0.9999999902999999`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\((\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, 
+                    k])\)\ \(\[Sum]\+\(k = 1\)\%1.`*^10\(\[Sum]\+\(l = \
+1\)\%1.`*^10 F[k, j, l]\)\)\)\) - 
+      99.00000002969999`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, 
+                  k]\ \(\[Sum]\+\(l = 1\)\%1.`*^10 F[l, j, k]\)\)\)\) + 
+      99.00000002969999`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, 
+                  k]\ \(\[Sum]\+\(l = 1\)\%1.`*^10\(\[Sum]\+\(m = \
+1\)\%1.`*^10 F[l, m, k]\)\)\)\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(Rez6\  = \ 
+      DSimplifyCI[\ 
+        Cov[\ M3[2, 1, 1], \ M3[\ 2, 2, 1]]]\)\(\[IndentingNewLine]\)
+    \)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(1\/\(\((\(-1\) + R)\)\ \((\(-1\) + S)\)\ \((\(-1\) + 
+              T)\)\)\)\((\(-\((\(-1\) - \((\(-1\) + pp)\)\ S\ \((1 + pp - 
+                      T)\) + R\ \((1 + \((\(-1\) + pp)\)\ S - T)\) + 
+                T)\)\)\ \((\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T F[i, j, k]\)\))\)\^2 + 
+        S\ \((\(-\((\(-1\) + pp)\)\)\ R\ \((pp - 
+                    T)\)\ \(\[Sum]\+\(i = 1\)\%R\((\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T F[i, j, k]\))\)\^2\) + \((\(-1\) + pp)\)\ R\ \((pp - 
+                    T)\)\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\((\
+\[Sum]\+\(k = 1\)\%T F[i, j, k])\)\^2\)\) - 
+              R\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k \
+= 1\)\%T F[i, j, k]\^2\)\)\) + 
+              2\ pp\ R\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T F[i, j, k]\^2\)\)\) - 
+              pp\^2\ R\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T F[i, j, k]\^2\)\)\) + 
+              R\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k \
+= 1\)\%T F[i, j, k]\ \(\[Sum]\+\(l = 1\)\%S F[i, l, k]\)\)\)\) - 
+              2\ pp\ R\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T F[i, j, k]\ \(\[Sum]\+\(l = 1\)\%S F[i, l, k]\)\)\)\) + 
+              pp\^2\ R\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T F[i, j, k]\ \(\[Sum]\+\(l = 1\)\%S F[i, l, k]\)\)\)\) - 
+              pp\^2\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\((\[Sum]\+\(k = 1\)\%T F[i, j, 
+                            k])\)\ \(\[Sum]\+\(k = 1\)\%R\(\[Sum]\+\(l = \
+1\)\%T F[k, j, l]\)\)\)\) + 
+              pp\ R\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\((\[Sum]\+\(k = 1\)\%T F[i, j, 
+                            k])\)\ \(\[Sum]\+\(k = 1\)\%R\(\[Sum]\+\(l = \
+1\)\%T F[k, j, l]\)\)\)\) + 
+              pp\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\((\[Sum]\+\(k = 1\)\%T F[i, j, 
+                            k])\)\ \(\[Sum]\+\(k = 1\)\%R\(\[Sum]\+\(l = \
+1\)\%T F[k, j, l]\)\)\)\) - 
+              R\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\((\[Sum]\+\(k = 1\)\%T F[i, j, 
+                            k])\)\ \(\[Sum]\+\(k = 1\)\%R\(\[Sum]\+\(l = \
+1\)\%T F[k, j, l]\)\)\)\) - 
+              
+              pp\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, 
+                          k]\ \(\[Sum]\+\(l = 1\)\%R F[l, j, k]\)\)\)\) + 
+              pp\^2\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, 
+                          k]\ \(\[Sum]\+\(l = 1\)\%R F[l, j, k]\)\)\)\) + 
+              R\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k \
+= 1\)\%T F[i, j, k]\ \(\[Sum]\+\(l = 1\)\%R F[l, j, k]\)\)\)\) - 
+              pp\ R\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, 
+                          k]\ \(\[Sum]\+\(l = 1\)\%R F[l, j, k]\)\)\)\) + 
+              pp\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, 
+                          k]\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = 1\)\%S F[
+                              l, m, k]\)\)\)\)\) - 
+              pp\^2\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, 
+                          k]\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = 1\)\%S F[
+                              l, m, k]\)\)\)\)\) - 
+              R\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k \
+= 1\)\%T F[i, j, k]\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = 1\)\%S F[l, m, 
+                              k]\)\)\)\)\) + 
+              pp\ R\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, 
+                          k]\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = 1\)\%S F[
+                              l, m, k]\)\)\)\)\))\))\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Expand[
+      Rez6\  /. \ {\ R \[Rule] 10.0^10, \ S \[Rule] 10.0^10, \ 
+          T \[Rule] 10.0^10, \ pp \[Rule] 100.0}]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(-1.9699999905939997`*^-8\)\ \((\[Sum]\+\(i = \
+1\)\%1.`*^10\(\[Sum]\+\(j = 1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, \
+k]\)\))\)\^2 + 
+      98.99999903969999`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\((\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, k]\))\)\^2\) - 
+      98.99999903969999`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\((\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, k])\)\^2\)\) - 
+      9801.000002940298`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, k]\^2\)\)\) + 
+      9801.000002940298`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, 
+                  k]\ \(\[Sum]\+\(l = 1\)\%1.`*^10 F[i, l, k]\)\)\)\) - 
+      0.9999999803`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = 1\)\%1.`*^10\
+\((\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, 
+                    k])\)\ \(\[Sum]\+\(k = 1\)\%1.`*^10\(\[Sum]\+\(l = \
+1\)\%1.`*^10 F[k, j, l]\)\)\)\) - 
+      98.99999903969997`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, 
+                  k]\ \(\[Sum]\+\(l = 1\)\%1.`*^10 F[l, j, k]\)\)\)\) + 
+      98.99999903969999`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10 F[i, j, 
+                  k]\ \(\[Sum]\+\(l = 1\)\%1.`*^10\(\[Sum]\+\(m = \
+1\)\%1.`*^10 F[l, m, k]\)\)\)\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Rez7\  = \ 
+      DSimplifyCI[\ Cov[\ M2[1, 1], \ M2[2, 2]]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(1\/\(\((\(-1\) + R)\)\ \((\(-1\) + S)\)\)\)\((\((\(-1\) + R + 
+              S)\)\ \((\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S F[i, \
+j]\))\)\^2 - 
+        R\ S\ \((\[Sum]\+\(i = 1\)\%R\((\[Sum]\+\(j = 1\)\%S F[i, j])\)\^2 - \
+\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S F[i, j]\^2\) + \[Sum]\+\(i = \
+1\)\%R\(\[Sum]\+\(j = 1\)\%S F[i, 
+                      j]\ \(\[Sum]\+\(k = 1\)\%R F[k, 
+                        j]\)\))\))\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(Expand[
+      Rez7\  /. \ {\ R \[Rule] 10.0^10, \ S \[Rule] 10.0^10, \ 
+          T \[Rule] 10.0^10, \ pp \[Rule] 100.0}]\)\(\ \)\)\)], "Input"],
+
+Cell[BoxData[
+    \(2.0000000002999999`*^-10\ \((\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10 F[i, j]\))\)\^2 - 
+      1.0000000002`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\((\[Sum]\+\(j = \
+1\)\%1.`*^10 F[i, j])\)\^2\) + 
+      1.0000000002`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = 1\)\%1.`*^10 \
+F[i, j]\^2\)\) - 
+      1.0000000002`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = 1\)\%1.`*^10 
+                F[i, j]\ \(\[Sum]\+\(k = 1\)\%1.`*^10 F[k, 
+                  j]\)\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(Expand[
+      Rez7\  /. \ {\ R \[Rule] 10.0^10, \ S \[Rule] 10.0^10, \ 
+          T \[Rule] 10.0^10, \ pp \[Rule] 100.0, \ 
+          F[__]\  \[Rule] \ 1}]\)\(\ \)\(\[IndentingNewLine]\)
+    \)\)], "Input"],
+
+Cell[BoxData[
+    \(4.1538374876586294`*^14\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(Rez8\  = \ 
+      DSimplifyCI[\ Cov[\ M2[2, 1], \ M2[2, 2]]]\)\(\[IndentingNewLine]\)
+    \)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\((\(-1\) + R + S - pp\ S)\)\ \((\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S F[i, j]\))\)\^2 + S\ \((\((\(-1\) + pp)\)\ R\ \(\[Sum]\+\(i = \
+1\)\%R\((\[Sum]\+\(j = 1\)\%S F[i, j])\)\^2\) + \((R - pp\ R)\)\ \
+\(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S F[i, j]\^2\)\) + \((pp - R)\)\ \
+\(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S F[i, j]\ \(\[Sum]\+\(k = 1\)\%R \
+F[k, j]\)\)\))\)\)\/\(\((\(-1\) + R)\)\ \((\(-1\) + S)\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(Expand[
+      Rez8\  /. \ {\ R \[Rule] 10.0^10, \ S \[Rule] 10.0^10, \ 
+          T \[Rule] 10.0^10, \ 
+          pp \[Rule] 100.0}]\)\(\ \)\(\[IndentingNewLine]\)
+    \)\)], "Input"],
+
+Cell[BoxData[
+    \(\(-9.80000000197`*^-9\)\ \((\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = 1\
+\)\%1.`*^10 F[i, j]\))\)\^2 + 
+      99.0000000198`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\((\[Sum]\+\(j = \
+1\)\%1.`*^10 F[i, j])\)\^2\) - 
+      99.0000000198`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10 F[i, j]\^2\)\) - 
+      0.9999999902`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = 1\)\%1.`*^10 
+                F[i, j]\ \(\[Sum]\+\(k = 1\)\%1.`*^10 F[k, 
+                  j]\)\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(Expand[
+      Rez8\  /. \ {\ R \[Rule] 10.0^10, \ S \[Rule] 10.0^10, \ 
+          T \[Rule] 10.0^10, \ pp \[Rule] 100.0, \ 
+          F[__]\  \[Rule] 1}]\)\(\ \)\(\[IndentingNewLine]\)
+    \)\)], "Input"],
+
+Cell[BoxData[
+    \(0.`\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\($RecursionLimit\  = \ 
+      8192\[IndentingNewLine]
+    $IterationLimit\  = \ 65536\[IndentingNewLine]
+    Rez9\  = \ DSimplifyCI[\ Var[\ M4[1, 1, 1, 1]]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(8192\)], "Output"],
+
+Cell[BoxData[
+    \(65536\)], "Output"],
+
+Cell[BoxData[
+    \(\(\(1\/\(\((\(-1\) + R)\)\ \((\(-1\) + S)\)\ \((\(-1\) + 
+              T)\)\ \((\(-1\) + U)\)\)\)\((\((\(-1\) + 
+            pp)\)\ \((\((pp\^3 - \((\(-1\) + S)\)\ \((\(-1\) + 
+                        T)\)\ \((\(-1\) + U)\) - 
+                  pp\^2\ \((\(-1\) + R + S + T + U)\) - 
+                  R\ \((\((\(-1\) + T)\)\ \((\(-1\) + U)\) + 
+                        S\ \((\(-1\) + T + U)\))\) + 
+                  pp\ \((\((\(-1\) + T)\)\ \((\(-1\) + U)\) + 
+                        S\ \((\(-1\) + T + U)\) + 
+                        R\ \((\(-1\) + S + T + 
+                              U)\))\))\)\ \((\[Sum]\+\(i = \
+1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, \
+j, k, l]\)\)\))\)\^2 - 
+            R\ \((pp - S)\)\ \((pp - T)\)\ \((pp - 
+                  U)\)\ \(\[Sum]\+\(i = 1\)\%R\((\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, l]\)\))\)\^2\) - 
+            pp\^2\ R\ S\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\((\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, l]\))\)\^2\)\) \
++ pp\^3\ R\ S\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\((\[Sum]\+\(k = 1\
+\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, l]\))\)\^2\)\) + 
+            pp\ R\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\((\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, l]\))\)\^2\)\) \
+- pp\^2\ R\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\((\[Sum]\+\(k \
+= 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, l]\))\)\^2\)\) + 
+            pp\ R\ S\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\((\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, l]\))\)\^2\)\) \
+- pp\^2\ R\ S\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\((\[Sum]\+\(k \
+= 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, l]\))\)\^2\)\) - 
+            R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\((\[Sum]\
+\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, l]\))\)\^2\)\) + 
+            pp\ R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\((\
+\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, l]\))\)\^2\)\) - 
+            pp\ R\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, l])\)\^2\)\)\) + 
+            
+            2\ pp\^2\ R\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, l])\)\^2\)\)\) - 
+            pp\^3\ R\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, l])\)\^2\)\)\) + 
+            R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, l])\)\^2\)\)\) \
+- 2\ pp\ R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, l])\)\^2\)\)\) \
++ pp\^2\ R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, l])\)\^2\)\)\) \
+- R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k = 1\)\
+\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, l]\^2\)\)\)\) + 
+            3\ pp\ R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, l]\^2\)\)\)\) - 
+            3\ pp\^2\ R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, l]\^2\)\)\)\) + 
+            pp\^3\ R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, l]\^2\)\)\)\) - 
+            pp\ R\ S\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%T F[i, j, m, 
+                            l]\)\)\)\)\) + 
+            2\ pp\^2\ R\ S\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%T F[i, j, m, 
+                            l]\)\)\)\)\) - 
+            pp\^3\ R\ S\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%T F[i, j, m, 
+                            l]\)\)\)\)\) + 
+            R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%T F[i, j, m, 
+                            l]\)\)\)\)\) - 
+            2\ pp\ R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%T F[i, j, m, 
+                            l]\)\)\)\)\) + 
+            pp\^2\ R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%T F[i, j, m, 
+                            l]\)\)\)\)\) - 
+            pp\^2\ R\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l])\)\ \(\[Sum]\+\(l = 1\)\%S\(\[Sum]\+\(m = \
+1\)\%U F[i, l, k, m]\)\)\)\)\) + 
+            pp\^3\ R\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l])\)\ \(\[Sum]\+\(l = 1\)\%S\(\[Sum]\+\(m = \
+1\)\%U F[i, l, k, m]\)\)\)\)\) + 
+            pp\ R\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l])\)\ \(\[Sum]\+\(l = 1\)\%S\(\[Sum]\+\(m = \
+1\)\%U F[i, l, k, m]\)\)\)\)\) - 
+            pp\^2\ R\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l])\)\ \(\[Sum]\+\(l = 1\)\%S\(\[Sum]\+\(m = \
+1\)\%U F[i, l, k, m]\)\)\)\)\) + 
+            pp\ R\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l])\)\ \(\[Sum]\+\(l = 1\)\%S\(\[Sum]\+\(m = \
+1\)\%U F[i, l, k, m]\)\)\)\)\) - 
+            pp\^2\ R\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l])\)\ \(\[Sum]\+\(l = 1\)\%S\(\[Sum]\+\(m = \
+1\)\%U F[i, l, k, m]\)\)\)\)\) - 
+            R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l])\)\ \(\[Sum]\+\(l = 1\)\%S\(\[Sum]\+\(m = \
+1\)\%U F[i, l, k, m]\)\)\)\)\) + 
+            pp\ R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l])\)\ \(\[Sum]\+\(l = 1\)\%S\(\[Sum]\+\(m = \
+1\)\%U F[i, l, k, m]\)\)\)\)\) - 
+            pp\ R\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%S F[i, m, k, 
+                            l]\)\)\)\)\) + 
+            2\ pp\^2\ R\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%S F[i, m, k, 
+                            l]\)\)\)\)\) - 
+            pp\^3\ R\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%S F[i, m, k, 
+                            l]\)\)\)\)\) + 
+            R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%S F[i, m, k, 
+                            l]\)\)\)\)\) - 
+            2\ pp\ R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%S F[i, m, k, 
+                            l]\)\)\)\)\) + 
+            pp\^2\ R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%S F[i, m, k, 
+                            l]\)\)\)\)\) - 
+            pp\^3\ S\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\((\[Sum]\+\
+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l]\))\)\ \(\[Sum]\+\(k = 1\)\%R\(\[Sum]\+\(l = \
+1\)\%T\(\[Sum]\+\(m = 1\)\%U F[k, j, l, m]\)\)\)\)\) + 
+            pp\^2\ R\ S\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\((\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l]\))\)\ \(\[Sum]\+\(k = 1\)\%R\(\[Sum]\+\(l = \
+1\)\%T\(\[Sum]\+\(m = 1\)\%U F[k, j, l, m]\)\)\)\)\) + 
+            pp\^2\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\((\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l]\))\)\ \(\[Sum]\+\(k = 1\)\%R\(\[Sum]\+\(l = \
+1\)\%T\(\[Sum]\+\(m = 1\)\%U F[k, j, l, m]\)\)\)\)\) - 
+            pp\ R\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\((\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l]\))\)\ \(\[Sum]\+\(k = 1\)\%R\(\[Sum]\+\(l = \
+1\)\%T\(\[Sum]\+\(m = 1\)\%U F[k, j, l, m]\)\)\)\)\) + 
+            pp\^2\ S\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\((\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l]\))\)\ \(\[Sum]\+\(k = 1\)\%R\(\[Sum]\+\(l = \
+1\)\%T\(\[Sum]\+\(m = 1\)\%U F[k, j, l, m]\)\)\)\)\) - 
+            pp\ R\ S\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\((\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l]\))\)\ \(\[Sum]\+\(k = 1\)\%R\(\[Sum]\+\(l = \
+1\)\%T\(\[Sum]\+\(m = 1\)\%U F[k, j, l, m]\)\)\)\)\) - 
+            pp\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\((\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l]\))\)\ \(\[Sum]\+\(k = 1\)\%R\(\[Sum]\+\(l = \
+1\)\%T\(\[Sum]\+\(m = 1\)\%U F[k, j, l, m]\)\)\)\)\) + 
+            R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\((\[Sum]\
+\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l]\))\)\ \(\[Sum]\+\(k = 1\)\%R\(\[Sum]\+\(l = \
+1\)\%T\(\[Sum]\+\(m = 1\)\%U F[k, j, l, m]\)\)\)\)\) - 
+            pp\^2\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l])\)\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = \
+1\)\%U F[l, j, k, m]\)\)\)\)\) + 
+            pp\^3\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l])\)\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = \
+1\)\%U F[l, j, k, m]\)\)\)\)\) + 
+            pp\ R\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l])\)\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = \
+1\)\%U F[l, j, k, m]\)\)\)\)\) - 
+            pp\^2\ R\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l])\)\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = \
+1\)\%U F[l, j, k, m]\)\)\)\)\) + 
+            pp\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l])\)\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = \
+1\)\%U F[l, j, k, m]\)\)\)\)\) - 
+            
+            pp\^2\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l])\)\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = \
+1\)\%U F[l, j, k, m]\)\)\)\)\) - 
+            R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l])\)\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = \
+1\)\%U F[l, j, k, m]\)\)\)\)\) + 
+            pp\ R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l])\)\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = \
+1\)\%U F[l, j, k, m]\)\)\)\)\) - 
+            pp\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R F[m, j, k, 
+                            l]\)\)\)\)\) + 
+            2\ pp\^2\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R F[m, j, k, 
+                            l]\)\)\)\)\) - 
+            pp\^3\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R F[m, j, k, 
+                            l]\)\)\)\)\) + 
+            R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R F[m, j, k, 
+                            l]\)\)\)\)\) - 
+            2\ pp\ R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R F[m, j, k, 
+                            l]\)\)\)\)\) + 
+            pp\^2\ R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R F[m, j, k, 
+                            l]\)\)\)\)\) - 
+            pp\^2\ R\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%S\(\[Sum]\+\(n = 1\)\%T F[
+                              i, m, n, l]\)\)\)\)\)\) + 
+            pp\^3\ R\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%S\(\[Sum]\+\(n = 1\)\%T F[
+                              i, m, n, l]\)\)\)\)\)\) + 
+            pp\ R\ S\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%S\(\[Sum]\+\(n = 1\)\%T F[
+                              i, m, n, l]\)\)\)\)\)\) - 
+            pp\^2\ R\ S\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%S\(\[Sum]\+\(n = 1\)\%T F[
+                              i, m, n, l]\)\)\)\)\)\) + 
+            pp\ R\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%S\(\[Sum]\+\(n = 1\)\%T F[
+                              i, m, n, l]\)\)\)\)\)\) - 
+            pp\^2\ R\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%S\(\[Sum]\+\(n = 1\)\%T F[
+                              i, m, n, l]\)\)\)\)\)\) - 
+            R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%S\(\[Sum]\+\(n = 1\)\%T F[
+                              i, m, n, l]\)\)\)\)\)\) + 
+            pp\ R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%S\(\[Sum]\+\(n = 1\)\%T F[
+                              i, m, n, l]\)\)\)\)\)\) - 
+            pp\^3\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l])\)\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = \
+1\)\%S\(\[Sum]\+\(n = 1\)\%U F[l, m, k, n]\)\)\)\)\)\) + 
+            pp\^2\ R\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l])\)\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = \
+1\)\%S\(\[Sum]\+\(n = 1\)\%U F[l, m, k, n]\)\)\)\)\)\) + 
+            pp\^2\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l])\)\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = \
+1\)\%S\(\[Sum]\+\(n = 1\)\%U F[l, m, k, n]\)\)\)\)\)\) - 
+            pp\ R\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l])\)\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = \
+1\)\%S\(\[Sum]\+\(n = 1\)\%U F[l, m, k, n]\)\)\)\)\)\) + 
+            pp\^2\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l])\)\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = \
+1\)\%S\(\[Sum]\+\(n = 1\)\%U F[l, m, k, n]\)\)\)\)\)\) - 
+            pp\ R\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l])\)\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = \
+1\)\%S\(\[Sum]\+\(n = 1\)\%U F[l, m, k, n]\)\)\)\)\)\) - 
+            pp\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l])\)\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = \
+1\)\%S\(\[Sum]\+\(n = 1\)\%U F[l, m, k, n]\)\)\)\)\)\) + 
+            R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                            l])\)\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = \
+1\)\%S\(\[Sum]\+\(n = 1\)\%U F[l, m, k, n]\)\)\)\)\)\) - 
+            pp\^2\ S\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R\(\[Sum]\+\(n = 1\)\%T F[
+                              m, j, n, l]\)\)\)\)\)\) + 
+            pp\^3\ S\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R\(\[Sum]\+\(n = 1\)\%T F[
+                              m, j, n, l]\)\)\)\)\)\) + 
+            pp\ R\ S\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R\(\[Sum]\+\(n = 1\)\%T F[
+                              m, j, n, l]\)\)\)\)\)\) - 
+            pp\^2\ R\ S\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R\(\[Sum]\+\(n = 1\)\%T F[
+                              m, j, n, l]\)\)\)\)\)\) + 
+            
+            pp\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R\(\[Sum]\+\(n = 1\)\%T F[
+                              m, j, n, l]\)\)\)\)\)\) - 
+            pp\^2\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R\(\[Sum]\+\(n = 1\)\%T F[
+                              m, j, n, l]\)\)\)\)\)\) - 
+            R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R\(\[Sum]\+\(n = 1\)\%T F[
+                              m, j, n, l]\)\)\)\)\)\) + 
+            pp\ R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R\(\[Sum]\+\(n = 1\)\%T F[
+                              m, j, n, l]\)\)\)\)\)\) - 
+            pp\^2\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R\(\[Sum]\+\(n = 1\)\%S F[
+                              m, n, k, l]\)\)\)\)\)\) + 
+            pp\^3\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R\(\[Sum]\+\(n = 1\)\%S F[
+                              m, n, k, l]\)\)\)\)\)\) + 
+            pp\ R\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R\(\[Sum]\+\(n = 1\)\%S F[
+                              m, n, k, l]\)\)\)\)\)\) - 
+            pp\^2\ R\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R\(\[Sum]\+\(n = 1\)\%S F[
+                              m, n, k, l]\)\)\)\)\)\) + 
+            pp\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R\(\[Sum]\+\(n = 1\)\%S F[
+                              m, n, k, l]\)\)\)\)\)\) - 
+            pp\^2\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R\(\[Sum]\+\(n = 1\)\%S F[
+                              m, n, k, l]\)\)\)\)\)\) - 
+            R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R\(\[Sum]\+\(n = 1\)\%S F[
+                              m, n, k, l]\)\)\)\)\)\) + 
+            pp\ R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R\(\[Sum]\+\(n = 1\)\%S F[
+                              m, n, k, l]\)\)\)\)\)\) - 
+            pp\^3\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R\(\[Sum]\+\(n = 1\)\%S\(\
+\[Sum]\+\(o = 1\)\%T F[m, n, o, l]\)\)\)\)\)\)\) + 
+            pp\^2\ R\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R\(\[Sum]\+\(n = 1\)\%S\(\
+\[Sum]\+\(o = 1\)\%T F[m, n, o, l]\)\)\)\)\)\)\) + 
+            pp\^2\ S\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R\(\[Sum]\+\(n = 1\)\%S\(\
+\[Sum]\+\(o = 1\)\%T F[m, n, o, l]\)\)\)\)\)\)\) - 
+            pp\ R\ S\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R\(\[Sum]\+\(n = 1\)\%S\(\
+\[Sum]\+\(o = 1\)\%T F[m, n, o, l]\)\)\)\)\)\)\) + 
+            pp\^2\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R\(\[Sum]\+\(n = 1\)\%S\(\
+\[Sum]\+\(o = 1\)\%T F[m, n, o, l]\)\)\)\)\)\)\) - 
+            pp\ R\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R\(\[Sum]\+\(n = 1\)\%S\(\
+\[Sum]\+\(o = 1\)\%T F[m, n, o, l]\)\)\)\)\)\)\) - 
+            pp\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R\(\[Sum]\+\(n = 1\)\%S\(\
+\[Sum]\+\(o = 1\)\%T F[m, n, o, l]\)\)\)\)\)\)\) + 
+            R\ S\ T\ U\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\ \(\[Sum]\+\(m = 1\)\%R\(\[Sum]\+\(n = 1\)\%S\(\
+\[Sum]\+\(o = 1\)\%T F[m, n, o, l]\)\)\)\)\)\)\))\))\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Expand[
+      Rez9\  /. \ {\ R \[Rule] 10.0^10, \ S \[Rule] 10.0^10, \ 
+          T \[Rule] 10.0^10, \ U \[Rule] 10.0^10, 
+          pp \[Rule] 100.0}]\)\(\ \)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(-3.95999994159`*^-8\)\ \((\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = 1\
+\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10\(\[Sum]\+\(l = 1\)\%1.`*^10 F[i, j, \
+k, l]\)\)\))\)\^2 + 
+      98.99999706960003`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\((\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10\(\[Sum]\+\(l = 1\)\%1.`*^10 F[i, j, \
+k, l]\)\))\)\^2\) + 
+      9800.9998079004`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\((\[Sum]\+\(k = 1\)\%1.`*^10\(\[Sum]\+\(l = 1\)\%1.`*^10 F[i, j, \
+k, l]\))\)\^2\)\) + 
+      970298.9906851293`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10\((\[Sum]\+\(l = 1\)\%1.`*^10 F[i, j, \
+k, l])\)\^2\)\)\) + 
+      9.605960103842382`*^7\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10\(\[Sum]\+\(l = 1\)\%1.`*^10 F[i, j, \
+k, l]\^2\)\)\)\) + 
+      970298.9906851293`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10\(\[Sum]\+\(l = 1\)\%1.`*^10 F[i, j, 
+                    k, l]\ \(\[Sum]\+\(m = 1\)\%1.`*^10 F[i, j, m, 
+                      l]\)\)\)\)\) + 
+      9800.9998079004`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10\((\[Sum]\+\(l = 1\)\%1.`*^10 F[i, j, 
+                      k, l])\)\ \(\[Sum]\+\(l = 1\)\%1.`*^10\(\[Sum]\+\(m = 1\
+\)\%1.`*^10 F[i, l, k, m]\)\)\)\)\) + 
+      970298.9906851293`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10\(\[Sum]\+\(l = 1\)\%1.`*^10 F[i, j, 
+                    k, l]\ \(\[Sum]\+\(m = 1\)\%1.`*^10 F[i, m, k, 
+                      l]\)\)\)\)\) + 
+      98.99999706960003`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\((\[Sum]\+\(k = 1\)\%1.`*^10\(\[Sum]\+\(l = 1\)\%1.`*^10 F[i, j, 
+                      k, l]\))\)\ \(\[Sum]\+\(k = 1\)\%1.`*^10\(\[Sum]\+\(l = \
+1\)\%1.`*^10\(\[Sum]\+\(m = 1\)\%1.`*^10 F[k, j, l, m]\)\)\)\)\) + 
+      9800.9998079004`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10\((\[Sum]\+\(l = 1\)\%1.`*^10 F[i, j, 
+                      k, 
+                      l])\)\ \(\[Sum]\+\(l = 1\)\%1.`*^10\(\[Sum]\+\(m = \
+1\)\%1.`*^10 F[l, j, k, m]\)\)\)\)\) + 
+      970298.9906851293`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10\(\[Sum]\+\(l = 1\)\%1.`*^10 F[i, j, 
+                    k, l]\ \(\[Sum]\+\(m = 1\)\%1.`*^10 F[m, j, k, 
+                      l]\)\)\)\)\) + 
+      9800.9998079004`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10\(\[Sum]\+\(l = 1\)\%1.`*^10 F[i, j, 
+                    k, l]\ \(\[Sum]\+\(m = 1\)\%1.`*^10\(\[Sum]\+\(n = \
+1\)\%1.`*^10 F[i, m, n, l]\)\)\)\)\)\) + 
+      98.99999706960003`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10\((\[Sum]\+\(l = 1\)\%1.`*^10 F[i, j, 
+                      k, l])\)\ \(\[Sum]\+\(l = 1\)\%1.`*^10\(\[Sum]\+\(m = 1\
+\)\%1.`*^10\(\[Sum]\+\(n = 1\)\%1.`*^10 F[l, m, k, n]\)\)\)\)\)\) + 
+      9800.9998079004`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10\(\[Sum]\+\(l = 1\)\%1.`*^10 F[i, j, 
+                    k, l]\ \(\[Sum]\+\(m = 1\)\%1.`*^10\(\[Sum]\+\(n = \
+1\)\%1.`*^10 F[m, j, n, l]\)\)\)\)\)\) + 
+      9800.9998079004`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10\(\[Sum]\+\(l = 1\)\%1.`*^10 F[i, j, 
+                    k, l]\ \(\[Sum]\+\(m = 1\)\%1.`*^10\(\[Sum]\+\(n = \
+1\)\%1.`*^10 F[m, n, k, l]\)\)\)\)\)\) + 
+      98.99999706960003`\ \(\[Sum]\+\(i = 1\)\%1.`*^10\(\[Sum]\+\(j = \
+1\)\%1.`*^10\(\[Sum]\+\(k = 1\)\%1.`*^10\(\[Sum]\+\(l = 1\)\%1.`*^10 F[i, j, 
+                    k, l]\ \(\[Sum]\+\(m = 1\)\%1.`*^10\(\[Sum]\+\(n = \
+1\)\%1.`*^10\(\[Sum]\+\(o = 1\)\%1.`*^10 F[m, n, o, 
+                          l]\)\)\)\)\)\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Expand[{Rez1, Rez3, 
+          Rez7}\  /. {F[__]\  \[Rule] \ 1, \ \ R \[Rule] 10.0^5, \ 
+          S \[Rule] 10.0^5, \ T \[Rule] 10.0^5, \ 
+          pp \[Rule] 100.0}]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \($Aborted\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Expand[\ 
+      Rez1\  /. \ F[__]\  \[Rule] 1]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(0\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Expand[{Rez1, Rez3, 
+          Rez7}\  /. {F[i_, 
+              j_]\  \[Rule] \ \((d[i, j]\  + d[i, j + 1] + d[i, j + 2] + 
+                d[i, j + 3] + d[i, j + 4])\), \ \ R \[Rule] 10.0^2, \ 
+          S \[Rule] 10.0^2, \ T \[Rule] 10.0^2, \ 
+          pp \[Rule] 100.0}]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \({4.659900000000001`*^6, \(-44140.40404040404`\), 
+      416.273849607183`}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \({4.659900000000001`*^6, \(-99\)*44140.40404040404`, 
+      99*416.273849607183`}\)], "Input"],
+
+Cell[BoxData[
+    \({4.659900000000001`*^6, \(-4.3699`*^6\), 
+      41211.11111111112`}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(FactorTerms[
+      Rez9, {R, S, T, U, pp}]\)\)\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(General::"poly"\), \(\(:\)\(\ \)\), \
+"\<\"\\!\\(\\(\\(\\((\\(\\(-1\\)\\) + pp)\\)\\)\\\\ \\(\\((\\(\[LeftSkeleton] \
+1 \[RightSkeleton]\\))\\)\\)\\)\\/\\(\\(\\((\\(\\(-1\\)\\) + R)\\)\\)\\\\ \\(\
+\\((\\(\\(-1\\)\\) + S)\\)\\)\\\\ \\(\\((\\(\\(-1\\)\\) + T)\\)\\)\\\\ \
+\\(\\((\\(\\(-1\\)\\) + U)\\)\\)\\)\\) is not a polynomial. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::poly\\\"]\\)\"\>"}]], \
+"Message"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Expand[\((pp\^3 - \((\(-1\) + 
+                S)\)\ \((\(-1\) + T)\)\ \((\(-1\) + U)\) - 
+          pp\^2\ \((\(-1\) + R + S + T + U)\) - 
+          R\ \((\((\(-1\) + T)\)\ \((\(-1\) + U)\) + 
+                S\ \((\(-1\) + T + U)\))\) + 
+          pp\ \((\((\(-1\) + T)\)\ \((\(-1\) + U)\) + 
+                S\ \((\(-1\) + T + U)\) + 
+                R\ \((\(-1\) + S + T + U)\))\))\)\ ]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(1 + pp + pp\^2 + pp\^3 - R - pp\ R - pp\^2\ R - S - pp\ S - pp\^2\ S + 
+      R\ S + pp\ R\ S - T - pp\ T - pp\^2\ T + R\ T + pp\ R\ T + S\ T + 
+      pp\ S\ T - R\ S\ T - U - pp\ U - pp\^2\ U + R\ U + pp\ R\ U + S\ U + 
+      pp\ S\ U - R\ S\ U + T\ U + pp\ T\ U - R\ T\ U - S\ T\ U\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(FactorTerms[
+      1 + pp + pp\^2 + pp\^3 - R - pp\ R - pp\^2\ R - S - pp\ S - pp\^2\ S + 
+        R\ S + pp\ R\ S - T - pp\ T - pp\^2\ T + R\ T + pp\ R\ T + S\ T + 
+        pp\ S\ T - R\ S\ T - U - pp\ U - pp\^2\ U + R\ U + pp\ R\ U + S\ U + 
+        pp\ S\ U - R\ S\ U + T\ U + pp\ T\ U - R\ T\ U - S\ T\ U, \ {R, S, T, 
+        U}]\)], "Input"],
+
+Cell[BoxData[
+    \(1 + pp + pp\^2 + pp\^3 - R - pp\ R - pp\^2\ R - S - pp\ S - pp\^2\ S + 
+      R\ S + pp\ R\ S - T - pp\ T - pp\^2\ T + R\ T + pp\ R\ T + S\ T + 
+      pp\ S\ T - R\ S\ T - U - pp\ U - pp\^2\ U + R\ U + pp\ R\ U + S\ U + 
+      pp\ S\ U - R\ S\ U + T\ U + pp\ T\ U - R\ T\ U - S\ T\ U\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Expand[\((\(-1\) + pp)\)\ \((\(-1\) - 
+            pp\^2 + S + T - S\ T - R\ \((\(-1\) + S + T)\) + 
+            pp\ \((\(-1\) + R + S + T)\))\)]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(1 - pp\^3 - R + pp\^2\ R - S + pp\^2\ S + R\ S - pp\ R\ S - T + 
+      pp\^2\ T + R\ T - pp\ R\ T + S\ T - pp\ S\ T\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Expand[\ \((R - pp)\) \((S - pp)\) \((T - pp)\) - \((R - 1)\) \((S - 
+              1)\) \((T - 1)\)]\)], "Input"],
+
+Cell[BoxData[
+    \(1 - pp\^3 - R + pp\^2\ R - S + pp\^2\ S + R\ S - pp\ R\ S - T + 
+      pp\^2\ T + R\ T - pp\ R\ T + S\ T - pp\ S\ T\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(DSimplify[Var[\ M1[1]]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\((\(-1\) + pp)\)\ \((\(-S[F]\^2\) + R\ SJ[F])\)\)\/\(\(-1\) + \
+R\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(\[IndentingNewLine]\)\( (*\ 
+      checking\ the\ unbiased\ estimator\ for\ Var[
+          M1[1]]\ *) \)\(\[IndentingNewLine]\)\(\[IndentingNewLine]\)\(\
+DSimplify[\ 
+      Ex[\ \((\((R - pp)\) - \((R - 1)\))\)/\((R - pp)\) M1[1]^2 + 
+          R\ pp\ \((pp - 1)\)/\((R - pp)\)\ N1[1]]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(-\(\(\((\(-1\) + 
+                pp)\)\ \((\((pp - R)\)\ S[F]\^2 + \((1 + 
+                      pp\ \((\(-2\) + R)\))\)\ R\ SJ[F])\)\)\/\(\((pp - 
+                R)\)\ \((\(-1\) + R)\)\)\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(DSimplify[\ 
+      Ex[\ \((pp - 1)\)/\((R - 1)\) \((\(-\((R - 1)\)\)/\((R - pp)\) 
+                M1[1]^2\  + \ \((R - 1)\)/\((R - pp)\)\ R\ N1[
+                  1])\)]]\)], "Input"],
+
+Cell[BoxData[
+    \(\(\((\(-1\) + pp)\)\ \((\(-S[F]\^2\) + R\ SJ[F])\)\)\/\(\(-1\) + \
+R\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(DSimplify[\ 
+      Ex[\ \((pp - 1)\)/\((R - pp)\) \((\ \(-M1[1]^2\) + 
+              R\ N1[1])\)]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\((\(-1\) + pp)\)\ \((\(-S[F]\^2\) + R\ SJ[F])\)\)\/\(\(-1\) + \
+R\)\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\( (*\ 
+      checking\ the\ unbiased\ estimator\ for\ Var[M2[1]]\ *) \)\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(DSimplifyCI[\ 
+      Var[\ M2[1, 1]]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\((\(-1\) + pp)\)\ \((\((1 + pp - R - S)\)\ \((\[Sum]\+\(i = 1\)\%R\(\
+\[Sum]\+\(j = 1\)\%S F[i, j]\))\)\^2 + R\ \((\(-pp\) + S)\)\ \(\[Sum]\+\(i = \
+1\)\%R\((\[Sum]\+\(j = 1\)\%S F[i, j])\)\^2\) + S\ \((\((\(-1\) + pp)\)\ R\ \
+\(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S F[i, j]\^2\)\) + \((\(-pp\) + R)\
+\)\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S F[i, j]\ \(\[Sum]\+\(k = 1\)\
+\%R F[k, j]\)\)\))\))\)\)\/\(\((\(-1\) + R)\)\ \((\(-1\) + S)\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(DSimplifyCI[\ 
+      Ex[\ \((pp - 1)\)^2/\((\ \((R - pp)\) \((S - pp)\))\)\ \((\ \(-\ 
+                M2[1, 1]^2\)\ \  + \ R\ N2R[1, 1]\  + \ S\ N2S[1, 1]\  + \ 
+              R\ S\ N2[1, 1])\)]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(-\(\(1\/\(\((pp - R)\)\ \((\(-1\) + R)\)\ \((pp - S)\)\ \((\(-1\) + 
+                S)\)\)\)\((\((\(-1\) + pp)\)\^2\ \((\((pp - R)\)\ \((pp - 
+                    S)\)\ \((\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S F[i, \
+j]\))\)\^2 - \((pp - R)\)\ R\ \((pp - 
+                    S)\)\ \(\[Sum]\+\(i = 1\)\%R\((\[Sum]\+\(j = 1\)\%S F[i, \
+j])\)\^2\) - S\ \((R\ \((1 - pp\^2 + pp\ \((1 + R)\) + R\ \((\(-2\) + S)\) - 
+                          S)\)\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S \
+F[i, j]\^2\)\) - \((pp - R)\)\ \((\(-1\) + 
+                          S)\)\ \(\[Sum]\+\(i = 1\)\%S\((\[Sum]\+\(j = 1\)\%R 
+                                F[j, i])\)\ \(\[Sum]\+\(j = 1\)\%R F[j, 
+                              j]\)\) + \((\(-1\) + 
+                          pp)\)\ \((R\ \((\(-1\) + 
+                                S)\)\ \(\[Sum]\+\(i = 1\)\%S\(\[Sum]\+\(j = 1\
+\)\%R F[j, j]\^2\)\) + \((pp - 
+                                R)\)\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\
+\)\%S F[i, j]\ \(\[Sum]\+\(k = 1\)\%R F[k, 
+                                      j]\)\)\))\))\))\))\)\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(\[IndentingNewLine]\)\(DSimplify[\ 
+      Ex[\ M1[1]^2]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(pp\ R\^2\ F[20]\^2\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(M1[p]\)], "Input"],
+
+Cell[BoxData[
+    \(pp\ R\ F[20]\ X[20, p]\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Definition[M1]\)], "Input"],
+
+Cell[BoxData[
+    InterpretationBox[GridBox[{
+          {GridBox[{
+                {\(M1[p_] := \(\[Sum]\+\(i = 1\)\%R F[i]\ X[i, p]\)\/a[p]\)}
+                },
+              GridBaseline->{Baseline, {1, 1}},
+              ColumnWidths->0.999,
+              ColumnAlignments->{Left}]}
+          },
+        GridBaseline->{Baseline, {1, 1}},
+        ColumnAlignments->{Left}],
+      Definition[ M1],
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Clear[F, R]\)\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Definition[F]\)\)\)], "Input"],
+
+Cell[BoxData[
+    InterpretationBox["Null",
+      Definition[ F],
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(\[IndentingNewLine]\)\(DSimplifyCI[\ 
+      Ex[M2[p, q]^2]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(-\((\(-1\) + pp)\)\)\ R\ \((pp - S)\)\ \(\[Sum]\+\(i = 1\)\%R\((\
+\[Sum]\+\(j = 1\)\%S F[i, j])\)\^2\) + \((\(-1\) + pp)\)\^2\ R\ S\ \(\[Sum]\+\
+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S F[i, j]\^2\)\) + \((pp - R)\)\ \((\((pp - \
+S)\)\ \((\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S F[i, j]\))\)\^2 - \((\(-1\
+\) + pp)\)\ S\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S F[i, j]\ \(\[Sum]\
+\+\(k = 1\)\%R F[k, j]\)\)\))\)\)\/\(\((\(-1\) + R)\)\ \((\(-1\) + S)\)\)\)], \
+"Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(DSimplifyCI[\ Ex[N2R[p, q]]]\)], "Input"],
+
+Cell[BoxData[
+    \(\(\((\(-pp\) + S)\)\ \(\[Sum]\+\(i = 1\)\%R\((\[Sum]\+\(j = 1\)\%S F[i, \
+j])\)\^2\) + \((\(-1\) + pp)\)\ S\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S F[i, j]\^2\)\)\)\/\(\(-1\) + S\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(DSimplifyCI[\ 
+      Ex[\ \ \((N2R[p, q] - 
+              S\ \((pp - 1)\)/\((S - 1)\) N2[p, q])\)*\((S - 1)\)/\((S - 
+                pp)\)]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\[Sum]\+\(i = 1\)\%R\((\[Sum]\+\(j = 1\)\%S F[i, j])\)\^2\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(Clear[N2U, \ N2RU, \ N2SU, \ M22U, \ Var2U]\), "\[IndentingNewLine]", 
+    \(N2U\  := \ N2[p, q]\), "\[IndentingNewLine]", 
+    \(N2RU\  := \ \((N2R[p, q] - 
+            S\ \((pp - 1)\)/\((S - 1)\) N2U)\)*\((S - 1)\)/\((S - 
+              pp)\)\), "\[IndentingNewLine]", 
+    \(N2SU\  := \ \((N2S[p, q]\  - 
+            R \((pp - 1)\)/\((R - 1)\) N2U)\)*\((R - 1)\)/\((R - 
+              pp)\)\[IndentingNewLine] (*\ 
+      Unbiased\ estimator\ for\ M2^2\ *) \), "\[IndentingNewLine]", 
+    \(M22U\  := \ \((M2[p, q]^2 - 
+            1/\((\ \((R - 1)\) \((S - 1)\)\ )\) \((\ \((pp - 1)\) 
+                    R \((S - pp)\)\ N2RU + \((pp - 1)\) S \((R - pp)\) 
+                    N2SU + \((pp - 1)\)^2\ R\ S\ N2U)\))\)*\((\ \((R - 
+                  1)\) \((S - 1)\)\ )\)/\((\ \((R - pp)\) \((S - 
+                  pp)\))\)\), "\[IndentingNewLine]", 
+    \(Var2U\  := \ 
+      1/\((\ \((R - 1)\)\ \((S - 
+                  1)\)\ )\)\ \((\ \((\ \((R - pp)\) \((S - pp)\) - \((R - 
+                        1)\) \((S - 1)\))\)\ M22U\  + \ \((pp - 1)\) 
+              R \((S - pp)\)\ N2RU + \((pp - 1)\) S \((R - pp)\) 
+              N2SU + \((pp - 1)\)^2\ R\ S\ N2U)\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(DSimplifyCI[\ Ex[N2RU]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\[Sum]\+\(i = 1\)\%R\((\[Sum]\+\(j = 1\)\%S F[i, j])\)\^2\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(DSimplifyCI[\ Ex[\ N2SU]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(1\/\(pp - 
+          R\)\)\((\((\(-1\) + 
+              pp)\)\ R\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S F[i, \
+j]\^2\)\) + \((pp - 
+              R)\)\ \(\[Sum]\+\(i = 1\)\%S\((\[Sum]\+\(j = 1\)\%R F[j, 
+                    i])\)\ \(\[Sum]\+\(j = 1\)\%R F[j, j]\)\) - \((\(-1\) + 
+              pp)\)\ R\ \(\[Sum]\+\(i = 1\)\%S\(\[Sum]\+\(j = 1\)\%R F[j, \
+j]\^2\)\))\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(DSimplifyCI[\ Ex[M22U]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(1\/\(\((pp - R)\)\ \((pp - S)\)\)\)\((\((pp - R)\)\ \((pp - 
+              S)\)\ \((\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S F[i, \
+j]\))\)\^2 + \((\(-1\) + 
+              pp)\)\ S\ \((\((\(-1\) + 
+                    pp)\)\ R\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S \
+F[i, j]\^2\)\) + \((pp - 
+                    R)\)\ \(\[Sum]\+\(i = 1\)\%S\((\[Sum]\+\(j = 1\)\%R F[j, 
+                          i])\)\ \(\[Sum]\+\(j = 1\)\%R F[j, j]\)\) + 
+              R\ \(\[Sum]\+\(i = 1\)\%S\(\[Sum]\+\(j = 1\)\%R F[j, j]\^2\)\) \
+- pp\ R\ \(\[Sum]\+\(i = 1\)\%S\(\[Sum]\+\(j = 1\)\%R F[j, j]\^2\)\) - 
+              pp\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S F[i, 
+                        j]\ \(\[Sum]\+\(k = 1\)\%R F[k, j]\)\)\) + 
+              R\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S F[i, 
+                        j]\ \(\[Sum]\+\(k = 1\)\%R F[k, 
+                          j]\)\)\))\))\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(DSimplifyCI[\ 
+      Ex[\ M2[p, q]^2]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(1\/\(\((\(-1\) + R)\)\ \((\(-1\) + 
+              S)\)\)\)\((\(-\((\(-1\) + pp)\)\)\ R\ \((pp - 
+              S)\)\ \(\[Sum]\+\(i = 1\)\%R\((\[Sum]\+\(j = 1\)\%S F[i, \
+j])\)\^2\) + \((\(-1\) + pp)\)\^2\ R\ S\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j \
+= 1\)\%S F[i, j]\^2\)\) + \((pp - 
+              R)\)\ \((\((pp - 
+                    S)\)\ \((\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S F[i, \
+j]\))\)\^2 - \((\(-1\) + 
+                    pp)\)\ S\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S F[
+                        i, j]\ \(\[Sum]\+\(k = 1\)\%R F[k, 
+                          j]\)\)\))\))\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(DSimplifyCI[\ 
+      Ex[\ Var2U - Var[M2[p, q]]]]\)\(\ \)\( (*\ 
+      I\ checked\ theat\ it\ simplifies\ to\ 0\ *) \)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(-\(\(1\/\(\((pp - R)\)\ \((pp - S)\)\)\)\((\((\(-1\) + 
+              pp)\)\ S\ \((\((\(-1\) + 
+                    pp)\)\ R\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S \
+F[i, j]\^2\)\) + \((pp - 
+                    R)\)\ \(\[Sum]\+\(i = 1\)\%S\((\[Sum]\+\(j = 1\)\%R F[j, 
+                          i])\)\ \(\[Sum]\+\(j = 1\)\%R F[j, j]\)\) + 
+              R\ \(\[Sum]\+\(i = 1\)\%S\(\[Sum]\+\(j = 1\)\%R F[j, j]\^2\)\) \
+- pp\ R\ \(\[Sum]\+\(i = 1\)\%S\(\[Sum]\+\(j = 1\)\%R F[j, j]\^2\)\) - 
+              pp\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S F[i, 
+                        j]\ \(\[Sum]\+\(k = 1\)\%R F[k, j]\)\)\) + 
+              R\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S F[i, 
+                        j]\ \(\[Sum]\+\(k = 1\)\%R F[k, 
+                          j]\)\)\))\))\)\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\( (*\ 
+      Checking\ the\ \(C++\)\ code\ *) \)\(\[IndentingNewLine]\)\(N2U\  := \ 
+      pp^2*N2V\n
+    N2RU\  := \ \((pp^3*N2RV - 
+            S\ \((pp - 1)\)/\((S - 1)\) N2U)\)*\((S - 1)\)/\((S - pp)\)\n
+    N2SU\  := \ \((pp^3*N2SV - 
+            R \((pp - 1)\)/\((R - 1)\) N2U)\)*\((R - 1)\)/\((R - 
+              pp)\)\[IndentingNewLine] (*\ 
+      Unbiased\ estimator\ for\ M2^2\ *) \n
+    M22U\  := \ \((pp^4*M22V - 
+            1/\((\ \((R - 1)\) \((S - 1)\)\ )\) \((\ \((pp - 1)\) 
+                    R \((S - pp)\)\ N2RU + \((pp - 1)\) S \((R - pp)\) 
+                    N2SU + \((pp - 1)\)^2\ R\ S\ N2U)\))\)*\((\ \((R - 
+                  1)\) \((S - 1)\)\ )\)/\((\ \((R - pp)\) \((S - 
+                  pp)\))\)\[IndentingNewLine]
+    Var2U\  := \ 
+      1/\((\ \((R - 1)\)\ \((S - 
+                  1)\)\ )\)\ \((\ \((\ \((R - pp)\) \((S - pp)\) - \((R - 
+                        1)\) \((S - 1)\))\)\ M22U\  + \ \((pp - 1)\) 
+              R \((S - pp)\)\ N2RU + \((pp - 1)\) S \((R - pp)\) 
+              N2SU + \((pp - 1)\)^2\ R\ S\ N2U)\)\[IndentingNewLine]
+    Var2B\  := \ \ 1/\((\ \((R - 1)\)\ \((S - 
+                  1)\)\ )\)\ \((\ \((\ \((R - pp)\) \((S - pp)\) - \((R - 
+                        1)\) \((S - 1)\))\)\ pp^4*M22V\  + \ \((pp - 1)\) 
+              R \((S - pp)\) pp^3\ \ N2RV + \((pp - 1)\) S \((R - pp)\) 
+              pp^3\ N2SV + \((pp - 1)\)^2\ R\ S\ pp^2\ N2V)\)\)\)\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(General::"spell1"\), \(\(:\)\(\ \)\), "\<\"Possible spelling \
+error: new symbol name \\\"\\!\\(Var2B\\)\\\" is similar to existing symbol \
+\\\"\\!\\(Var2U\\)\\\". \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::spell1\\\"]\\)\"\>"}]], "Message"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Simplify[\ 
+      N2U\  /. \ {pp \[Rule] 10, \ N2V \[Rule] 10, \ N2RV \[Rule] 10, \ 
+          N2SV \[Rule] 10, \ M22V \[Rule] 100}]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(1000\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Simplify[\ 
+      N2RU\  /. \ {pp \[Rule] 10, \ N2V \[Rule] 10, \ N2RV \[Rule] 10, \ 
+          N2SV \[Rule] 10, \ M22V \[Rule] 100}]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(1000\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Simplify[\ 
+      N2SU\  /. \ {pp \[Rule] 10, \ N2V \[Rule] 10, \ N2RV \[Rule] 10, \ 
+          N2SV \[Rule] 10, \ M22V \[Rule] 100}]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(1000\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Simplify[\ 
+      M22U\  /. \ {pp \[Rule] 10, \ N2V \[Rule] 10, \ N2RV \[Rule] 10, \ 
+          N2SV \[Rule] 10, \ M22V \[Rule] 100, R \[Rule] 100, \ 
+          S \[Rule] 100}]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(1090000\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(Simplify[\ 
+      Var2U\  /. \ {pp \[Rule] 10, \ N2V \[Rule] 10, \ N2RV \[Rule] 10, \ 
+          N2SV \[Rule] 10, \ M22V \[Rule] 100, R \[Rule] 100, \ 
+          S \[Rule] 100}]\)\(\[IndentingNewLine]\)
+    \)\)], "Input"],
+
+Cell[BoxData[
+    \(\(-90000\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(Simplify[\ 
+      Var2B\  /. \ {pp \[Rule] 10, \ N2V \[Rule] 10, \ N2RV \[Rule] 10, \ 
+          N2SV \[Rule] 10, \ M22V \[Rule] 100, R \[Rule] 100, \ 
+          S \[Rule] 100}]\)\(\[IndentingNewLine]\)
+    \)\)], "Input"],
+
+Cell[BoxData[
+    \(9000000\/121\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\[IndentingNewLine]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(DSimplifyCI[\ Cov[M1[1], M1[2]]]\)], "Input"],
+
+Cell[BoxData[
+    \(\(\((\[Sum]\+\(i = 1\)\%R F[i])\)\^2 - R\ \(\[Sum]\+\(i = 1\)\%R \
+F[i]\^2\)\)\/\(\(-1\) + R\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(DSimplifyCI[\ 
+      Cov[\ M2[1, 1], \ M2[2, 2]]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\((\(-1\) + R + S)\)\ \((\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S \
+F[i, j]\))\)\^2 - R\ S\ \((\[Sum]\+\(i = 1\)\%R\((\[Sum]\+\(j = 1\)\%S F[i, \
+j])\)\^2 - \[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S F[i, j]\^2\) + \[Sum]\+\
+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S F[i, j]\ \(\[Sum]\+\(k = 1\)\%R F[k, \
+j]\)\))\)\)\/\(\((\(-1\) + R)\)\ \((\(-1\) + S)\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(DSimplifyCI[\ 
+      Ex[\ M3[1, 1, 1] M3[2, 2, 2]]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(1\/\(\((\(-1\) + R)\)\ \((\(-1\) + S)\)\ \((\(-1\) + 
+              T)\)\)\)\((R\ S\ T\ \((\((\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\
+\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, k]\)\))\)\^2 - \[Sum]\+\(i = 1\)\%R\((\
+\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, k]\))\)\^2 + \[Sum]\+\(i = \
+1\)\%R\(\[Sum]\+\(j = 1\)\%S\((\[Sum]\+\(k = 1\)\%T F[i, j, k])\)\^2\) - \
+\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, \
+k]\^2\)\) + \[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k = 1\)\%T 
+                      F[i, j, 
+                      k]\ \(\[Sum]\+\(l = 1\)\%S F[i, l, 
+                        k]\)\)\) - \[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\
+\((\[Sum]\+\(k = 1\)\%T F[i, j, 
+                        k])\)\ \(\[Sum]\+\(k = 1\)\%R\(\[Sum]\+\(l = 1\)\%T F[
+                        k, j, l]\)\)\) + \[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, 
+                      k]\ \(\[Sum]\+\(l = 1\)\%R F[l, j, 
+                        k]\)\)\) - \[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\
+\(\[Sum]\+\(k = 1\)\%T F[i, j, 
+                      k]\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = 1\)\%S F[l, 
+                          m, k]\)\)\)\))\))\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(DSimplifyCI[\ 
+      Ex[M4[1, 1, 1, 1] M4[2, 2, 2, 2]]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(1\/\(\((\(-1\) + R)\)\ \((\(-1\) + S)\)\ \((\(-1\) + 
+              T)\)\ \((\(-1\) + 
+              U)\)\)\)\((R\ S\ T\ U\ \((\((\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j \
+= 1\)\%S\(\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, \
+l]\)\)\))\)\^2 - \[Sum]\+\(i = 1\)\%R\((\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k = 1\
+\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, l]\)\))\)\^2 + \[Sum]\+\(i = 1\)\%R\(\
+\[Sum]\+\(j = 1\)\%S\((\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, \
+l]\))\)\^2\) - \[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k = \
+1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, l])\)\^2\)\) + \[Sum]\+\(i = \
+1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, \
+j, k, l]\^2\)\)\) - \[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k = \
+1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                        l]\ \(\[Sum]\+\(m = 1\)\%T F[i, j, m, 
+                          l]\)\)\)\) + \[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l])\)\ \(\[Sum]\+\(l = 1\)\%S\(\[Sum]\+\(m = 1\)\%U 
+                          F[i, l, k, 
+                          m]\)\)\)\) - \[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                        l]\ \(\[Sum]\+\(m = 1\)\%S F[i, m, k, 
+                          l]\)\)\)\) - \[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\((\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l]\))\)\ \(\[Sum]\+\(k = 1\)\%R\(\[Sum]\+\(l = \
+1\)\%T\(\[Sum]\+\(m = 1\)\%U F[k, j, l, 
+                          m]\)\)\)\) + \[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l])\)\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = 1\)\%U 
+                          F[l, j, k, 
+                          m]\)\)\)\) - \[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                        l]\ \(\[Sum]\+\(m = 1\)\%R F[m, j, k, 
+                          l]\)\)\)\) + \[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                        l]\ \(\[Sum]\+\(m = 1\)\%S\(\[Sum]\+\(n = 1\)\%T F[i, 
+                            m, n, l]\)\)\)\)\) - \[Sum]\+\(i = 1\)\%R\(\[Sum]\
+\+\(j = 1\)\%S\(\[Sum]\+\(k = 1\)\%T\((\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                          l])\)\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = 1\)\%S\
+\(\[Sum]\+\(n = 1\)\%U F[l, m, k, 
+                            n]\)\)\)\)\) + \[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j \
+= 1\)\%S\(\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                        l]\ \(\[Sum]\+\(m = 1\)\%R\(\[Sum]\+\(n = 1\)\%T F[m, 
+                            j, n, l]\)\)\)\)\) + \[Sum]\+\(i = 1\)\%R\(\[Sum]\
+\+\(j = 1\)\%S\(\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                        l]\ \(\[Sum]\+\(m = 1\)\%R\(\[Sum]\+\(n = 1\)\%S F[m, 
+                            n, k, l]\)\)\)\)\) - \[Sum]\+\(i = 1\)\%R\(\[Sum]\
+\+\(j = 1\)\%S\(\[Sum]\+\(k = 1\)\%T\(\[Sum]\+\(l = 1\)\%U F[i, j, k, 
+                        l]\ \(\[Sum]\+\(m = 1\)\%R\(\[Sum]\+\(n = 1\)\%S\(\
+\[Sum]\+\(o = 1\)\%T F[m, n, o, l]\)\)\)\)\)\))\))\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(DSimplifyCI[
+      Ex[\ M2[1, 1]\ M2[2, 1]]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(-\(\(R\ \((\((pp - 
+                      S)\)\ \((\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S \
+F[i, j]\))\)\^2 + \((\(-pp\) + 
+                      S)\)\ \(\[Sum]\+\(i = 1\)\%R\((\[Sum]\+\(j = 1\)\%S \
+F[i, j])\)\^2\) + \((\(-1\) + 
+                      pp)\)\ S\ \((\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S \
+F[i, j]\^2\) - \[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S F[i, 
+                              j]\ \(\[Sum]\+\(k = 1\)\%R F[k, 
+                                j]\)\))\))\)\)\/\(\((\(-1\) + 
+                R)\)\ \((\(-1\) + S)\)\)\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(DSimplifyCI[\ 
+      Ex[\ M3[1, 1, 1]\ M3[2, 1, 1]]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(1\/\(\((\(-1\) + R)\)\ \((\(-1\) + S)\)\ \((\(-1\) + 
+              T)\)\)\)\((R\ \((\((pp - S)\)\ \((pp - 
+                  T)\)\ \((\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T F[i, j, k]\)\))\)\^2 - \((pp - S)\)\ \((pp - 
+                  T)\)\ \(\[Sum]\+\(i = 1\)\%R\((\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T F[i, j, k]\))\)\^2\) + \((\(-1\) + 
+                  pp)\)\ \((S\ \((pp - 
+                        T)\)\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\((\
+\[Sum]\+\(k = 1\)\%T F[i, j, k])\)\^2\)\) - \((\(-1\) + 
+                        pp)\)\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, k]\^2\)\)\) + 
+                  pp\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T F[i, j, k]\ \(\[Sum]\+\(l = 1\)\%S F[i, l, k]\)\)\)\) - 
+                  S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, 
+                              k]\ \(\[Sum]\+\(l = 1\)\%S F[i, l, k]\)\)\)\) - 
+                  pp\ S\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\((\[Sum]\+\(k = 1\)\%T F[i, j, 
+                                k])\)\ \(\[Sum]\+\(k = 1\)\%R\(\[Sum]\+\(l = \
+1\)\%T F[k, j, l]\)\)\)\) + 
+                  S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\((\[Sum]\
+\+\(k = 1\)\%T F[i, j, k])\)\ \(\[Sum]\+\(k = 1\)\%R\(\[Sum]\+\(l = 1\)\%T F[
+                                k, j, l]\)\)\)\) - 
+                  S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, 
+                              k]\ \(\[Sum]\+\(l = 1\)\%R F[l, j, k]\)\)\)\) + 
+                  pp\ S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T F[i, j, k]\ \(\[Sum]\+\(l = 1\)\%R F[l, j, k]\)\)\)\) - 
+                  pp\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\
+\+\(k = 1\)\%T F[i, j, k]\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = 1\)\%S F[l, 
+                                  m, k]\)\)\)\)\) + 
+                  S\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = \
+1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, 
+                              k]\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = \
+1\)\%S F[l, m, k]\)\)\)\)\))\))\))\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(DSimplifyCI[\ 
+      Ex[\ M3[1, 1, 1]\ M3[2, 2, 1]]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(1\/\(\((\(-1\) + R)\)\ \((\(-1\) + S)\)\ \((\(-1\) + 
+              T)\)\)\)\((R\ S\ \((\(-pp\)\ \((\[Sum]\+\(i = \
+1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k = 1\)\%T F[i, j, k]\)\))\)\^2 + 
+            T\ \((\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k = 1\
+\)\%T F[i, j, k]\)\))\)\^2 + 
+            pp\ \(\[Sum]\+\(i = 1\)\%R\((\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k = \
+1\)\%T F[i, j, k]\))\)\^2\) - 
+            T\ \(\[Sum]\+\(i = 1\)\%R\((\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k = 1\
+\)\%T F[i, j, k]\))\)\^2\) + \((\(-pp\) + 
+                  T)\)\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\((\[Sum]\
+\+\(k = 1\)\%T F[i, j, k])\)\^2\)\) + \((\(-1\) + 
+                  pp)\)\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\
+\[Sum]\+\(k = 1\)\%T F[i, j, k]\^2\)\)\) + 
+            T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k = \
+1\)\%T F[i, j, k]\ \(\[Sum]\+\(l = 1\)\%S F[i, l, k]\)\)\)\) - 
+            pp\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k \
+= 1\)\%T F[i, j, k]\ \(\[Sum]\+\(l = 1\)\%S F[i, l, k]\)\)\)\) + 
+            pp\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\((\[Sum]\+\(k = \
+1\)\%T F[i, j, k])\)\ \(\[Sum]\+\(k = 1\)\%R\(\[Sum]\+\(l = 1\)\%T F[k, j, 
+                          l]\)\)\)\) - 
+            T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\((\[Sum]\+\(k = 1\
+\)\%T F[i, j, k])\)\ \(\[Sum]\+\(k = 1\)\%R\(\[Sum]\+\(l = 1\)\%T F[k, j, 
+                          l]\)\)\)\) + 
+            T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k = \
+1\)\%T F[i, j, k]\ \(\[Sum]\+\(l = 1\)\%R F[l, j, k]\)\)\)\) - 
+            pp\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k \
+= 1\)\%T F[i, j, k]\ \(\[Sum]\+\(l = 1\)\%R F[l, j, k]\)\)\)\) - 
+            T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k = \
+1\)\%T F[i, j, k]\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = 1\)\%S F[l, m, 
+                            k]\)\)\)\)\) + 
+            pp\ T\ \(\[Sum]\+\(i = 1\)\%R\(\[Sum]\+\(j = 1\)\%S\(\[Sum]\+\(k \
+= 1\)\%T F[i, j, k]\ \(\[Sum]\+\(l = 1\)\%R\(\[Sum]\+\(m = 1\)\%S F[l, m, 
+                            k]\)\)\)\)\))\))\)\)\)], "Output"]
+}, Open  ]]
+},
+FrontEndVersion->"5.1 for X",
+ScreenRectangle->{{0, 2720}, {0, 1024}},
+WindowSize->{1227, 952},
+WindowMargins->{{Automatic, 18}, {Automatic, 0}},
+PrintingPageRange->{Automatic, Automatic},
+PrintingOptions->{"PaperSize"->{612, 792},
+"PaperOrientation"->"Portrait",
+"PostScriptOutputFile":>FrontEnd`FileName[{$RootDirectory, "exports", \
+"adobra", "mathematica"}, "multiRippleJoin2.nb.ps", CharacterEncoding -> \
+"iso8859-1"],
+"Magnification"->1}
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1754, 51, 141, 3, 43, "Input"],
+Cell[1898, 56, 2220, 43, 475, "Input"],
+Cell[4121, 101, 2342, 49, 379, "Input"],
+
+Cell[CellGroupData[{
+Cell[6488, 154, 128, 3, 59, "Input"],
+Cell[6619, 159, 86, 1, 55, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[6742, 165, 92, 1, 43, "Input"],
+Cell[6837, 168, 126, 2, 55, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[7000, 175, 106, 2, 43, "Input"],
+Cell[7109, 179, 142, 2, 55, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[7288, 186, 107, 2, 43, "Input"],
+Cell[7398, 190, 495, 7, 56, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[7930, 202, 169, 4, 43, "Input"],
+Cell[8102, 208, 475, 8, 69, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[8614, 221, 187, 3, 43, "Input"],
+Cell[8804, 226, 57, 1, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[8898, 232, 113, 2, 43, "Input"],
+Cell[9014, 236, 4412, 73, 485, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[13463, 314, 185, 3, 43, "Input"],
+Cell[13651, 319, 1428, 22, 203, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[15116, 346, 146, 2, 43, "Input"],
+Cell[15265, 350, 441, 6, 56, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[15743, 361, 190, 4, 43, "Input"],
+Cell[15936, 367, 469, 8, 69, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[16442, 380, 132, 2, 43, "Input"],
+Cell[16577, 384, 2437, 40, 296, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[19051, 429, 190, 4, 43, "Input"],
+Cell[19244, 435, 1431, 23, 203, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[20712, 463, 132, 2, 43, "Input"],
+Cell[20847, 467, 2282, 37, 250, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[23166, 509, 190, 4, 43, "Input"],
+Cell[23359, 515, 1434, 22, 203, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[24830, 542, 146, 4, 43, "Input"],
+Cell[24979, 548, 3879, 65, 422, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[28895, 618, 185, 3, 43, "Input"],
+Cell[29083, 623, 1429, 23, 203, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[30549, 651, 124, 2, 43, "Input"],
+Cell[30676, 655, 469, 8, 65, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[31182, 668, 168, 3, 27, "Input"],
+Cell[31353, 673, 502, 9, 69, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[31892, 687, 230, 5, 43, "Input"],
+Cell[32125, 694, 57, 1, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[32219, 700, 129, 3, 43, "Input"],
+Cell[32351, 705, 460, 6, 56, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[32848, 716, 207, 5, 43, "Input"],
+Cell[33058, 723, 503, 9, 69, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[33598, 737, 228, 5, 43, "Input"],
+Cell[33829, 744, 37, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[33903, 750, 219, 4, 75, "Input"],
+Cell[34125, 756, 38, 1, 27, "Output"],
+Cell[34166, 759, 39, 1, 27, "Output"],
+Cell[34208, 762, 24334, 383, 2811, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[58579, 1150, 221, 4, 43, "Input"],
+Cell[58803, 1156, 3927, 61, 535, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[62767, 1222, 232, 4, 43, "Input"],
+Cell[63002, 1228, 42, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[63081, 1234, 110, 2, 43, "Input"],
+Cell[63194, 1238, 35, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[63266, 1244, 338, 6, 43, "Input"],
+Cell[63607, 1252, 108, 2, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[63752, 1259, 113, 2, 27, "Input"],
+Cell[63868, 1263, 101, 2, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[64006, 1270, 106, 2, 43, "Input"],
+Cell[64115, 1274, 523, 8, 39, "Message"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[64675, 1287, 454, 8, 47, "Input"],
+Cell[65132, 1297, 317, 4, 47, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[65486, 1306, 367, 6, 50, "Input"],
+Cell[65856, 1314, 317, 4, 47, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[66210, 1323, 209, 3, 47, "Input"],
+Cell[66422, 1328, 149, 2, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[66608, 1335, 134, 2, 27, "Input"],
+Cell[66745, 1339, 149, 2, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[66931, 1346, 87, 1, 43, "Input"],
+Cell[67021, 1349, 104, 2, 46, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[67162, 1356, 350, 6, 91, "Input"],
+Cell[67515, 1364, 229, 4, 49, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[67781, 1373, 204, 4, 27, "Input"],
+Cell[67988, 1379, 104, 2, 46, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[68129, 1386, 162, 3, 43, "Input"],
+Cell[68294, 1391, 104, 2, 46, "Output"]
+}, Open  ]],
+Cell[68413, 1396, 132, 2, 43, "Input"],
+
+Cell[CellGroupData[{
+Cell[68570, 1402, 101, 2, 43, "Input"],
+Cell[68674, 1406, 487, 6, 56, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[69198, 1417, 260, 4, 43, "Input"],
+Cell[69461, 1423, 1130, 17, 168, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[70628, 1445, 120, 2, 59, "Input"],
+Cell[70751, 1449, 52, 1, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[70840, 1455, 38, 1, 27, "Input"],
+Cell[70881, 1458, 56, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[70974, 1464, 47, 1, 27, "Input"],
+Cell[71024, 1467, 434, 12, 41, "Output"]
+}, Open  ]],
+Cell[71473, 1482, 75, 1, 43, "Input"],
+
+Cell[CellGroupData[{
+Cell[71573, 1487, 77, 1, 43, "Input"],
+Cell[71653, 1490, 100, 3, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[71790, 1498, 123, 2, 59, "Input"],
+Cell[71916, 1502, 495, 7, 56, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[72448, 1514, 61, 1, 27, "Input"],
+Cell[72512, 1517, 222, 3, 54, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[72771, 1525, 205, 4, 43, "Input"],
+Cell[72979, 1531, 91, 1, 63, "Output"]
+}, Open  ]],
+Cell[73085, 1535, 1202, 21, 123, "Input"],
+
+Cell[CellGroupData[{
+Cell[74312, 1560, 87, 1, 43, "Input"],
+Cell[74402, 1563, 91, 1, 63, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[74530, 1569, 89, 1, 43, "Input"],
+Cell[74622, 1572, 416, 8, 63, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[75075, 1585, 87, 1, 43, "Input"],
+Cell[75165, 1588, 945, 15, 124, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[76147, 1608, 102, 2, 43, "Input"],
+Cell[76252, 1612, 639, 11, 65, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[76928, 1628, 180, 3, 43, "Input"],
+Cell[77111, 1633, 841, 13, 124, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[77989, 1651, 1475, 26, 155, "Input"],
+Cell[79467, 1679, 358, 5, 20, "Message"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[79862, 1689, 196, 3, 43, "Input"],
+Cell[80061, 1694, 38, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[80136, 1700, 197, 3, 43, "Input"],
+Cell[80336, 1705, 38, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[80411, 1711, 197, 3, 43, "Input"],
+Cell[80611, 1716, 38, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[80686, 1722, 240, 4, 43, "Input"],
+Cell[80929, 1728, 41, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[81007, 1734, 246, 5, 43, "Input"],
+Cell[81256, 1741, 44, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[81337, 1747, 246, 5, 43, "Input"],
+Cell[81586, 1754, 46, 1, 44, "Output"]
+}, Open  ]],
+Cell[81647, 1758, 52, 1, 43, "Input"],
+
+Cell[CellGroupData[{
+Cell[81724, 1763, 65, 1, 27, "Input"],
+Cell[81792, 1766, 128, 2, 52, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[81957, 1773, 113, 2, 43, "Input"],
+Cell[82073, 1777, 388, 5, 56, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[82498, 1787, 115, 2, 43, "Input"],
+Cell[82616, 1791, 1245, 19, 128, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[83898, 1815, 119, 2, 43, "Input"],
+Cell[84020, 1819, 3312, 48, 359, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[87369, 1872, 108, 2, 43, "Input"],
+Cell[87480, 1876, 585, 10, 56, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[88102, 1891, 116, 2, 43, "Input"],
+Cell[88221, 1895, 2233, 35, 251, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[90491, 1935, 116, 2, 43, "Input"],
+Cell[90610, 1939, 2177, 33, 251, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML>
+ <HEAD>
+  <TITLE>wxMaxima HTML export</TITLE>
+  <META NAME="generator" CONTENT="wxMaxima">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+  <STYLE TYPE="text/css">
+body {
+}
+.input {
+}
+.comment {
+}
+.section {
+  font-weight: bold;
+  text-decoration: underline;
+  font-size: 1.5em;
+}
+.title {
+  font-weight: bold;
+  font-style: italic;
+  text-decoration: underline;
+  font-size: 2em;
+}
+.prompt {
+}
+.hidden {
+}
+  </STYLE>
+ </HEAD>
+ <BODY>
+
+<!-- Input/output group -->
+
+ <P>
+  <SPAN CLASS="prompt">
+/*
+  </SPAN>
+  <SPAN CLASS="input">
+   wxMaxima 0.7.1 http://wxmaxima.sourceforge.net
+   <BR>
+   Maxima 5.10.0 http://maxima.sourceforge.net
+   <BR>
+   Using Lisp GNU Common Lisp (GCL) GCL 2.6.7 (aka GCL)
+   <BR>
+   Distributed under the GNU Public License. See the file COPYING.
+   <BR>
+   Dedicated to the memory of William Schelter.
+   <BR>
+   This is a development version of Maxima. The function bug_report()
+   <BR>
+   provides bug reporting information.
+   <BR>
+  </SPAN>
+ </P>
+
+<!-- Input/output group -->
+
+ <P>
+  <SPAN CLASS="prompt">
+(%i1) 
+  </SPAN>
+  <SPAN CLASS="input">
+   load("/exports/adobra/cvs/CASEY/maxima/casey.mac")$
+   <BR>
+  </SPAN>
+ </P>
+
+<!-- Input/output group -->
+
+ <P>
+  <SPAN CLASS="prompt">
+(%i1) 
+  </SPAN>
+  <SPAN CLASS="input">
+   makeRV(X1, BernouliSampling, [p]);<BR>
+makeRV(Y1, BernouliSampling, [q]);<BR>
+<BR>
+/*<BR>
+<BR>
+frm1: 1/(p*q)*sum( sum( f(i,j)*X1(i)*Y1(j), i,1,n), j,1,n);<BR>
+<BR>
+print("Expectation=",makeTensor(dsimplify(E(frm1))));<BR>
+print("Variance=", makeTensor(dsimplify(var(frm1))));<BR>
+<BR>
+*/<BR>
+<BR>
+makeRV(X2, UniformSamplingWithoutReplacement, [N,Np]);<BR>
+makeRV(Y2, UniformSamplingWithoutReplacement, [M,Mp]);<BR>
+<BR>
+/*<BR>
+frm2: N*M/(Np*Mp)*sum( sum( f(i,j)*X2(i)*Y2(j), i,1,N), j,1,M);<BR>
+<BR>
+print("Expectation=",makeTensor(dsimplify(E(frm2))));<BR>
+print("Variance=", makeTensor(dsimplify(var(frm2))));<BR>
+*/<BR>
+<BR>
+<BR>
+makeRV(X3, UniformSamplingWithReplacement, [N,Np]);<BR>
+makeRV(Y3, UniformSamplingWithReplacement, [M,Mp]);<BR>
+<BR>
+/*<BR>
+frm3: N*M/(Np*Mp)*sum( sum( f(i,j)*X3(i)*Y3(j), i,1,N), j,1,M);<BR>
+<BR>
+print("Expectation=",makeTensor(dsimplify(E(frm3))));<BR>
+print("Variance=", makeTensor(dsimplify(var(frm3))));<BR>
+*/<BR>
+<BR>
+makeRV(Z, AMS, []);<BR>
+<BR>
+rez: 1/(p*q)*sum( Z(i)*sum( I(t=i)*X1(t)*f(t),t,1,N),i,1,n )*<BR>
+sum( Z(i)*sum(I(v=i)*Y1(v)*g(v),v,1,M),i,1,n); <BR>
+<BR>
+print("E(rez)=",makeTensor(dsimplify(E(rez))));
+   <BR>
+  </SPAN>
+  <BR>
+  <IMG ALT="Result" SRC="img/untitled_0.png">
+ </P>
+
+<!-- Input/output group -->
+
+ <P>
+  <SPAN CLASS="prompt">
+(%i10) 
+  </SPAN>
+  <SPAN CLASS="input">
+   makeTensor(dsimplify(var(rez)));
+   <BR>
+  </SPAN>
+  <BR>
+  <IMG ALT="Result" SRC="img/untitled_1.png">
+ </P>
+
+<!-- Input/output group -->
+
+ <P>
+  <SPAN CLASS="prompt">
+(%i11) 
+  </SPAN>
+  </SPAN>
+ </P>
+
+ <HR>
+ <SMALL> Created with <A HREF="http://wxmaxima.sourceforge.net/">wxMaxima</A>.</SMALL>
+
+ </BODY>
+</HTML>

@@ -1,0 +1,128 @@
+outset:set();
+
+makeeqsets(iset,tset):=
+block(
+	if length(iset)=1 then ( tmpset:set(),return(true)),
+ 	for i:1 step 1 while (i<=length(iset)) do
+	(		
+		tmplist:listify(iset),
+		tmpset:set(tmplist[i]),
+		ttset:tset,
+		diffset:setdifference(iset,tmpset),
+		newout:append(set(tmpset),set(diffset)),
+		newout2:set(setify(flatten(full_listify(append(set(tmpset),set(diffset)))))),
+		if not emptyp(ttset) then
+		(
+			newout:append(newout,ttset),
+			newout2:append(newout2,set(setify(flatten(full_listify(ttset)))))
+		),
+		outset:append(outset,set(newout)),
+		outset:append(outset,set(newout2)),
+		if not emptyp(ttset) then
+		(
+			ttset:append(ttset,set(tmpset))
+		)
+		else
+		(
+			ttset:set(append(ttset,tmpset))
+		),
+		makeeqsets(diffset,ttset)
+	)
+);
+
+eqsets(ip):=
+block(
+	outset:set(),
+	ipset:setify(ip),
+	makeeqsets(ipset,set()),
+	return (outset)
+);
+
+/* source case... format is list of lists [[i,j],[k]]*/
+createSymmetricEqSets(sourcecase):= 
+block(
+	[svars:listify(setify(flatten(sourcecase))),eqsetcases:[],noOfSets:0,lengthOfSets:[], symmetricCases:[],noOfSetsg:0,lengthOfSetsg:[]],
+	eqsetcases:full_listify(eqsets(svars)),
+	noOfSets:length(sourcecase),
+	for m:1 step 1 thru length(sourcecase) do
+	(
+		lengthOfSets:append(lengthOfSets,[length(sourcecase[m])])
+	),
+	lengthOfSets:sort(lengthOfSets),
+	for n:1 step 1 thru length(eqsetcases) do
+	(
+		noOfSetsg:length(eqsetcases[n]),
+		lengthOfSetsg:[],
+		for x:1 step 1 thru noOfSetsg do
+		(
+			lengthOfSetsg:append(lengthOfSetsg,[length(eqsetcases[n][x])])
+		),
+		lengthOfSetsg:sort(lengthOfSetsg),
+		if noOfSets=noOfSetsg and lengthOfSets=lengthOfSetsg then
+		(
+			symmetricCases:append(symmetricCases,[eqsetcases[n]])
+		)
+	),
+	return (symmetricCases) 
+/* output in list format */
+);
+
+
+createSymmetricCases(symcase):=
+block(
+	[lSymCase:symcase,indiff_flag:0,sumexp:0,productexp:1,Indiff_arglist:[],Diff_arglist:[],newIndiff_list:[],newDiff_list:[],newDiff_Cases:[],tempDiff_Cases:[]],
+		if string(op(lSymCase))="In" then
+		(
+			Indiff_arglist:args(lSymCase),
+			for j:1 step 1 thru length(Indiff_arglist) do    /* for each argument of Indifferent*/          
+			(
+				if string(op(Indiff_arglist[j]))="Df" then
+				(
+					Diff_arglist:args(Indiff_arglist[j]),
+					for k:1 step 1 thru length(Diff_arglist) do    /* for each argument of Different*/          
+					(
+						if string(op(Diff_arglist[k]))="Eq" then
+						(
+							Diff_arglist[k]:args(Diff_arglist[k])
+						)
+						else
+						(
+							print("Error in Format--in Create Symmetric Cases1---",symcase)
+						)
+					),
+					newDiff_list:createSymmetricEqSets(Diff_arglist), newDiff_Cases:[],
+					for m:1 step 1 thru length(newDiff_list) do 
+					(	
+						tempDiff_Cases:[],
+						for n:1 step 1 thru length(newDiff_list[m]) do
+						(
+							tempDiff_Cases:append(tempDiff_Cases,[apply(Eq,newDiff_list[m][n])])
+						),
+						newDiff_Cases:append(newDiff_Cases,[apply(Df,tempDiff_Cases)])
+					),
+				newIndiff_list:append(newIndiff_list,[setify(newDiff_Cases)])
+				)
+				else
+				(
+					print ("Error in Format--in Create Symmetric Cases2")
+				)	
+			),
+			lSymCase:listify(createInDiffCases(newIndiff_list))
+		)
+		else
+		(
+			print ("Error in Format--in Create Symmetric Cases3")
+		),
+	return (lSymCase)	
+);
+
+createInDiffCases(Indiffset):=
+block(
+[cross_product:listify(apply(cartesian_product,Indiffset)),lengthp:0,output:[]],
+lengthp:length(cross_product),
+for i:1 step 1 thru lengthp do
+(
+    output:append(output,[apply(In,cross_product[i])])
+),
+return(output)
+);

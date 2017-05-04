@@ -1,0 +1,205 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.1'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[      3476,        133]*)
+(*NotebookOutlinePosition[      4106,        155]*)
+(*  CellTagsIndexPosition[      4062,        151]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+    \(\(\(SubstitutionRange[\ {i, N}\ ]\)\(\[IndentingNewLine]\)
+    \)\)], "Input"],
+
+Cell[BoxData[
+    \({i \[Rule] i$50}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(MakeVariablesUnique[\ \((Sum[\ 
+            f[i], \ {i, N}])\)^\((\(-10\))\)]\)], "Input"],
+
+Cell[BoxData[
+    \(1\/\((\[Sum]\+\(i$422 = 1\)\%N f[i$422])\)\^10\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(MakeVariablesUnique[\ f[i]^3\ ]\)], "Input"],
+
+Cell[BoxData[
+    \(f[i]\^3\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(SubstitutionList[\ {i, N}, \ {j, N}, \ {k, 
+        N}]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \({i \[Rule] i$127, j \[Rule] i$128, k \[Rule] i$129}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\ \)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(SubstitutionList[\ {i, N}]\)], "Input"],
+
+Cell[BoxData[
+    \({i \[Rule] i$126}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(Clear[i]\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Av[f_, j_]\  := \ 
+      Sum[\ f[i]\ X[i, j], \ {i, N}]\ /\ NN[j]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(M\  := \ 
+      Sum[\ Av[f, j]\ *\ Av[g, j], \ {j, k}]\)\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Ex[\ M\ ]\)], "Input"],
+
+Cell[BoxData[
+    \(\[Sum]\+\(i$520 = 1\)\%k\(\[Sum]\+\(i$511 = 1\)\%N\(\[Sum]\+\(i$516 = 1\
+\)\%N ExBase[\(f[i$511]\ g[i$516]\ X[i$511, i$520]\ X[i$516, \
+i$520]\)\/NN[i$520]\^2]\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(RVLIST\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(RVLIST\)], "Output"]
+}, Open  ]]
+},
+FrontEndVersion->"5.1 for X",
+ScreenRectangle->{{0, 2720}, {0, 1024}},
+WindowSize->{1229, 948},
+WindowMargins->{{43, Automatic}, {Automatic, 0}}
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[1776, 53, 98, 2, 43, "Input"],
+Cell[1877, 57, 50, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[1964, 63, 110, 2, 27, "Input"],
+Cell[2077, 67, 80, 1, 51, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2194, 73, 64, 1, 27, "Input"],
+Cell[2261, 76, 41, 1, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2339, 82, 119, 2, 43, "Input"],
+Cell[2461, 86, 85, 1, 27, "Output"]
+}, Open  ]],
+Cell[2561, 90, 35, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[2621, 95, 59, 1, 27, "Input"],
+Cell[2683, 98, 51, 1, 27, "Output"]
+}, Open  ]],
+Cell[2749, 102, 41, 1, 27, "Input"],
+Cell[2793, 105, 129, 2, 43, "Input"],
+Cell[2925, 109, 118, 2, 43, "Input"],
+
+Cell[CellGroupData[{
+Cell[3068, 115, 42, 1, 27, "Input"],
+Cell[3113, 118, 197, 3, 65, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3347, 126, 70, 1, 43, "Input"],
+Cell[3420, 129, 40, 1, 27, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

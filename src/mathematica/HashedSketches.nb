@@ -1,0 +1,1104 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.1'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     35558,        887]*)
+(*NotebookOutlinePosition[     36494,        916]*)
+(*  CellTagsIndexPosition[     36450,        912]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+    \(\(\( (*Loading\ the\ simplification\ \
+rules*) \)\(\[IndentingNewLine]\)\(<< "\<~/cvs/CASEY/mathematica/Delta.m\>"\)\
+\)\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(Sum::"itform"\), \(\(:\)\(\ \)\), "\<\"Argument \\!\\(L__\\) at \
+position \\!\\(3\\) does not have the correct form for an iterator. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::itform\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Sum::"itform"\), \(\(:\)\(\ \)\), "\<\"Argument \\!\\(L__\\) at \
+position \\!\\(2\\) does not have the correct form for an iterator. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::itform\\\"]\\)\"\>"}]], \
+"Message"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\( (*\ 
+      X[i, l]\ is\ 1\ if\ item\ i\ belongs\ to\ bucket\ l, \ 
+      0\ otherwise\ *) \)\(\[IndentingNewLine]\)\(Clear[ExBase, R, 
+      J]\[IndentingNewLine]
+    J[l_]\  := \ N/B\[IndentingNewLine]
+    R[l_]\  := \ J[l]/N\[IndentingNewLine]
+    R[l_, i_]\  := R[l]\  (*\((J[l] - i)\)/\((N - i)\)\ \ *) \  (*\ 
+      Should\ be\  - 
+        i\ both\ up\ and\ down\ *) \[IndentingNewLine] (*\[IndentingNewLine]R[
+          l_]\  := \ \(1/n\[IndentingNewLine]
+        R[l_, i_]\  := \ 1/n\)\[IndentingNewLine]*) \[IndentingNewLine]
+    ExBase[X[i_, l_]]\  := \ R[l]\[IndentingNewLine]
+    ExBase[X[i_, l_]^n_]\  := \ R[l] /; \ n > 0\[IndentingNewLine]
+    ExBase[X[i_, l_] X[j_, k_]]\  := \ 
+      R[l] d[l, k] d[i, j] + R[l]\ R[l, 1] d[l, k] \((1 - d[i, j])\) + 
+        R[l] R[k]\ \((1 - d[i, j])\)\ \((1 - d[l, k])\)\[IndentingNewLine]
+    ExBase[X[i_, l_] X[j_, l_] X[m_, k_] X[n_, k_]]\  := \ 
+      d[l, k] \((R[l] \((1 - R[l, 1] R[l, 2] R[l, 3])\) d[i, j] d[i, m] 
+                d[i, n] + 
+              R[l] R[l, 
+                  1] \((1 - 
+                    R[l, 2] R[l, 3])\) \((d[i, j] d[i, m] \((1 - d[i, n])\) + 
+                    d[i, j] d[i, n] \((1 - d[i, m])\) + 
+                    d[i, m] d[i, n] \((1 - d[i, j])\) + 
+                    d[j, m] d[j, n] \((1 - d[i, j])\) + 
+                    d[i, j] d[m, n] \((1 - d[i, m])\) + 
+                    d[i, m] d[j, n] \((1 - d[i, j])\) + 
+                    d[i, n] d[j, m] \((1 - d[i, j])\))\)\  + \ 
+              R[l] R[l, 1] 
+                R[l, 2] \((1 - 
+                    R[l, 3])\) \((d[i, 
+                        j] \((1 - d[i, m])\) \((1 - d[i, n])\) \((1 - 
+                          d[m, n])\) + 
+                    d[i, m] \((1 - d[i, j])\) \((1 - d[i, n])\) \((1 - 
+                          d[j, n])\) + 
+                    d[i, n] \((1 - d[i, j])\) \((1 - d[i, m])\) \((1 - 
+                          d[j, m])\)\  + \ 
+                    d[j, m] \((1 - d[i, j])\) \((1 - d[j, n])\) \((1 - 
+                          d[i, n])\)\  + \ 
+                    d[j, n] \((1 - d[i, j])\) \((1 - d[j, m])\) \((1 - 
+                          d[i, m])\) + 
+                    d[m, n] \((1 - d[i, m])\) \((1 - d[j, m])\) \((1 - 
+                          d[i, j])\))\)\  + \ 
+              R[l] R[l, 1] R[l, 2] R[l, 3]\ )\) + \((1 - d[l, k])\) \((1 - 
+              d[i, m])\) \((1 - d[i, n])\) \((1 - d[j, m])\) \((1 - 
+              d[j, n])\) \((\ 
+            R[l] d[i, j] + 
+              R[l] R[l, 1] \((1 - d[i, j])\))\) \((R[k] d[m, n] + 
+              R[k] R[k, 1] \((1 - d[m, n])\))\)\[IndentingNewLine]
+    ExBase[X[i_, l_] X[j_, l_] X[m_, k_]]\  := \ 
+      Module[\ {n}, 
+        ExBase[\ X[i, l] X[j, l] X[m, k] X[n, k]] /. {n \[Rule] 
+              m}]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\( (*\ 
+      Define\ the\ variance\ of\ the\ sketches\ as\ a\ function\ of\ \
+bucketization\ *) \)\(\[IndentingNewLine]\)\(Vh\  := \ 
+      Module[\ {j, \ i, ip}, \ 
+        Sum[\ Sum[X[i, j]*f[i]^2, {i, N}]*
+              Sum[X[i1, j]*g[i1]^2, {i1, N}] + \((Sum[
+                  X[i, j]*f[i] g[i], {i, N}])\)*\((Sum[
+                  X[ip, j]*f[ip] g[ip], {ip, N}])\) - 
+            2*Sum[X[i, j]*f[i]^2  g[i]^2, {i, N}], \ {j, 
+            B}]]\[IndentingNewLine]
+    Vh2\  := \ 
+      Sum[\ Sum[X[i, j]*f[i]^2, {i, N}]*
+            Sum[X[i, j]*g[i]^2, {i, N}] + \((Sum[
+                X[i, j]*f[i] g[i], {i, N}])\)^2 - 
+          2*Sum[X[i, j]*f[i]^2  g[i]^2, {i, N}], \ {j, B}]\)\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Simplify[
+      CleanupSums[DSimplifyCI[\ Ex[\ Vh]]]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\((\[Sum]\+\(i = 1\)\%N f[i]\ g[i])\)\ \(\[Sum]\+\(j = 1\)\%N f[j]\ \
+g[j]\) + \((\[Sum]\+\(i = 1\)\%N f[i]\^2)\)\ \(\[Sum]\+\(j = 1\)\%N g[j]\^2\) \
+- 2\ \(\[Sum]\+\(j = 1\)\%N f[j]\^2\ g[j]\^2\)\)\/B\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(\ \)\($RecursionLimit\  := \ 
+      8192\[IndentingNewLine]
+    $IterationLimit\  := \ 8192\[IndentingNewLine]
+    Simplify[\ 
+      dRewrite[CleanupSums[DSimplifyCI[\ Var[Vh2]\ ]]]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(1\/B\^3\)\((\(-B\)\ P[f\ g]\^4 + B\ P[f\^4]\ P[g\^2]\^2 - 
+        10\ B\ P[f\^2\ g\^2]\^2 + 3\ B\^2\ P[f\^2\ g\^2]\^2 - 
+        8\ B\ P[g\^2]\ P[f\^4\ g\^2] - 8\ B\ P[f\^3\ g]\ P[f\ g\^3] + 
+        4\ B\^2\ P[f\^3\ g]\ P[f\ g\^3] - 2\ B\ P[f\^4]\ P[g\^4] + 
+        B\^2\ P[f\^4]\ P[g\^4] + 32\ B\ P[f\^4\ g\^4] - 
+        8\ B\^2\ P[f\^4\ g\^4] - 
+        P[g\^2]\^2\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N f[k]\^4\)\) \
++ P[f\ g]\^3\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N f[k]\ g[k]\)\) + 
+        P[f\ g\^3]\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N f[k]\^3\ g[
+                  k]\)\) + 
+        7\ P[f\^2\ g\^2]\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N \
+f[k]\^2\ g[k]\^2\)\) + 
+        P[f\ g]\^2\ \((8\ B\ P[f\^2\ g\^2] + 
+              P[f\^2]\ \((\(-2\)\ B\ P[
+                        g\^2] + \[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N \
+g[k]\^2\))\) + 
+              2\ \((\(-4\) + 
+                    B)\)\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N \
+f[k]\^2\ g[k]\^2\)\))\) + 
+        8\ P[g\^2]\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N f[k]\^4\ \
+g[k]\^2\)\) + 
+        3\ P[f\^3\ g]\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N f[
+                  k]\ g[k]\^3\)\) + 
+        P[f\ g]\ \((4\ B\ P[f\^3\ g]\ P[g\^2] + 
+              P[f\^2]\ \((4\ B\ P[f\ g\^3] + 
+                    P[g\^2]\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N f[
+                              k]\ g[k]\)\) - 
+                    4\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N f[
+                              k]\ g[k]\^3\)\))\) - 
+              2\ \((8\ B\ P[f\^3\ g\^3] + 
+                    B\ P[f\^2\ g\^2]\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\
+\)\%N f[k]\ g[k]\)\) + 
+                    2\ P[g\^2]\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N \
+f[k]\^3\ g[k]\)\) - 
+                    8\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N f[k]\^3\ \
+g[k]\^3\)\))\))\) + 
+        P[f\^2]\^2\ \((\(-B\)\ P[g\^2]\^2 + B\ P[g\^4] + 
+              P[g\^2]\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N g[k]\^2\)\
+\) - \[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N g[k]\^4\))\) + 
+        P[f\^4]\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N g[k]\^4\)\) + 
+        2\ P[f\^2]\ \((\(-4\)\ B\ P[f\^2\ g\^4] - 
+              B\ P[f\^2\ g\^2]\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N \
+g[k]\^2\)\) + 
+              P[g\^2]\ \((3\ B\ P[
+                        f\^2\ g\^2] + \((\(-3\) + 
+                          B)\)\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N \
+f[k]\^2\ g[k]\^2\)\))\) + 
+              4\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N f[k]\^2\ \
+g[k]\^4\)\))\) - 
+        24\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N f[k]\^4\ \
+g[k]\^4\)\))\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Simplify[\ 
+      dRewrite[CleanupSums[DSimplifyCI[\ Var[Vh]\ ]]]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(-\(\((P[f\ g]\^2 + P[f\^2]\ P[g\^2] - 2\ P[f\^2\ \
+g\^2])\)\^2\/B\^2\)\) + \(N\^2\ P[f\^2\ g\^2]\^2\)\/B + \(N\^2\ P[f\^4]\ \
+P[g\^4]\)\/B + 4\ N\ P[f\^4\ g\^4] + 
+      2\ N\^2\ P[
+          f\^4\ g\^4] - \(2\ N\^2\ P[f\^4\ g\^4]\)\/B - \(4\ N\ \((P[g\^2]\ \
+P[f\^4\ g\^2] + \((\(-1\) + B)\)\ P[f\^4\ g\^4])\)\)\/B - \(4\ N\ \((P[f\ g]\ \
+P[f\^3\ g\^3] + \((\(-1\) + B)\)\ P[f\^4\ g\^4])\)\)\/B + \(2\ N\ \((P[f\ g]\ \
+\((P[f\^3\ g]\ P[g\^2] + \((\(-1\) + B)\)\ P[f\^3\ g\^3])\) + \((\(-1\) + \
+B)\)\ \((P[g\^2]\ P[f\^4\ g\^2] + P[f\^3\ g]\ P[f\ g\^3] + \((\(-2\) + B)\)\ \
+P[f\^4\ g\^4])\))\)\)\/B\^2\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Factor[\ %92]\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(1\/B\^2\)\((\(-P[f\ g]\^4\) - 2\ P[f\^2]\ P[f\ g]\^2\ P[g\^2] + 
+        2\ N\ P[f\ g]\ P[f\^3\ g]\ P[g\^2] - P[f\^2]\^2\ P[g\^2]\^2 + 
+        4\ P[f\ g]\^2\ P[f\^2\ g\^2] + 4\ P[f\^2]\ P[g\^2]\ P[f\^2\ g\^2] - 
+        4\ P[f\^2\ g\^2]\^2 + B\ N\^2\ P[f\^2\ g\^2]\^2 - 
+        2\ N\ P[g\^2]\ P[f\^4\ g\^2] - 2\ B\ N\ P[g\^2]\ P[f\^4\ g\^2] - 
+        2\ N\ P[f\^3\ g]\ P[f\ g\^3] + 2\ B\ N\ P[f\^3\ g]\ P[f\ g\^3] - 
+        2\ N\ P[f\ g]\ P[f\^3\ g\^3] - 2\ B\ N\ P[f\ g]\ P[f\^3\ g\^3] + 
+        B\ N\^2\ P[f\^4]\ P[g\^4] + 4\ N\ P[f\^4\ g\^4] + 
+        2\ B\ N\ P[f\^4\ g\^4] - 2\ B\^2\ N\ P[f\^4\ g\^4] - 
+        2\ B\ N\^2\ P[f\^4\ g\^4] + 
+        2\ B\^2\ N\^2\ P[f\^4\ g\^4])\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(\(Q := \ \(-P[f\ g]\^4\) - 
+        2\ P[f\^2]\ P[f\ g]\^2\ P[g\^2] + 
+        2\ N\ P[f\ g]\ P[f\^3\ g]\ P[g\^2] - P[f\^2]\^2\ P[g\^2]\^2 + 
+        4\ P[f\ g]\^2\ P[f\^2\ g\^2] + 4\ P[f\^2]\ P[g\^2]\ P[f\^2\ g\^2] - 
+        4\ P[f\^2\ g\^2]\^2 + B\ N\^2\ P[f\^2\ g\^2]\^2 - 
+        2\ N\ P[g\^2]\ P[f\^4\ g\^2] - 2\ B\ N\ P[g\^2]\ P[f\^4\ g\^2] - 
+        2\ N\ P[f\^3\ g]\ P[f\ g\^3] + 2\ B\ N\ P[f\^3\ g]\ P[f\ g\^3] - 
+        2\ N\ P[f\ g]\ P[f\^3\ g\^3] - 2\ B\ N\ P[f\ g]\ P[f\^3\ g\^3] + 
+        B\ N\^2\ P[f\^4]\ P[g\^4] + 4\ N\ P[f\^4\ g\^4] + 
+        2\ B\ N\ P[f\^4\ g\^4] - 2\ B\^2\ N\ P[f\^4\ g\^4] - 
+        2\ B\ N\^2\ P[f\^4\ g\^4] + 
+        2\ B\^2\ N\^2\ P[f\^4\ g\^4]\)\(\[IndentingNewLine]\)
+    \)\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Factor[\ Q]\)], "Input"],
+
+Cell[BoxData[
+    \(\(-P[f\ g]\^4\) - 2\ P[f\^2]\ P[f\ g]\^2\ P[g\^2] + 
+      2\ N\ P[f\ g]\ P[f\^3\ g]\ P[g\^2] - P[f\^2]\^2\ P[g\^2]\^2 + 
+      4\ P[f\ g]\^2\ P[f\^2\ g\^2] + 4\ P[f\^2]\ P[g\^2]\ P[f\^2\ g\^2] - 
+      4\ P[f\^2\ g\^2]\^2 + B\ N\^2\ P[f\^2\ g\^2]\^2 - 
+      2\ N\ P[g\^2]\ P[f\^4\ g\^2] - 2\ B\ N\ P[g\^2]\ P[f\^4\ g\^2] - 
+      2\ N\ P[f\^3\ g]\ P[f\ g\^3] + 2\ B\ N\ P[f\^3\ g]\ P[f\ g\^3] - 
+      2\ N\ P[f\ g]\ P[f\^3\ g\^3] - 2\ B\ N\ P[f\ g]\ P[f\^3\ g\^3] + 
+      B\ N\^2\ P[f\^4]\ P[g\^4] + 4\ N\ P[f\^4\ g\^4] + 
+      2\ B\ N\ P[f\^4\ g\^4] - 2\ B\^2\ N\ P[f\^4\ g\^4] - 
+      2\ B\ N\^2\ P[f\^4\ g\^4] + 2\ B\^2\ N\^2\ P[f\^4\ g\^4]\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Simplify[\ 
+      Q /. {B \[Rule] 1}]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(-P[f\ g]\^4\) - P[f\^2]\^2\ P[g\^2]\^2 + 
+      4\ P[f\^2]\ P[g\^2]\ P[f\^2\ g\^2] - 4\ P[f\^2\ g\^2]\^2 + 
+      N\^2\ P[f\^2\ g\^2]\^2 + 
+      P[f\ g]\^2\ \((\(-2\)\ P[f\^2]\ P[g\^2] + 4\ P[f\^2\ g\^2])\) - 
+      4\ N\ P[g\^2]\ P[f\^4\ g\^2] + 
+      2\ N\ P[f\ g]\ \((P[f\^3\ g]\ P[g\^2] - 2\ P[f\^3\ g\^3])\) + 
+      N\^2\ P[f\^4]\ P[g\^4] + 4\ N\ P[f\^4\ g\^4]\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Simplify[
+      CleanupSums[DSimplifyCI[\ Ex[\ Vh2]]]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\((\[Sum]\+\(i = 1\)\%N f[i]\ g[i])\)\ \(\[Sum]\+\(j = 1\)\%N f[j]\ \
+g[j]\) + \((\[Sum]\+\(i = 1\)\%N f[i]\^2)\)\ \(\[Sum]\+\(j = 1\)\%N g[j]\^2\) \
+- 2\ \(\[Sum]\+\(j = 1\)\%N f[j]\^2\ g[j]\^2\)\)\/B\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(DSimplifyCI[Ex[\ Vh2]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\((\[Sum]\+\(i = 1\)\%N f[i]\ g[i])\)\ \(\[Sum]\+\(i = 1\)\%B\(\[Sum]\
+\+\(j = 1\)\%N f[j]\ g[j]\)\) + \((\[Sum]\+\(i = 1\)\%N f[i]\^2)\)\ \
+\(\[Sum]\+\(i = 1\)\%B\(\[Sum]\+\(j = 1\)\%N g[j]\^2\)\) - 2\ \(\[Sum]\+\(i = \
+1\)\%B\(\[Sum]\+\(j = 1\)\%N f[j]\^2\ g[j]\^2\)\)\)\/B\^2\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Trace[\ URExp[\ Vh2\ ]]\)\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(URExp[\ Vh2\ ]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\[Sum]\+\($165 = 1\)\%B\((\((\[Sum]\+\($160 = 1\)\%N 
+                    f[$160]\ g[$160]\ X[$160, $165])\)\ \(\[Sum]\+\($161 = \
+1\)\%N f[$161]\ g[$161]\ X[$161, $165]\) + \((\[Sum]\+\($162 = 1\)\%N f[$162]\
+\^2\ X[$162, $165])\)\ \(\[Sum]\+\($163 = 1\)\%N g[$163]\^2\ X[$163, $165]\) \
+- 2\ \(\[Sum]\+\($164 = 1\)\%N f[$164]\^2\ g[$164]\^2\ X[$164, $165]\))\)\)], \
+"Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Trace[\ 
+      URExp[\ \[Sum]\+\(i = 1\)\%N f[i]\ g[i]\ X[i, j]]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{"{", 
+      RowBox[{
+        TagBox[\(URExp[\[Sum]\+\(i = 1\)\%N f[i]\ g[i]\ X[i, j]]\),
+          HoldForm], ",", 
+        TagBox[\(Module[{y$, r$, z$, Lp$}, y$ = URExp[f[i]\ g[i]\ X[i, j]]; 
+            r$ = UniqueReplacements[{{i, 1, N}}]; \[Sum]\+\(i = 1\)\%N 
+                  Evaluate[y$] /. \[InvisibleSpace]r$]\),
+          HoldForm], ",", 
+        RowBox[{"{", 
+          RowBox[{
+            
+            TagBox[\(y$13728 = URExp[f[i]\ g[i]\ X[i, j]]; 
+              r$13728 = 
+                UniqueReplacements[{{i, 1, N}}]; \[Sum]\+\(i = 1\)\%N 
+                    Evaluate[y$13728] /. \[InvisibleSpace]r$13728\),
+              HoldForm], ",", 
+            RowBox[{"{", 
+              RowBox[{
+                RowBox[{"{", 
+                  RowBox[{
+                    TagBox[\(URExp[f[i]\ g[i]\ X[i, j]]\),
+                      HoldForm], ",", 
+                    TagBox[\(URExp[f[i]]\ URExp[g[i]\ X[i, j]]\),
+                      HoldForm], ",", 
+                    RowBox[{"{", 
+                      RowBox[{
+                        TagBox[\(URExp[f[i]]\),
+                          HoldForm], ",", 
+                        TagBox[\(f[i]\),
+                          HoldForm]}], "}"}], ",", 
+                    RowBox[{"{", 
+                      RowBox[{
+                        TagBox[\(URExp[g[i]\ X[i, j]]\),
+                          HoldForm], ",", 
+                        TagBox[\(URExp[g[i]]\ URExp[X[i, j]]\),
+                          HoldForm], ",", 
+                        RowBox[{"{", 
+                          RowBox[{
+                            TagBox[\(URExp[g[i]]\),
+                              HoldForm], ",", 
+                            TagBox[\(g[i]\),
+                              HoldForm]}], "}"}], ",", 
+                        RowBox[{"{", 
+                          RowBox[{
+                            TagBox[\(URExp[X[i, j]]\),
+                              HoldForm], ",", 
+                            TagBox[\(X[i, j]\),
+                              HoldForm]}], "}"}], ",", 
+                        TagBox[\(g[i]\ X[i, j]\),
+                          HoldForm]}], "}"}], ",", 
+                    TagBox[\(f[i]\ \((g[i]\ X[i, j])\)\),
+                      HoldForm], ",", 
+                    TagBox[\(f[i]\ g[i]\ X[i, j]\),
+                      HoldForm]}], "}"}], ",", 
+                TagBox[\(y$13728 = f[i]\ g[i]\ X[i, j]\),
+                  HoldForm], ",", 
+                TagBox[\(f[i]\ g[i]\ X[i, j]\),
+                  HoldForm]}], "}"}], ",", 
+            RowBox[{"{", 
+              RowBox[{
+                RowBox[{"{", 
+                  RowBox[{
+                    TagBox[\(UniqueReplacements[{{i, 1, N}}]\),
+                      HoldForm], ",", 
+                    TagBox[\(UniqueReplacementsEL /@ {{i, 1, N}}\),
+                      HoldForm], ",", 
+                    TagBox[\({UniqueReplacementsEL[{i, 1, N}]}\),
+                      HoldForm], ",", 
+                    RowBox[{"{", 
+                      RowBox[{
+                        TagBox[\(UniqueReplacementsEL[{i, 1, N}]\),
+                          HoldForm], ",", 
+                        TagBox[\(i \[Rule] Unique[]\),
+                          HoldForm], ",", 
+                        RowBox[{"{", 
+                          RowBox[{
+                            TagBox[\(Unique[]\),
+                              HoldForm], ",", 
+                            TagBox["$159",
+                              HoldForm]}], "}"}], ",", 
+                        TagBox[\(i \[Rule] $159\),
+                          HoldForm], ",", 
+                        TagBox[\(i \[Rule] $159\),
+                          HoldForm]}], "}"}], ",", 
+                    TagBox[\({i \[Rule] $159}\),
+                      HoldForm]}], "}"}], ",", 
+                TagBox[\(r$13728 = {i \[Rule] $159}\),
+                  HoldForm], ",", 
+                TagBox[\({i \[Rule] $159}\),
+                  HoldForm]}], "}"}], ",", 
+            RowBox[{"{", 
+              RowBox[{
+                RowBox[{"{", 
+                  RowBox[{
+                    RowBox[{"{", 
+                      RowBox[{
+                        TagBox["y$13728",
+                          HoldForm], ",", 
+                        TagBox[\(f[i]\ g[i]\ X[i, j]\),
+                          HoldForm]}], "}"}], ",", 
+                    TagBox[\(\[Sum]\+\(i = 1\)\%N f[i]\ g[i]\ X[i, j]\),
+                      HoldForm]}], "}"}], ",", 
+                RowBox[{"{", 
+                  RowBox[{
+                    TagBox["r$13728",
+                      HoldForm], ",", 
+                    TagBox[\({i \[Rule] $159}\),
+                      HoldForm]}], "}"}], ",", 
+                
+                TagBox[\(\[Sum]\+\(i = 1\)\%N f[i]\ g[i]\ X[i, 
+                          j] /. \[InvisibleSpace]{i \[Rule] $159}\),
+                  HoldForm], ",", 
+                
+                TagBox[\(\[Sum]\+\($159 = 1\)\%N f[$159]\ g[$159]\ X[$159, 
+                        j]\),
+                  HoldForm]}], "}"}], ",", 
+            TagBox[\(\[Sum]\+\($159 = 1\)\%N f[$159]\ g[$159]\ X[$159, j]\),
+              HoldForm]}], "}"}], ",", 
+        TagBox[\(\[Sum]\+\($159 = 1\)\%N f[$159]\ g[$159]\ X[$159, j]\),
+          HoldForm]}], "}"}]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Sum[\ 
+        f[i]\ g[i]\ X[i, j], \ {i, 1, N}]\  /. \ {i \[Rule] q}\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\[Sum]\+\(q = 1\)\%N f[q]\ g[q]\ X[q, j]\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Simplify[
+      CleanupSums[DSimplifyCI[\ Ex[\ Vh2]]]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\((\[Sum]\+\(i = 1\)\%N f[i]\ g[i])\)\ \(\[Sum]\+\(j = 1\)\%N f[j]\ \
+g[j]\) + \((\[Sum]\+\(i = 1\)\%N f[i]\^2)\)\ \(\[Sum]\+\(j = 1\)\%N g[j]\^2\) \
+- 2\ \(\[Sum]\+\(j = 1\)\%N f[j]\^2\ g[j]\^2\)\)\/B\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Var[\ Vh2\ ]\)\)\)], "Input"],
+
+Cell[BoxData[""], "Input"],
+
+Cell[BoxData[
+    \(Ex[\ Vh2^2\ ]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(URExp[Vh2^2]\)], "Input"],
+
+Cell[BoxData[
+    \(\((\[Sum]\+\($237 = 1\)\%B\((\((\[Sum]\+\($232 = 1\)\%N 
+                        f[$232]\ g[$232]\ X[$232, $237])\)\ \(\[Sum]\+\($233 \
+= 1\)\%N f[$233]\ g[$233]\ X[$233, $237]\) + \((\[Sum]\+\($234 = 1\)\%N \
+f[$234]\^2\ X[$234, $237])\)\ \(\[Sum]\+\($235 = 1\)\%N g[$235]\^2\ X[$235, \
+$237]\) - 
+              2\ \(\[Sum]\+\($236 = 1\)\%N f[$236]\^2\ g[$236]\^2\ X[$236, \
+$237]\))\))\)\ \(\[Sum]\+\($243 = 1\)\%B\((\((\[Sum]\+\($238 = 1\)\%N 
+                      f[$238]\ g[$238]\ X[$238, $243])\)\ \(\[Sum]\+\($239 = \
+1\)\%N f[$239]\ g[$239]\ X[$239, $243]\) + \((\[Sum]\+\($240 = 1\)\%N f[$240]\
+\^2\ X[$240, $243])\)\ \(\[Sum]\+\($241 = 1\)\%N g[$241]\^2\ X[$241, $243]\) \
+- 2\ \(\[Sum]\+\($242 = 1\)\%N f[$242]\^2\ g[$242]\^2\ X[$242, \
+$243]\))\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Q\  := 
+      d[l, k] \((R[l] \((1 - R[l, 1] R[l, 2] R[l, 3])\) d[i, j] d[i, m] 
+                d[i, n] + 
+              R[l] R[l, 
+                  1] \((1 - 
+                    R[l, 2] R[l, 3])\) \((d[i, j] d[i, m] \((1 - d[i, n])\) + 
+                    d[i, j] d[i, n] \((1 - d[i, m])\) + 
+                    d[i, m] d[i, n] \((1 - d[i, j])\) + 
+                    d[j, m] d[j, n] \((1 - d[i, j])\) + 
+                    d[i, j] d[m, n] \((1 - d[i, m])\) + 
+                    d[i, m] d[j, n] \((1 - d[i, j])\) + 
+                    d[i, n] d[j, m] \((1 - d[i, j])\))\)\  + \ 
+              R[l] R[l, 1] 
+                R[l, 2] \((1 - 
+                    R[l, 3])\) \((d[i, 
+                        j] \((1 - d[i, m])\) \((1 - d[i, n])\) \((1 - 
+                          d[m, n])\) + 
+                    d[i, m] \((1 - d[i, j])\) \((1 - d[i, n])\) \((1 - 
+                          d[j, n])\) + 
+                    d[i, n] \((1 - d[i, j])\) \((1 - d[i, m])\) \((1 - 
+                          d[j, m])\)\  + \ 
+                    d[j, m] \((1 - d[i, j])\) \((1 - d[j, n])\) \((1 - 
+                          d[i, n])\)\  + \ 
+                    d[j, n] \((1 - d[i, j])\) \((1 - d[j, m])\) \((1 - 
+                          d[i, m])\) + 
+                    d[m, n] \((1 - d[i, m])\) \((1 - d[j, m])\) \((1 - 
+                          d[i, j])\))\)\  + \ 
+              R[l] R[l, 1] R[l, 2] R[l, 3]\ )\) + \(\((1 - d[l, k])\) \((1 - 
+              d[i, m])\) \((1 - d[i, n])\) \((1 - d[j, m])\) \((1 - 
+              d[j, n])\) \((\ 
+            R[l] d[i, j] + 
+              R[l] R[l, 1] \((1 - d[i, j])\))\) \((R[k] d[m, n] + 
+              R[k] R[k, 1] \((1 - d[m, n])\))\)\(\ \)\)\)\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Q /. \ {m \[Rule] n, \ 
+        i \[Rule] j}\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\((1 - d[j, n])\)\^4\ \((1 - d[k, l])\)\)\/B\^2 + \((1\/B\^4 + \(\((1 \
+- 1\/B\^3)\)\ d[j, n]\^2\)\/B + \(\((1 - 1\/B\^2)\)\ \((1 - d[j, n] + 2\ \((1 \
+- d[j, n])\)\ d[j, n])\)\)\/B\^2)\)\ d[k, l]\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Simplify[
+      Q /. \ {j \[Rule] i, \ m \[Rule] i, \ n \[Rule] i, \ 
+          k \[Rule] l}]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(1\/B\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Simplify[
+      Q /. \ {j \[Rule] i, \ m \[Rule] n}]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(-\(\(\((\(-1\) + d[i, n])\)\^4\ \((\(-1\) + 
+                  d[k, l])\)\)\/B\^2\)\) + \(\((B\^2 + \((\(-1\) + B\^2)\)\ \
+d[i, n] + \((1 - 2\ B\^2 + B\^3)\)\ d[i, n]\^2)\)\ d[k, l]\)\/B\^4\)], \
+"Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Simplify[\(-\(\(\((\(-1\) + d[i, n])\)\ \((\(-1\) + 
+                    d[k, l])\)\)\/B\^2\)\) + \(\((B\^2 + \((\(-1\) + B\^2)\)\ \
+d[i, n] + \((1 - 2\ B\^2 + B\^3)\)\ d[i, n])\)\ d[k, l]\)\/B\^4]\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(-1\) + 2\ d[k, l] + d[i, n]\ \((1 + \((\(-2\) + B)\)\ d[k, \
+l])\)\)\/B\^2\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Simplify[\ 
+      ExBase[\ X[i, l] X[n, k]]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(1 + d[i, n]\ \((\(-1\) + B\ d[k, l])\)\)\/B\^2\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Simplify[\(-\(\(\((\(-1\) + 
+                    d[i, n])\)\ \((\(-1\) + 
+                    d[k, l])\)\)\/B\^2\)\) + \(\((B\^2 + \((\(-1\) + B\^2)\)\ \
+d[i, n] + \((1 - 2\ B\^2 + B\^3)\)\ d[i, n])\)\ d[k, l]\)\/B\^4]\)\)\)], \
+"Input"],
+
+Cell[BoxData[
+    \(\(\(-1\) + 2\ d[k, l] + d[i, n]\ \((1 + \((\(-2\) + B)\)\ d[k, \
+l])\)\)\/B\^2\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(\((1 - d[l, k])\) \((1 - d[i, m])\) \((1 - 
+            d[i, n])\) \((1 - d[j, m])\) \((1 - d[j, n])\) \((\ 
+          R[l] d[i, j] + R[l] R[l, 1] \((1 - d[i, j])\))\) \((R[k] d[m, n] + 
+            R[k] R[k, 1] \((1 - d[m, n])\))\)\  /. {j \[Rule] i, 
+        m \[Rule] n}\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\((1 - d[i, n])\)\^4\ \((1 - d[k, l])\)\)\/B\^2\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(R[l] \((1 - R[l, 1] R[l, 2] R[l, 3])\) 
+        d[i, j] d[i, m] d[i, n]\  /. \ {j \[Rule] i, 
+        m \[Rule] n}\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\((1 - 1\/B\^3)\)\ d[i, n]\^2\)\/B\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Simplify[
+      1 + d[i, n]\ \((\(-1\) + B\ d[k, l])\)\  - \ \((\(-1\) + 2\ d[k, l] + 
+            d[i, n]\ \((1 + \((\(-2\) + B)\)\ d[k, l])\))\)]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(2\ \((\(-1\) + d[i, n])\)\ \((\(-1\) + d[k, l])\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(\((1 - d[l, k])\) \((1 - d[i, m])\) \((1 - 
+            d[i, n])\) \((1 - d[j, m])\) \((1 - d[j, n])\) \((\ 
+          R[l])\) \((R[k])\)\ \  /. \ {j \[Rule] i, 
+        m \[Rule] n}\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\((1 - d[i, n])\)\^4\ \((1 - d[k, l])\)\)\/B\^2\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(R[l] \((1 - R[l, 1] R[l, 2] R[l, 3])\) 
+          d[i, j] d[i, m] d[i, n] + 
+        R[l] R[l, 
+            1] \((1 - 
+              R[l, 2] R[l, 3])\) \((d[i, j] d[i, m] \((1 - d[i, n])\) + 
+              d[i, j] d[i, n] \((1 - d[i, m])\) + 
+              d[i, m] d[i, n] \((1 - d[i, j])\) + 
+              d[j, m] d[j, n] \((1 - d[i, j])\) + 
+              d[i, j] d[m, n] \((1 - d[i, m])\) + 
+              d[i, m] d[j, n] \((1 - d[i, j])\) + 
+              d[i, n] d[j, m] \((1 - d[i, j])\))\)\  + \ 
+        R[l] R[l, 1] 
+          R[l, 2] \((1 - 
+              R[l, 3])\) \((d[i, 
+                  j] \((1 - d[i, m])\) \((1 - d[i, n])\) \((1 - d[m, n])\) + 
+              d[i, m] \((1 - d[i, j])\) \((1 - d[i, n])\) \((1 - d[j, n])\) + 
+              d[i, n] \((1 - d[i, j])\) \((1 - d[i, m])\) \((1 - 
+                    d[j, m])\)\  + \ 
+              d[j, m] \((1 - d[i, j])\) \((1 - d[j, n])\) \((1 - 
+                    d[i, n])\)\  + \ 
+              d[j, n] \((1 - d[i, j])\) \((1 - d[j, m])\) \((1 - d[i, m])\) + 
+              d[m, n] \((1 - d[i, m])\) \((1 - d[j, m])\) \((1 - 
+                    d[i, j])\))\)\  + \ 
+        R[l] R[l, 1] R[l, 2] R[l, 3]\  /. \ {j \[Rule] i, 
+        m \[Rule] n}\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(1\/B\^4 + \(\((1 - 1\/B\^3)\)\ d[i, n]\^2\)\/B + \(\((1 - 1\/B\^2)\)\ \
+\((1 - d[i, n] + 2\ \((1 - d[i, n])\)\ d[i, n])\)\)\/B\^2\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Simplify[
+      1\/B\^4 + \(\((1 - 1\/B\^3)\)\ d[i, n]\)\/B + \(\((1 - 1\/B\^2)\)\ \((1 \
+- d[i, n] + 2\ \((1 - d[i, n])\)\ d[i, n])\)\)\/B\^2]\)], "Input"],
+
+Cell[BoxData[
+    \(\(B\^2 + \((\(-2\) + B\^2 + B\^3)\)\ d[i, n] - 2\ \((\(-1\) + B\^2)\)\ \
+d[i, n]\^2\)\/B\^4\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Simplify[\(B\^2 + \((\(-2\) + B\^2 + B\^3)\)\ d[i, n] - 2\ \((\(-1\) + \
+B\^2)\)\ d[i, n]\)\/B\^4]\)], "Input"],
+
+Cell[BoxData[
+    \(\(1 + \((\(-1\) + B)\)\ d[i, n]\)\/B\^2\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Simplify[\(\(1 + \((\(-1\) + B)\)\ d[i, n]\)\/B\^2\) 
+          d[l, k] + \(\((1 - d[i, n])\)\ \((1 - d[k, l])\)\)\/B\^2]\)], \
+"Input"],
+
+Cell[BoxData[
+    \(\(1 + d[i, n]\ \((\(-1\) + B\ d[k, l])\)\)\/B\^2\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Q /. \ {j \[Rule] i, \ 
+        m \[Rule] n}\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\((1 - d[i, n])\)\^4\ \((1 - d[k, l])\)\)\/B\^2 + \((1\/B\^4 + \(\((1 \
+- 1\/B\^3)\)\ d[i, n]\^2\)\/B + \(\((1 - 1\/B\^2)\)\ \((1 - d[i, n] + 2\ \((1 \
+- d[i, n])\)\ d[i, n])\)\)\/B\^2)\)\ d[k, l]\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Simplify[\(\((1 - d[i, n])\)\ \((1 - d[k, l])\)\)\/B\^2 + \((1\/B\^4 + \
+\(\((1 - 1\/B\^3)\)\ d[i, n]\)\/B + \(\((1 - 1\/B\^2)\)\ \((1 - d[i, n] + 2\ \
+\((1 - d[i, n])\)\ d[i, n])\)\)\/B\^2)\)\ d[k, l]]\)], "Input"],
+
+Cell[BoxData[
+    \(\(B\^2 - 2\ \((\(-1\) + B\^2)\)\ d[i, n]\^2\ d[k, l] + d[i, n]\ \((\(-B\
+\^2\) + \((\(-2\) + 2\ B\^2 + B\^3)\)\ d[k, l])\)\)\/B\^4\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Simplify[\(B\^2 - 2\ \((\(-1\) + B\^2)\)\ d[i, n]\ d[k, l] + d[i, n]\ \
+\((\(-B\^2\) + \((\(-2\) + 2\ B\^2 + B\^3)\)\ d[k, l])\)\)\/B\^4]\)], "Input"],
+
+Cell[BoxData[
+    \(\(1 + d[i, n]\ \((\(-1\) + B\ d[k, l])\)\)\/B\^2\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\[IndentingNewLine]\)], "Input"],
+
+Cell[BoxData[
+    \(VarVh2\  := \ \(1\/B\^3\) \((\(-B\)\ P[f\ g]\^4 + 
+            B\ P[f\^4]\ P[g\^2]\^2 - 10\ B\ P[f\^2\ g\^2]\^2 + 
+            3\ B\^2\ P[f\^2\ g\^2]\^2 - 8\ B\ P[g\^2]\ P[f\^4\ g\^2] - 
+            8\ B\ P[f\^3\ g]\ P[f\ g\^3] + 4\ B\^2\ P[f\^3\ g]\ P[f\ g\^3] - 
+            2\ B\ P[f\^4]\ P[g\^4] + B\^2\ P[f\^4]\ P[g\^4] + 
+            32\ B\ P[f\^4\ g\^4] - 8\ B\^2\ P[f\^4\ g\^4] - 
+            P[g\^2]\^2\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N \
+f[k]\^4\)\) + 
+            P[f\ g]\^3\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N f[k]\ g[
+                      k]\)\) + 
+            P[f\ g\^3]\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N f[k]\^3\ \
+g[k]\)\) + 7\ P[
+                f\^2\ g\^2]\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N \
+f[k]\^2\ g[k]\^2\)\) + 
+            P[f\ g]\^2\ \((8\ B\ P[f\^2\ g\^2] + 
+                  P[f\^2]\ \((\(-2\)\ B\ P[
+                            g\^2] + \[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = \
+1\)\%N g[k]\^2\))\) + 
+                  2\ \((\(-4\) + 
+                        B)\)\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N \
+f[k]\^2\ g[k]\^2\)\))\) + 
+            8\ P[g\^2]\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N f[k]\^4\ \
+g[k]\^2\)\) + 
+            3\ P[f\^3\ g]\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N f[
+                      k]\ g[k]\^3\)\) + 
+            P[f\ g]\ \((4\ B\ P[f\^3\ g]\ P[g\^2] + 
+                  P[f\^2]\ \((4\ B\ P[f\ g\^3] + 
+                        P[g\^2]\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N 
+                                  f[k]\ g[k]\)\) - 
+                        4\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N f[
+                                  k]\ g[k]\^3\)\))\) - 
+                  2\ \((8\ B\ P[f\^3\ g\^3] + 
+                        B\ P[f\^2\ g\^2]\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k \
+= 1\)\%N f[k]\ g[k]\)\) + 
+                        2\ P[g\^2]\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\
+\%N f[k]\^3\ g[k]\)\) - 
+                        8\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N \
+f[k]\^3\ g[k]\^3\)\))\))\) + 
+            P[f\^2]\^2\ \((\(-B\)\ P[g\^2]\^2 + B\ P[g\^4] + 
+                  P[g\^2]\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N \
+g[k]\^2\)\) - \[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N g[k]\^4\))\) + 
+            P[f\^4]\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N g[k]\^4\)\) \
++ 2\ P[f\^2]\ \((\(-4\)\ B\ P[f\^2\ g\^4] - 
+                  B\ P[f\^2\ g\^2]\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\
+\%N g[k]\^2\)\) + P[g\^2]\ \((3\ B\ P[
+                            f\^2\ g\^2] + \((\(-3\) + 
+                              B)\)\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\
+\%N f[k]\^2\ g[k]\^2\)\))\) + 
+                  4\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N f[k]\^2\ \
+g[k]\^4\)\))\) - 
+            24\ \(\[Sum]\+\(j = 1\)\%B\(\[Sum]\+\(k = 1\)\%N f[k]\^4\ g[k]\^4\
+\)\))\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(dRewrite[CleanupSums[VarVh2]]\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(1\/B\^3\)\((\(-3\)\ B\ P[f\^2\ g\^2]\^2 + 
+        3\ B\^2\ P[f\^2\ g\^2]\^2 + 
+        P[f\ g]\^2\ \((\(-B\)\ P[f\^2]\ P[g\^2] + 8\ B\ P[f\^2\ g\^2] + 
+              2\ \((\(-4\) + B)\)\ B\ P[f\^2\ g\^2])\) + 
+        2\ P[f\^2]\ \((\(-B\^2\)\ P[g\^2]\ P[f\^2\ g\^2] + 
+              P[g\^2]\ \((3\ B\ P[f\^2\ g\^2] + \((\(-3\) + B)\)\ B\ P[
+                        f\^2\ g\^2])\))\) + 
+        P[f\ g]\ \((B\ P[f\^2]\ P[f\ g]\ P[g\^2] + 
+              4\ B\ P[f\^3\ g]\ P[g\^2] - 
+              2\ \((2\ B\ P[f\^3\ g]\ P[g\^2] + 
+                    B\^2\ P[f\ g]\ P[f\^2\ g\^2])\))\) - 
+        4\ B\ P[f\^3\ g]\ P[f\ g\^3] + 4\ B\^2\ P[f\^3\ g]\ P[f\ g\^3] - 
+        B\ P[f\^4]\ P[g\^4] + B\^2\ P[f\^4]\ P[g\^4] + 8\ B\ P[f\^4\ g\^4] - 
+        8\ B\^2\ P[f\^4\ g\^4])\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(VarVh2Clean\  := \(1\/B\^3\) \((\(-3\)\ B\ P[f\^2\ g\^2]\^2 + 
+            3\ B\^2\ P[f\^2\ g\^2]\^2 + 
+            P[f\ g]\^2\ \((\(-B\)\ P[f\^2]\ P[g\^2] + 8\ B\ P[f\^2\ g\^2] + 
+                  2\ \((\(-4\) + B)\)\ B\ P[f\^2\ g\^2])\) + 
+            2\ P[f\^2]\ \((\(-B\^2\)\ P[g\^2]\ P[f\^2\ g\^2] + 
+                  P[g\^2]\ \((3\ B\ P[f\^2\ g\^2] + \((\(-3\) + B)\)\ B\ P[
+                            f\^2\ g\^2])\))\) + 
+            P[f\ g]\ \((B\ P[f\^2]\ P[f\ g]\ P[g\^2] + 
+                  4\ B\ P[f\^3\ g]\ P[g\^2] - 
+                  2\ \((2\ B\ P[f\^3\ g]\ P[g\^2] + 
+                        B\^2\ P[f\ g]\ P[f\^2\ g\^2])\))\) - 
+            4\ B\ P[f\^3\ g]\ P[f\ g\^3] + 4\ B\^2\ P[f\^3\ g]\ P[f\ g\^3] - 
+            B\ P[f\^4]\ P[g\^4] + B\^2\ P[f\^4]\ P[g\^4] + 
+            8\ B\ P[f\^4\ g\^4] - 8\ B\^2\ P[f\^4\ g\^4])\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Simplify[
+      VarVh2Clean\ \  /. \ {B \[Rule] 1}]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(0\)], "Output"]
+}, Open  ]]
+},
+FrontEndVersion->"5.1 for X",
+ScreenRectangle->{{0, 2720}, {0, 1024}},
+WindowSize->{796, 994},
+WindowMargins->{{Automatic, 476}, {Automatic, 0}},
+PrintingPageRange->{Automatic, Automatic},
+PrintingOptions->{"PaperSize"->{612, 792},
+"PaperOrientation"->"Portrait",
+"PostScriptOutputFile":>FrontEnd`FileName[{$RootDirectory, "exports", \
+"adobra", "cvs", "fastRangeSum"}, "HashedSketches.nb.ps", CharacterEncoding \
+-> "iso8859-1"],
+"Magnification"->1}
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[1776, 53, 153, 3, 43, "Input"],
+Cell[1932, 58, 329, 5, 20, "Message"],
+Cell[2264, 65, 329, 5, 20, "Message"]
+}, Open  ]],
+Cell[2608, 73, 2825, 53, 475, "Input"],
+Cell[5436, 128, 748, 15, 155, "Input"],
+
+Cell[CellGroupData[{
+Cell[6209, 147, 117, 2, 43, "Input"],
+Cell[6329, 151, 237, 3, 53, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[6603, 159, 246, 5, 75, "Input"],
+Cell[6852, 166, 2733, 51, 462, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[9622, 222, 130, 2, 43, "Input"],
+Cell[9755, 226, 638, 10, 145, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[10430, 241, 46, 1, 27, "Input"],
+Cell[10479, 244, 731, 11, 103, "Output"]
+}, Open  ]],
+Cell[11225, 258, 788, 13, 129, "Input"],
+
+Cell[CellGroupData[{
+Cell[12038, 275, 44, 1, 27, "Input"],
+Cell[12085, 278, 683, 10, 86, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[12805, 293, 101, 2, 43, "Input"],
+Cell[12909, 297, 404, 7, 68, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[13350, 309, 118, 2, 43, "Input"],
+Cell[13471, 313, 237, 3, 53, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[13745, 321, 86, 1, 43, "Input"],
+Cell[13834, 324, 314, 4, 53, "Output"]
+}, Open  ]],
+Cell[14163, 331, 87, 1, 43, "Input"],
+
+Cell[CellGroupData[{
+Cell[14275, 336, 78, 1, 43, "Input"],
+Cell[14356, 339, 398, 6, 160, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[14791, 350, 129, 2, 71, "Input"],
+Cell[14923, 354, 5286, 120, 392, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[20246, 479, 133, 2, 43, "Input"],
+Cell[20382, 483, 74, 1, 54, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[20493, 489, 118, 2, 43, "Input"],
+Cell[20614, 493, 237, 3, 53, "Output"]
+}, Open  ]],
+Cell[20866, 499, 76, 1, 43, "Input"],
+Cell[20945, 502, 26, 0, 27, "Input"],
+Cell[20974, 504, 46, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[21045, 509, 45, 1, 27, "Input"],
+Cell[21093, 512, 795, 12, 325, "Output"]
+}, Open  ]],
+Cell[21903, 527, 1768, 33, 235, "Input"],
+
+Cell[CellGroupData[{
+Cell[23696, 564, 108, 2, 43, "Input"],
+Cell[23807, 568, 232, 3, 98, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[24076, 576, 157, 3, 43, "Input"],
+Cell[24236, 581, 38, 1, 44, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[24311, 587, 116, 2, 43, "Input"],
+Cell[24430, 591, 227, 4, 46, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[24694, 600, 230, 3, 46, "Input"],
+Cell[24927, 605, 112, 2, 44, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[25076, 612, 108, 2, 43, "Input"],
+Cell[25187, 616, 82, 1, 44, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[25306, 622, 284, 5, 64, "Input"],
+Cell[25593, 629, 112, 2, 44, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[25742, 636, 337, 5, 75, "Input"],
+Cell[26082, 643, 83, 1, 46, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[26202, 649, 178, 3, 43, "Input"],
+Cell[26383, 654, 70, 1, 50, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[26490, 660, 211, 3, 43, "Input"],
+Cell[26704, 665, 83, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[26824, 671, 246, 4, 59, "Input"],
+Cell[27073, 677, 83, 1, 46, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[27193, 683, 1281, 25, 187, "Input"],
+Cell[28477, 710, 163, 2, 50, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[28677, 717, 176, 3, 50, "Input"],
+Cell[28856, 722, 125, 2, 46, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[29018, 729, 131, 2, 46, "Input"],
+Cell[29152, 733, 73, 1, 44, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[29262, 739, 156, 3, 44, "Input"],
+Cell[29421, 744, 82, 1, 44, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[29540, 750, 108, 2, 43, "Input"],
+Cell[29651, 754, 232, 3, 98, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[29920, 762, 235, 3, 95, "Input"],
+Cell[30158, 767, 164, 2, 46, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[30359, 774, 170, 2, 46, "Input"],
+Cell[30532, 778, 82, 1, 44, "Output"]
+}, Open  ]],
+Cell[30629, 782, 52, 1, 43, "Input"],
+Cell[30684, 785, 2880, 52, 532, "Input"],
+
+Cell[CellGroupData[{
+Cell[33589, 841, 62, 1, 27, "Input"],
+Cell[33654, 844, 815, 14, 101, "Output"]
+}, Open  ]],
+Cell[34484, 861, 880, 14, 124, "Input"],
+
+Cell[CellGroupData[{
+Cell[35389, 879, 115, 2, 43, "Input"],
+Cell[35507, 883, 35, 1, 27, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

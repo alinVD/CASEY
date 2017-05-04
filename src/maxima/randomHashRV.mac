@@ -1,0 +1,72 @@
+/* This file specifies the definition of the "randomHashing" family of random variables */
+/* The family consists in random variables X(I,K) with the following definition: */
+/* X(I,K) takes value 1 if item I is in bucket K and 0 otherwise */
+/* The hashing is assumed to be 4-wise independent */
+
+/* Family name: randomHashing */
+/* Parameters:  */
+/*     P  -- the probability to place each item in any of the buckets   */
+
+
+   
+
+expectations : [
+  expectation(X[I,K]) = P,
+  expectation(X[I,K]*X[J,L]) = Cases(	
+    Case(In(Df(Eq(K,L)), Df(Eq(I,J))), P),
+    Case(In(Df(Eq(K,L)), Df(Eq(I),Eq(J))), P^2),
+    Case(In(Df(Eq(K),Eq(L)), Df(Eq(I,J))), 0),
+    Case(In(Df(Eq(K),Eq(L)), Df(Eq(I),Eq(J))), P^2)),
+  expectation(X[I,K]*X[J,K]*X[IP,L]) = Cases(	
+    /***K = L ***/
+    Case(In(Df(Eq(K,L)), Df(Eq(I,J,IP))), P),
+    /* symmetric cases */
+    SymCase(In(Df(Eq(K,L)), Df(Eq(I,J),Eq(IP))), P^2),
+    /*******/
+    Case(In(Df(Eq(K,L)), Df(Eq(J),Eq(IP),Eq(I))), P^3),
+    
+    /***K # L ***/
+    Case(In(Df(Eq(K),Eq(L)), Df(Eq(I,J,IP))), 0),
+    /* symmetric cases */
+    SymCase(In(Df(Eq(K),Eq(L)), Df(Eq(I,IP),Eq(J))), 0),
+    /*******/
+    Case(In(Df(Eq(K),Eq(L)), Df(Eq(I,J),Eq(IP))), P^2),
+    Case(In(Df(Eq(K),Eq(L)), Df(Eq(J),Eq(IP),Eq(I))), P^3)),
+  
+  expectation(X[I,K]*X[J,K]*X[IP,L]*X[JP,L]) = Cases(	
+    /***K = L ***/
+    Case(In(Df(Eq(K,L)), Df(Eq(I,J,IP,JP))), P),
+    /* symmetric cases */
+    SymCase(In(Df(Eq(K,L)), Df(Eq(I,J,IP),Eq(JP))), P^2),
+    /*******/
+    /* symmetric cases */
+    SymCase(In(Df(Eq(K,L)), Df(Eq(I,J),Eq(IP,JP))), P^2),
+    /*******/
+    /* symmetric cases */
+    SymCase(In(Df(Eq(K,L)), Df(Eq(I,J),Eq(IP),Eq(JP))), P^3),
+    /*******/
+    Case(In(Df(Eq(K,L)), Df(Eq(J),Eq(IP),Eq(I),Eq(JP))), P^4),
+    
+    /***K # L ***/
+    Case(In(Df(Eq(K),Eq(L)), Df(Eq(I,J,IP,JP))), 0),
+    /* symmetric cases */
+    SymCase(In(Df(Eq(K),Eq(L)), Df(Eq(I,J,IP),Eq(JP))), 0),
+    /*******/
+    /* otherwise */
+    Case(In(Df(Eq(K),Eq(L)), Df(Eq(I,J),Eq(IP,JP))), P^2),
+    Case(In(Df(Eq(K),Eq(L)), Df(Eq(I,IP),Eq(J,JP))), 0),
+    Case(In(Df(Eq(K),Eq(L)), Df(Eq(I,JP),Eq(J,IP))), 0),
+    /*******/
+    /* otherwisw*/
+    Case(In(Df(Eq(K),Eq(L)), Df(Eq(I,J),Eq(IP),Eq(JP))), P^3),
+    Case(In(Df(Eq(K),Eq(L)), Df(Eq(I,IP),Eq(J),Eq(JP))), 0),
+    Case(In(Df(Eq(K),Eq(L)), Df(Eq(I,JP),Eq(IP),Eq(J))), 0),
+    Case(In(Df(Eq(K),Eq(L)), Df(Eq(J,IP),Eq(I),Eq(JP))), 0),
+    Case(In(Df(Eq(K),Eq(L)), Df(Eq(J,JP),Eq(I),Eq(IP))), 0),
+    Case(In(Df(Eq(K),Eq(L)), Df(Eq(IP,JP),Eq(I),Eq(J))), P^3),
+    /*******/
+    Case(In(Df(Eq(K),Eq(L)), Df(Eq(J),Eq(IP),Eq(I),Eq(JP))), P^4)
+  )
+];
+
+makeRVFamily(X, randomHashing, [P], expectations );

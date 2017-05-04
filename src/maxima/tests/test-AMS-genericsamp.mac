@@ -1,0 +1,28 @@
+makeRV(X, GenericSampling, [a1,b1,e1]);
+makeRV(Y, GenericSampling, [a2,b2,e2]);
+
+
+makeRV(Z, AMS, []);
+makeRV(W, AMS, []);
+
+rez: 1/(e1*e2)*sum( Z[i]*sum( I[t,i]*X[t]*f[t],t,1,N),i,1,n )*
+sum( Z[i]*sum(I[v,i]*Y[v]*g[v],v,1,M),i,1,n); 
+
+print("E(rez)=",makeTensor(dsimplify(E(rez))));
+
+sv: dsimplify(var(rez));
+smp: ratsimp(e1^2*e2^2*makeTensor(sv));
+printLargeLatex(X,smp);
+
+
+rSamp: 1/(e1*e2)*sum( sum( sum( I[t,i]*X[t]*f[t]*I[v,i]*Y[v]*g[v],
+      t,1,N),i,1,n) ,v,1,M); 
+sSamp: dsimplify(var(rSamp));
+smpSamp: ratsimp(e1^2*e2^2*makeTensor(sSamp));
+
+rezP: 1/(e1*e2)*sum( W[i]*sum( I[t,i]*X[t]*f[t],t,1,N),i,1,n )*
+sum( W[i]*sum(I[v,i]*Y[v]*g[v],v,1,M),i,1,n);
+
+
+sv2: dsimplify(cov(rez,rezP));
+

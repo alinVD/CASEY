@@ -1,0 +1,1507 @@
+kill(all);
+
+/**** GLOBAL VARIABLES ****/
+
+/* List of random variable families
+   Format of each family:
+     [random variable, name of family, variables, case rules]
+*/
+rvflist:[];
+
+/* List of random variables along with their corresponding
+   family they belong to
+*/
+rvlistBase:[]; 
+
+/* List of all random variables */
+rvlist:[];
+
+/* List of all the rules. A rule for each product of random variables
+   is introduced. The name of the rule is: RVName_ProductSize. These
+   rules are introduced for each random variable not random variable
+   family.
+
+   Example: for random variable X, rules X_1, X_2, X_4 would specify
+   simplification rules for E(X[]), E(X[]X[]), etc.
+*/
+rulelist:[];
+
+/* Hash array to keep lists of expressions that form products of expressions.
+   When a random variable is creates, an empty list is inserted in this array.
+   A special entry in the array is for constants with the argument CONSTANT
+*/
+prodFact[CONSTANT]: [];
+
+
+/**** AUXILIARY FUNCTIONS ****/
+
+/* hacked up function to test if an entry in the array is genuine or the same expression (unevaluated)
+*/
+unbound_array_entry( varr, index):=
+block
+(
+  return( not atom(varr[index]) and op(varr[index]) = varr )
+  );
+
+/* Function to test if a symbol is a random variable
+   The test uses the hash arraq prodFact so it is crucial to keep it
+   up to date.
+*/
+isRV(X):=
+block
+(
+  return( not(X=CONSTANT or unbound_array_entry(prodFact,X)) )
+  );
+
+
+isConstant(X):=
+block
+(
+  return (atom(X) and not isRV(X))
+  );
+
+/* Function to reset values of prodFact
+   The function will set all lists to [] but does not change the existance of the entries
+*/
+resetProdFact():=
+block
+(
+  [listRV: rest(arrayinfo(prodFact),2)], /* do not skip CONSTANT */
+  map( lambda([V], prodFact[first(V)]: []), listRV)
+  );
+
+/* returns the list of random variables */
+getListRV():=
+block
+(
+  [listRV: rest(arrayinfo(prodFact),3)], /* skip CONSTANT */
+  map( lambda([V], first(V)), listRV)
+  );
+
+/* This function puts out an error message if the argument contains random
+   variables. This means that a situation the code does not know how to deal
+   with was encountered
+*/
+ensureNotRV(expr):=
+block
+(
+  [_listRV: getListRV()],
+  apply(freeof,append(_listRV,[expr]))
+  );
+
+/* get the head/top of an expression. Useful for getting RV names */
+headExpr(_expr):=
+block
+(
+  if atom(_expr) then return(_expr)
+  else return( op(_expr) )
+  );
+
+/* function to determine if an subexpression contains sum */
+freeofSum(_expr):=
+block
+(
+  if atom(_expr) then return(true)
+  else
+  (
+    if string(op(_expr))="sum" then return(false)
+    else apply( "and", map( freeofSum, args(_expr) ) )
+    )
+  );
+
+/* function extracts all indices from an expression */
+getIndexes(_expr):=
+block
+(
+  [_op,_list,_sublist,_set],
+  if atom(_expr) then return([]),
+  _op: op(_expr),
+  if member(_op, ["+","-","*","//","^"]) then
+  (
+    _list: [],
+    maplist(
+      lambda( [e],
+        _sublist: getIndexes(e),
+        _list: append(_list,_sublist)
+        )
+      , args(_expr)
+      ),
+    _set: setify(_list),
+    _list: listify(_set),
+    return(_list)
+    )
+  else (
+    /* array or function */
+    return(args(_expr))
+    )
+  
+);
+
+
+/* function to efficiently test whether an expression is constant */
+/* slow version */
+
+isConstantExpression(_expr):=
+block
+(
+  return( apply("and", map( lambda([X], freeof(X,_expr)), getListRV() )) )
+  );
+
+/**** FUNCTIONS ****/
+
+
+/*************
+  Function to specify a random varaible family (template for RVs). A family
+  specifies the behavior of random variables in a generic way. It should be
+  thought as the type specification for the random variables. The function
+  produces no instance of the random variable, just the type specification.
+
+  Parameters:
+    X: RV template name (everything else in rules is considered constant)
+    NAME: name of the RV Family
+    VARS: template variables that can be replaced when instantiated
+    RULES: specification of the expectations of producs of X
+
+  Detailed Functionality:
+    The function will create a template that allow the creation of random
+    variables. When the family is instantiated (for example by makeRV), X is
+    replaced by the actual random variable that is created, replacement
+    values for the variables in VARS are substituted in the definition RULES.
+    All other names that appear in RULES are considered constants. If multiple
+    instances of the RV Family are produced they will contain the same values
+    for the constants. For maximum flexibility, most parameters are declared
+    as variables so they can be replaed.
+
+    By convention, the name X shold be used to specifiy families but this is
+    not mandatory. RVs with the same name as the variable can be specified
+    without any problems.
+    
+*/
+makeRVFamily(X,NAME,VARS,RULES) :=
+block
+( 
+  /* 
+  if list is empty or the NAME being added not in the list just append
+  else append the VARS and RULES in the corresponding NAME family.
+
+  This function just remembers the patterns so that makeRV can do its job.
+  */
+  
+  [exists:false,i:0, nexists:false, vexists:false],
+  
+  if(length(rvflist)=0) then
+  (
+    rvflist:append(rvflist,[[X,NAME,VARS,RULES]]), 
+    return (rvflist)
+    ),
+  
+  for c:1 step 1 while (c<=length(rvflist) and not exists) do
+  (
+    nexists:member(NAME,rvflist[c]),
+    vexists:member(X,rvflist[c]),
+    exists:nexists and vexists,
+    i:i+1
+    ),
+  
+  if(exists) then
+  (
+    rvflist[i][3]:append(rvflist[i][3],VARS),
+    rvflist[i][4]:append(rvflist[i][4],RULES),
+    return (true)
+    )
+  else
+  (
+    rvflist:append(rvflist,[[X,NAME,VARS,RULES]]),
+    return (true)
+    )
+  );
+
+
+/**************
+  The function creates random variables by instantiating a template.
+
+  Parameters:
+    X: random variable to be created
+    NAME: name of the RV Family to be used as the template
+    VARS: values for the variables used in the specification of X
+
+  Detailed functionality:
+    The random variables need to be specified so that the sistem can
+    determine how to compute expectations. Any name appearing in a formula
+    under for which the expectation is computed is considered a constant.
+    Random variables with different names are assumed independent (implicit
+    independence assumption). The random variables can have as many indeces
+    as desired, thus they can encode very complex situations.
+
+    The values in VARS specify replacement values for the variables that
+    appear in the definition of the RV Family NAME. The values of the
+    parameters have to be specified in the order in which variables are
+    declared in makeRVFamily.
+
+    In order to avoid confusion, use single capital letters for random
+    variables. The name of the random variable can coincide with the variable
+    used in the declaration of the RV Family.
+*/
+
+makeRV(X,NAME,VARS):=
+block
+( 
+  [result:[], Specs],
+  if isRV(X) then
+  (
+    print("ERROR: Random Variable", X, "already exists"),
+    return(false)
+    )
+  else
+  (
+    /* insert the empty list in prodFact. */
+    prodFact[X]: [],
+    
+    rvlistBase:append(rvlistBase,[[X,NAME,VARS]]),
+    rvlist:append(rvlist,[X]),
+    /* do substitution of random variable instances in cases*/
+    Specs:instantiateRVDefinition(X,NAME,VARS),
+    newRules:makeRules(X,Specs),
+/*    print("Rules ", newRules, " created."), */
+    rulelist:append(rulelist,newRules),
+    return(newRules)
+    )	
+  );
+
+
+
+/* This function produces the definition of the random variable from the
+   template.
+
+   Parameters:
+     X: the random variable for which definition is produced
+     NAME: the name of the family that specified the definition
+     VARS: instances for the variables that have to be replaced
+     
+   Return value:
+     The specification of the random variable as a list of expectation() expr.
+*/
+instantiateRVDefinition(_RV,NAME,VARS):=
+block(
+  [explist:[],exists:false,c:0,tmpexplist:[],substrules:[],subexplist:[],rule],
+
+  
+  /* find the index of the array where the family exists in rvflist*/
+  for i:1 step 1 while (i<=length(rvflist) and not exists) do
+  (
+    exists:member(NAME,rvflist[i]),
+    c:c+1
+    ),
+  /* if family doesnot exist return error*/
+  if (not exists) then 
+  (
+    print ("ERROR: family doesnot exist"),
+    return(false)
+    ),
+  
+  rule: rvflist[c],
+  tmpexplist:rule[4],
+  /* create substitution rule that replaces random variable in
+     family with the random variable in the instance
+   */
+  substrules:[rule[1]=_RV],
+  /* create substitution rule that replaces case variables in
+     family with the case variables in the instance
+   */
+  for i:1 step 1 while (i<=length(rule[3])) do
+  (
+    substrules:apply(append,[substrules,[ev(rule[3][i]=VARS[i])]])
+    ),
+  /* do substitution*/
+  subexplist:apply(subst,[substrules,tmpexplist]),
+  explist:append(explist,subexplist),
+  return(explist)
+  );
+
+/************
+  Create a rule for simplifying expectations of the random variable X.
+  The only specification supported for now is of the form:
+    expectation(X(I)..) = ..
+
+  Parameters:
+    X: the random variable for which the rule is created
+    Spec: the specification of the rule for simplifying expressions with X
+
+  Return Value:
+    The name of the rule created (X_ProductSize). If an error is encountered,
+    a special name is returned for the name of the rule and an error message
+    prited on the screen.
+
+  Normally, this function should only be called by makeRV function.
+*/
+makeRule(X,Spec):=
+block(
+  [lhs:0,rhs:0,list3:[],tmp:0,tmp2:1,
+  caselist:[],exprlist:[],caseargs:[],newSymCases:[],
+  SymmetricCase:0,length_caseargs:0,noVars],
+  
+  remove(all,matchdeclare),
+  
+  /* Make sure that the random variable exists */
+  if not isRV(X) then
+  (
+    print("EROOR: The variable", X, "is not a declared random variable"),
+    return ("InexixtentRV")
+    ),
+  
+  if op(Spec) = "=" then
+  (
+    lhs:args(Spec)[1],
+    rhs:args(Spec)[2],
+    
+    if string(op(lhs))="expectation" then
+    (
+      list3:[],
+      if op(args(lhs)[1])="*" then
+      (
+        for aexpr in args(args(lhs)[1]) do
+        (
+          if not op(aexpr)=X then
+          (
+            print("Warning: Variable or constant other than", X,
+              "specified in the definition of expectation for", X)
+            ),
+          list3:append(list3,args(aexpr))
+          )
+        )
+      else
+      (
+        if not op(args(lhs)[1])=X then
+          (
+            print("Warning: Variable or constant other than", X,
+              "specified in the definition of expectation for", X)
+            ),
+        list3:append(list3,args(args(lhs)[1]))
+        ),
+      
+/*      print("list3=", list3), */
+      
+      noVars:length(list3),
+      list3:append(list3,[_e]),
+      apply(matchdeclare,[list3,all]),
+      
+      tmp:args(lhs)[1]*_e,
+      tmp2:1,
+      caselist:[],
+      exprlist:[],
+      
+      if (not atom(rhs))and string(op(rhs))="Cases" then
+      (
+        caseargs:copylist(args(rhs)), length_caseargs:length(caseargs),
+        for caseindex:1 thru length_caseargs step 1 do
+        (
+          if string(op(args(rhs)[caseindex]))="SymCase" then
+          (
+            SymmetricCase:args(caseargs[caseindex])[1],
+            newSymCases:createSymmetricCases(SymmetricCase),
+            for newSymIndex:1 thru length(newSymCases) step 1 do 
+            (
+              caselist:append(caselist,[[newSymCases[newSymIndex]]]),	
+              exprlist:append(exprlist,[args(caseargs[caseindex])[2]])
+              )
+            )
+          else
+          (
+            caselist:append(caselist,[[args(caseargs[caseindex])[1]]]),
+            exprlist:append(exprlist,[args(caseargs[caseindex])[2]])
+            )
+          ),
+        tmp2:deltaexp(caselist,exprlist),
+        tmp2:tmp2*_e
+        )
+      else
+      (
+        tmp2:args(Spec)[2]*_e
+        ),
+      ruleName:concat(X,"_",noVars),
+/*      print("Creating rule", ruleName, " pattern:", tmp, " replacement:", tmp2),*/
+      apply(defrule,[ruleName,tmp,tmp2])
+      /**********					apply(defmatch,[last(rulelist),tmp,tmp2])****/				
+      )
+    )
+  else print("??????????Format Error???????????"),
+  
+  return(ruleName)
+  );
+
+makeRules(X,expList):=
+block
+(
+  return( map(lambda([V], makeRule(X,V)), expList) )
+  );
+
+/* New, optimized version of dsimplify
+   The main idea is to expand the formula as much as possible to remove
+   indide +es. Then, all subformulas look like sums of products. In the process
+   of pushing all elements inside, the variables linked by delta expressions
+   are forced to be equal in groups (equivalence sets are formed).
+
+   Then, a massive substitution is produced si simultaneously simplify
+   everything. The longest running function should be expand.
+
+   Out of expectation everything is into pieces.
+
+*/
+
+dsimplifyOpt(_exp):=
+block
+(
+  if atom(_exp) then return(exp) /* nothing to simplify */
+  else
+  (
+    if not string(op(_exp))="sum" then
+    return( map( dsimplifyOpt, _exp) )
+    else
+    ( /* we have a sum */
+      return( dsimplifyOptSum(_exp) )
+      )
+    )
+  );
+
+/* Function to deal with siplifications of sums.
+   Elements are pushed into sums first, all terms that do not contain d()
+   are separated from the d() polynomials (there should be lots of them) ...
+*/
+dsimplifyOptSum(_exp, _ListIndexes):=
+block
+(
+  [],
+  if atom(_exp) then return(_exp)
+  );
+
+/*****************OLD CODE ********************/
+
+
+/*     */
+dsimplifycommon(eqc):=
+block
+(
+  [commoninput:eqc, eqd:eqc],
+  sumexpand:false, /* to restrict renaming of indices of sums inside the rule definition otherwise rd2&3 wont work*/
+  matchdeclare([_i,_j,_k,_l],all),
+  apply(defrule,[rd1,d(_i,_i),1]),
+  apply(defrule,[rd4,d(_i,_j)^_k,d(_i,_j)]),
+  apply(defrule,[rd2,sum(d(_i,_j),_j,1,_k),1]),
+  apply(defrule,[rd3,sum(d(_i,_j),_i,1,_k),1]),
+  eqd:apply(apply1,['commoninput,rd1,rd4,rd2,rd3]),
+  
+  while(commoninput#eqd) do /* Fixed Point*/
+  (
+    commoninput:eqd,
+    eqd:apply(apply1,['commoninput,rd1,rd4,rd2,rd3])
+    ),
+  matchdeclare([_i,_j,_k,_l],false),
+  /*	sumexpand:true, */  /*to restrict renaming of indices to allow firing of fixed point in dsimplify where you match two sums*/
+  return (eqd)
+  );
+
+/********************************************/
+dsimplifyproducts(eq1):=
+block
+(
+  [prodargs:[], prodinput:eq1, result:0, a:0],
+  
+  if not atom(prodinput) then
+  (
+    prodargs:args(prodinput),
+    
+    for a:1 thru length(prodargs) step 1 do
+    (
+      if not atom(prodargs[a]) then
+      (
+        if string(op(prodargs[a]))="sum" then
+        (
+          prodargs[a]:dsimplifysummands(prodargs[a])
+          )
+        else if op(prodargs[a])="*" then
+        (
+          prodargs[a]:dsimplifyproducts(prodargs[a])
+          )
+        /*			else
+        (
+          print ("a=",a,":prodargs[a]=",prodargs[a],":operator=",op(prodargs[a]))
+          )*/
+        )
+      ),
+    result:apply(op(prodinput),prodargs),
+    return (result)
+    )
+  else
+  return(prodinput)
+  );
+
+/*****/
+
+dsimplifysummands(summandinput):=
+block
+( 
+	[result:0,inputeq:summandinput,sumargs,searchvar,summandargs:[],
+        flag:1,index:1,uniquevar1,uniquevar2,subeq,sublist1,sublist2,
+        subresult:0,tmpres,temp1,temp2,temp3,temp4,temp5,temp6,temp7,
+        temp8,subst1,subst2],
+        
+        sumargs:args(inputeq),
+	searchvar:sumargs[2],
+	if op(sumargs[1])#"*" then
+      (  
+       if string(op(sumargs[1]))="sum" then
+       (
+		temp1:sumargs[1],
+		temp2:sumargs[2],
+		temp3:sumargs[3],
+		temp4:sumargs[4],
+		subresult:dsimplifysummands(temp1),
+		result:apply(sum,[subresult,temp2,temp3,temp4]),
+		return (result)
+	 )
+	 elseif string(op(sumargs[1]))="d" then
+	 (
+            uniquevar1:?gensym(),
+            uniquevar2:?gensym(),
+            apply(matchdeclare,[[uniquevar1,uniquevar2],all]),
+		apply(defmatch,[patt1,d(uniquevar1,searchvar)]),
+		apply(defmatch,[patt2,d(searchvar,uniquevar2)]),
+		sublist1:apply(patt1,[sumargs[1]]),
+		sublist2:apply(patt2,[sumargs[1]]),
+	    if listp(sublist1) then
+			(
+			    subresult:1,
+            	flag:0,
+            	return (subresult)
+			)
+			elseif listp(sublist2) then
+			(
+			    subresult:1,
+            	flag:0,
+            	return (subresult)
+			)
+            else
+            (
+                subresult:inputeq,
+                flag:0,
+                return(subresult)
+            )
+         )
+         else 
+         (
+                return(inputeq)       
+         )
+      ),
+	if op(sumargs[1])="*" then
+    (
+	 summandargs:args(sumargs[1]),
+     while index<=length(summandargs) and flag=1  do
+	(
+         if not atom(summandargs[index]) then
+         (
+            uniquevar1:?gensym(),
+            uniquevar2:?gensym(),
+            apply(matchdeclare,[[uniquevar1,uniquevar2],all]),
+		apply(defmatch,[patt1,d(uniquevar1,searchvar)]),
+		apply(defmatch,[patt2,d(searchvar,uniquevar2)]),
+
+	      temp6:summandargs,
+		temp:summandargs[index],	
+			
+		subst1:apply(apply,[patt1,[summandargs[index]]]),
+		subst2:apply(apply,[patt2,[summandargs[index]]]),
+		
+
+            if listp(subst1) then
+		(
+				subeq:apply("*",summandargs),
+				subeq:delete(summandargs[index],subeq),
+                		uniquevar1:apply(subst,[subst1,uniquevar1]),
+				subresult:apply(subst,[[searchvar=uniquevar1],subeq]),
+            	flag:0,
+            	return (subresult)
+		)
+		elseif listp(subst2) then
+		(
+				subeq:(apply("*",summandargs)),
+				subeq:quotient(subeq,summandargs[index]),
+                		uniquevar2:apply(subst,[subst2,uniquevar2]),
+				subresult:apply(subst,[[searchvar=uniquevar2],subeq]),
+				
+            	flag:0,
+            	return (subresult)
+		),
+			
+		    if string(op(summandargs[index]))="sum" then
+		    (
+		       tmpres:dsimplifysummands(temp),
+			   temp6[index]:tmpres
+            )
+          ),
+           index:index+1
+    )),
+    if flag=1 or index > length(summandargs) then
+    (
+		subeq:apply("*",temp6),
+		result:apply(op(inputeq),[subeq,sumargs[2],sumargs[3],sumargs[4]]),
+		return (result)
+	)
+	else
+	    return(subresult)
+);
+
+
+
+
+
+/*****************************************************************************************************************************************************/
+dsimplifyadditions(eqadd):=
+block
+(
+     [subresult:0,result:0,additionsinput:eqadd, additionargs:[],summandinput:0,productinput:0],
+     additionargs:args(additionsinput),
+	for aindex:1 thru length(additionargs) step 1 do
+     ( 
+        if not atom(additionargs[aindex]) then
+        (
+      	if string(op(additionargs[aindex]))="sum" then
+    		(
+			summandinput:additionargs[aindex],
+    			additionargs[aindex]:dsimplifysummands(summandinput)
+            )
+            elseif op(additionargs[aindex])="*" then
+		(
+			productinput:additionargs[aindex],
+    			additionargs[aindex]:dsimplifyproducts(productinput)
+            )
+		elseif op(additionargs[aindex])="-" then
+            (
+            	subresult:dsimplifyproducts(args(additionargs[aindex])[1]),
+    	    		additionargs[aindex]:apply("-",[subresult])
+    	   	)
+		elseif op(additionargs[aindex])="//" then
+            (
+			productinput:additionargs[aindex],
+    			additionargs[aindex]:dsimplifyproducts(productinput)
+    	   	)
+	
+  	   )
+   ),
+	result:apply(op(additionsinput),additionargs),
+	return (result)
+);
+
+/*****************************************************************************************************************************************************/
+dsimplify2(eq2):=
+block(
+ 	[ineq1:eq2,eqop1,result:eq2],
+	if not atom(ineq1) then
+	(
+		eqop1:op(ineq1)
+	)
+	else
+	(
+		print("ineq1=",ineq1),
+		return(ineq1)
+	),
+
+
+	if string(eqop1)="sum" then 
+	(
+		result:dsimplifysummands(ineq1)
+	)
+	elseif eqop1="*" then
+	(
+		result:dsimplifyproducts(ineq1)
+	)
+	elseif eqop1="+" or eqop1="-" then
+	(
+		result:dsimplifyadditions(ineq1)
+	)
+	elseif eqop1="//" then
+	(
+		result:dsimplifyproducts(ineq1)
+	)
+	else
+	(
+		result:ineq1
+	),
+
+	return (result)
+);
+/*****************************************************************************************************************************************************/
+dsimplify_old(deq):=
+block(
+	[dsimpinput:deq],
+	declare(sum,linear),
+	[expandeq:expand(dsimpinput)],
+	[dsmpeq1:expandeq],
+	[dsmpeq2:dsimplifycommon(dsmpeq1)],
+	[dsmpeq3:dsmpeq2],	 	
+    	[dsmpeq1:dsimplify2(dsmpeq3)],
+	[dsmpeq2:dsimplifycommon(dsmpeq1)],
+	for ind:1 step 1 unless dsmpeq1=dsmpeq2 /* and ind>5 */ do
+    	( 
+      	[dsmpeq2:dsimplifycommon(dsmpeq1)],
+		[dsmpeq3:dsmpeq2],
+      	[dsmpeq1:dsimplify2(dsmpeq3)],
+		print("index=========",ind)
+     	),
+	return (dsmpeq2)
+);
+
+/*****************************************************************************************************************************************************/
+dsimplify(deq):=
+block(
+	[_deq:deq,dsmpeq1,dsmpeq2],
+	declare(sum,linear),
+	_deq:expand(_deq),
+	dsmpeq2:dsimplifycommon(_deq),
+      	dsmpeq1:dsimplify2(dsmpeq2),
+     	while (dsmpeq1#dsmpeq2) do /*Fixed Point .. sumexpand should be false at this point*/
+    	( 
+      		dsmpeq2:dsimplifycommon(dsmpeq1),
+      		dsmpeq1:dsimplify2(dsmpeq2)
+    	),
+	return (dsmpeq1)
+);
+
+
+/* ALIN: CHECK IF YOU HAVE RV() INSTEAD OF RV[] AND KILL THE CASE */
+
+/**********/
+/* This function will push the expectation inside as much as possible
+ * until it is applied to elementary terms
+ */
+ E(expr):=
+ block
+ (
+   [opr,subexpr,index,lrange,hrange,lhs,rhs,result,listRV],
+   /* Summations have to be revealed and the expectation pushed inside */
+   sumexpand:true,
+   expr:intosum(expand(expr)),
+   /* Go recursively through the expressions and relentesly push
+   expectation inside
+   */
+   if atom(expr) then
+   ( /* expression is an atom. Must be a constant since all rv's are expressions*/
+     return(expr)
+     ),
+   opr:op(expr),
+   if string(opr) = "sum" then
+   (
+     /* expression: sum(subexpr,index,lrange,hrange) */
+     subexpr:args(expr)[1],
+     index:args(expr)[2],
+     lrange:args(expr)[3],
+     hrange:args(expr)[4],
+     /* need apply(sum,..) instead of sum(..) since sum does not evaluate the index */
+     return( apply(sum,[E(subexpr),index,lrange,hrange]) )
+     )
+   else if opr="+" then
+   (
+     return(map(E,expr))
+     )
+   else if opr="//" then
+   (
+     if isConstantExpression(args(expr)[2]) then
+     return(E(args(expr)[1])/args(expr)[2])
+     else
+     return( EBase(expr) )
+     )
+   else if opr="*" then
+   (
+     /* Operation is * and hopefully it does not contain any +
+     (expand should have factorized *)
+     */
+     
+     
+     /* Products of the same random variable and constants have to be
+     idenfified. This is donne by going through the list of terms
+     under product and putting them into separate lists that are
+     entries of the array prodFact. The array prodFact is assumed
+     to be initialized with lists for all existing random variables
+     and the entry CONSTANT
+     */
+     
+     resetProdFact(),
+     /* args(expr) contains the list of subexpressions under product */
+     for subexpr in args(expr) do
+     (
+       RV: headExpr(subexpr),
+/*       print("RV=", RV), */
+       /* check if subexpression is a constant or a random variable */
+       if unbound_array_entry(prodFact,RV) then
+       (
+         /* constant */
+         prodFact[CONSTANT]: cons(subexpr,prodFact[CONSTANT]),
+         if not ensureNotRV(subexpr) then
+         print ("Something is not right since ", subexpr, " contains RV even though
+           it should be a constant")
+         )
+       else
+       ( /* random variable expression */
+         prodFact[RV]: cons(subexpr,prodFact[RV])
+         )
+       ),
+     /*     print("prodFact=", prodFact), */
+     /* now prodFact is properly populated */
+     /* now go through the results, apply the E() simplifications
+        and reconstruct the result
+     */
+     result: apply("*",prodFact[CONSTANT]),
+     for RV in getListRV() do
+     (
+       listProd: prodFact[RV],
+       prod: apply("*",listProd),
+       sizeRule: length(listProd),
+       if sizeRule>0 then
+       (
+         ruleName: concat(RV,"_",sizeRule),
+         if not member(ruleName,rulelist) then
+         (
+           prod: EBase(prod)
+           )
+         else
+         (
+           prod: apply(apply1,append([prod],[ruleName]))
+           )
+         ),
+       result: result*prod
+       ),
+     return(result)
+     )
+   else (
+     /* must be a function or an array */
+     /* check if subexpression is a constant or a random variable */
+     RV: op(expr),     
+     if not isRV(RV) then
+     (/*constant*/
+       return(expr)
+       )
+     else (
+       ruleName: concat(RV,"_",1),
+/*       print("rulename",ruleName), */
+       if not member(ruleName,rulelist) then
+       (
+         return(EBase(expr))
+         )
+       else
+       (
+         return( apply(apply1,append([expr],[ruleName])) )
+         )
+       )
+     ),
+   /* If nothing worked return unreducible expectation*/
+   return( 'EBase(expr) )
+   );
+    
+
+/* The function computes variance of expressions */
+var(eq1):=
+block
+(
+  return(E(eq1*eq1)-E(eq1)^2)
+);
+
+/* The function computes covariance of expressions */
+covar(eq1,eq2):=
+block
+(
+  return( E(eq1*eq2)-E(eq1)*E(eq2) )
+);
+
+
+/* print nicely Latex code to display large formulas */
+
+printLargeLatex(_name, _expr):=
+block(
+  print("\\documentclass[12pt]{article}"),
+  print("\\usepackage{longtable}"),
+  print("\\begin{document}"),
+  print(" \\begin{longtable}{l}"),
+/*  print(_name, "&= \\\\"), */
+
+  if atom(_expr) or not op(_expr)="+" then tex(_expr)
+  else
+  (
+    map( lambda([x], tex(x), print("\\\\")), reverse(args(_expr))),
+    print("$\\cdot$")
+    ),
+  print("\\end{longtable}"),
+  print("\\end{document}"),
+  false
+  );
+
+/* write the sum nicely */
+niceSum(_expr,_list):=
+block
+(
+  [_sexpr,_nicelist,_uglylist,_substit],
+   _uglylist:rest([QWWQ1,QWWQ2,QWWQ3,QWWQ4,QWWQ5,QWWQ6,QWWQ7,QWWQ8],-8+length(_list)),
+   _nicelist: rest([i,j,k,l,ip,jp,kp,lp],-8+length(_list)),
+   /* substitute first with _uglylist */
+   _substit: map("=",_list,_uglylist),
+   _sexpr: subst(_substit,_expr),
+   /*substitute nice list */
+   _substit: map("=",_uglylist,_nicelist),
+   _sexpr: subst(_substit,_sexpr),
+   /* return( S(_sexpr)[_nicelist] ) this makes the notation S(exp)_list ind */
+   /* simplified version indices should be infered from the context */
+   return( S(_sexpr) )
+);
+
+
+/* one equivalence class for each inded */
+createUnionFind(_list,_UF):=
+block
+(
+  [],
+  remarray(_UF),
+  map( lambda([x], _UF[x]:x), _list)
+);
+
+maxUnionFind(_list):=
+block
+(
+  [_first,_rec],
+  _first: first(_list),
+  if length(_list)=1 then return( _first)
+  else
+  (
+    _rec: maxUnionFind( rest(_list)),
+    if ordergreatp(_first, _rec) then return(_first)
+    else return(_rec)
+    )
+);
+
+Find(_x, _UF):=
+block
+(
+  if _UF[_x]=_x then return(_x)
+  else return( Find(_UF[_x], _UF))
+);
+
+/* _y is the new EQ for _x */
+ReplaceUF(_x, _y, _UF):=
+block
+(
+  [_old],
+  _old: _UF[_x],
+  _UF[_x]: _y,
+  if not _old=_x then 
+  ReplaceUF(_old,_y, _UF)
+);
+
+Union(_list, _UF):=
+block
+(
+  [_list_EC,newEC],
+  _list_EC: map( lambda( [x], Find(x,_UF)), _list ),
+  newEC: maxUnionFind(_list_EC),
+  map( lambda([x], ReplaceUF(x,newEC,_UF)), _list) 
+);
+
+/* Break a sum into independent parts. Have to run union-find to find the independent
+parts. Initially each index is into it's own partition. When an expression is found
+that reffers to multiple indexes, the union of their equivalence classes is taken. */
+partitionSums(_expr,_list) :=
+block
+(
+  [_prodList,_UF,_IndexAR,_ExprAR,_resultList,_eqSet],
+  if atom(_expr) or not op(_expr)="*" then
+  return( niceSum(_expr,_list) ), /* change this */
+  
+  
+  /* partition the set of indeces in _list into equivalence classes
+  based on what expressions they participate in (_expr is expressed
+    as the product of such expressions).
+  */
+  createUnionFind(_list,_UF),
+  _prodList : args(_expr),
+  
+  map( lambda( [_e], if not atom(_e) then Union( getIndexes(_e), _UF)), _prodList),
+  /* now we separate the list of products and indexes based on EQ classes */
+  /* first, for each equivalence class put empty lists in _IndexAR and _EcprAR */
+  _eqSet: setify(
+    maplist( lambda( [_i], block(
+          [_eq],
+          _eq: Find(_i,_UF),
+          _IndexAR[_eq]:[],
+          _ExprAR[_eq]:[],
+          _eq)),
+      _list )
+    ),
+  _ExprAR[CONSTANTS]:[],
+  /* find equivalence classes between indexes */
+  maplist( lambda( [_i], block( [_eq], _eq:Find(_i,_UF),
+        _IndexAR[_eq]: endcons(_i,_IndexAR[_eq]))), _list),
+  /* find eq classes for expressions */
+  maplist( lambda( [_e], block( [_eq],
+        if atom(_e) then _ExprAR[CONSTANTS]:cons(_e,_ExprAR[CONSTANTS])
+        else (
+          _eq:Find( first(getIndexes(_e)), _UF),
+          _ExprAR[_eq]:cons(_e,_ExprAR[_eq])
+          ))), _prodList),
+  _resultList:_ExprAR[CONSTANTS],
+  _resultList: append( _resultList,
+    maplist( lambda( [_eq], niceSum(apply("*",_ExprAR[_eq]),
+          _IndexAR[_eq])) , _eqSet)),
+  
+  remarray(_UF), remarray(_IndexAR), remarray(_ExprAR),
+  return( apply("*",_resultList))  
+  );
+
+/* this function dives down to find indeces and contact sums */
+/* _list is the list of indeces seen so far */
+makeSumTensorIncremental(_expr, _list):=
+block
+(
+  [_sumexpr, _index],
+  
+  if atom(_expr) or not string(op(_expr))="sum" then
+  return( partitionSums(_expr,_list) ),
+  
+  _sumexpr: intosum(args(_expr)[1]),
+  _index: args(_expr)[2],
+  return(makeSumTensorIncremental(_sumexpr, cons(_index,_list)))
+  
+  );
+
+/* Transform a sum into a tensor */
+
+makeSumTensor(_expr):=
+block
+(
+  [_expanded],
+  sumexpand: true,
+  _expanded:intosum(expand(_expr)),
+
+  /* just in case, make sure the top operator is sum */
+  if not string(op(_expr))="sum" then
+  return(map(makeSumTensor,_expanded)),
+  
+  return(makeSumTensorIncremental(_expanded,[]))
+  );
+
+/* Transform an expression into a tensor */
+
+makeTensor(_expr):=
+block
+(
+  if atom(_expr) then return(_expr)
+  else
+  (
+    /* print("operator:",op(_expr)),*/
+    if string(op(_expr))="sum" then return(makeSumTensor(_expr))
+    else return(map( makeTensor, _expr))
+    )
+  );
+
+/* The function replaces sums by simbols to make the formulas simpler
+   and allow further simplification by the simplification engine
+*/
+drewrite(ineq):=
+block
+(
+   [sresult:0],
+   sumexpand:false, /* to restrict expansion of sums inside the rule
+                       definition otherwise rd2&3 wont work*/
+   matchdeclare([_x,_y,_n,_m,_f,_p,_g,_q],all),
+   apply(defrule,[s1,sum(_f(_x),_x,1,_n),_f[_x]*C[_x]]),
+   apply(defrule,[s2,sum(_f(_x)*_g(_x),_x,1,_n),_f[_x]*_g[_x]]),
+   apply(defrule,[s3,sum(_f(_x)^_p,_x,1,_n),(_f^_p)[_x]*C[_x]]),
+   apply(defrule,[s4,sum(_f(_x)^_p*_g(_x)^_q,_x,1,_n),(_f^_p)[_x]*(_g^_q)[_x]]),
+/*   apply(defrule,[s5,sum(sum(_f(_x,_y)^_p,_x,1,_n),_y,1,_m),(_f^_p)[_x,_y]*C[_x]*C[_y]]), */
+   sresult:apply(apply1,[ineq,s4,s3,s2,s1]),
+/*   matchdeclare([_i,_k,_f,_l],false),
+   clear_rules(),*/
+/*   sumexpand:true,*/
+   return (sresult)
+);
+
+dRewrite(eq2):=
+block(
+  [niceVars:[i,j,k,l,m,n.o,p]],
+  dRewrite2(eq2,niceVars)
+  );
+
+/*  */
+dRewrite2(eq2,niceVars):=
+block(
+  [leq2:eq2, lniceVars:niceVars, eqop1:0, result:eq2,
+  argsIneq:[eq2], tempresult:0, templist:[]],
+  
+  if (not atom(leq2)) and length(lniceVars)>0 then
+  (
+    eqop1:op(eq2), argsIneq:args(eq2),
+    if string(eqop1)="sum" then 
+    (
+      if length(lniceVars)>0 then
+      (
+        leq2:subst(lniceVars[1],argsIneq[2],leq2),
+        /*			print("leq2=",leq2),*/
+        
+        /*			[arg2:args(neweq2)[2],arg3:args(neweq2)[3],arg4:args(neweq2)[4]],*/
+        
+        lniceVars:rest(lniceVars),
+        /*			print("lniceVars=",lniceVars),*/
+        
+        tempresult:ev(dRewrite2(args(leq2)[1],lniceVars)),
+        
+        /*			print("tempresult=",tempresult),*/
+        
+        result:apply("sum",[tempresult,args(leq2)[2],args(leq2)[3],args(leq2)[4]]),
+        return (result)
+        )
+      else 
+      (
+        return (leq2)
+        )
+      ) /* test for powers --reminder */
+    elseif eqop1="*" or eqop1="+" or eqop1="-" or eqop1="//" then
+    (
+      for _index:1 thru length(argsIneq) step 1 do
+      (
+        templist:append(templist,[ev(dRewrite2(argsIneq[_index],lniceVars))])
+        ),
+      /*		print("templist=",templist),*/
+      result:apply(eqop1,templist)
+      )
+    else
+    (
+      /*		print("No matching operators"),*/
+      result:leq2
+      ),
+    return (result)
+    )
+  else 
+  return (leq2)
+  );
+
+
+
+/******** s1,s2,s3,s4 rules apply indefinitely for unknown reasons .. maxima people gave no logical reason.. so switching to fixed point implementation 
+drewrite_new(ineq):=
+block
+(
+   [sresult:0],
+   sumexpand:false, 
+   matchdeclare([_i,_k,_f,_l,_g,_m,_e],all),
+   apply(defrule,[s1,_e*sum(_f(_i),_i,1,_k),_e*S(_f)]),
+   apply(defrule,[s2,_e*sum(_f(_i)^_l,_i,1,_k),_e*S(_f^_l)]),
+   apply(defrule,[s3,_e*sum(_f(_i)^_l*_g(_i)^_m,_i,1,_k),_e*S(_f^_l*_g^_m)]),
+   apply(defrule,[s4,_e*sum(_f(_i)*_g(_i),_i,1,_k),_e*S(_f*_g)]),
+   sresult:apply(apply1,[ineq,s1,s2,s3,s4]),
+   return (sresult)
+);
+*****************/
+
+/**/
+
+/*Equivalent sets*/
+/************************************************************/
+/*killall();*/
+outset:set();
+
+makeeqsets(iset,tset):=
+block(
+  if length(iset)=1 then ( tmpset:set(),return(true)),
+  for i:1 step 1 while (i<=length(iset)) do
+  (		
+    tmplist:listify(iset),
+    tmpset:set(tmplist[i]),
+    ttset:tset,
+    diffset:setdifference(iset,tmpset),
+    newout:append(set(tmpset),set(diffset)),
+    newout2:set(setify(flatten(full_listify(append(set(tmpset),set(diffset)))))),
+    if not emptyp(ttset) then
+    (
+      newout:append(newout,ttset),
+      newout2:append(newout2,set(setify(flatten(full_listify(ttset)))))
+      ),
+    outset:append(outset,set(newout)),
+    outset:append(outset,set(newout2)),
+    if not emptyp(ttset) then
+    (
+      ttset:append(ttset,set(tmpset))
+      )
+    else
+    (
+      ttset:set(append(ttset,tmpset))
+      ),
+    makeeqsets(diffset,ttset)
+    )
+  );
+
+eqsets(ip):=
+block(
+  /*	killall(),*/
+  outset:set(),
+  ipset:setify(ip),
+  makeeqsets(ipset,set()),
+  return (outset)
+  );
+
+/* to do:
+check for overlap of variables between the two indifferent things
+*/
+verify(cases,vars):= 
+block(
+  reqdcases:eqsets(vars),
+  caseset:fullsetify(cases),
+  iserror:false,
+  print("Input Cases:",cases),
+  print("Input Variables:",vars),
+  print("Checking against Generated Cases:",reqdcases),
+  
+  if length(caseset)#length(cases) then
+  (
+    print("Ambiguous Cases"),
+    iserror:true
+    )
+  else
+  print("No Ambiguous Cases"),
+  if length(caseset)#length(reqdcases) then
+  (
+    print("Incomplete Cases. More Cases Reqd"),
+    iserror:true
+    )
+  else
+  print("Complete Cases"),
+  
+  iserror2:false,
+  for i:1 step 1 thru length(cases) do
+  (
+    exists:intersect(reqdcases,set(fullsetify(cases[i]))),
+    if length(exists)=0 then
+    (
+      print("Invalid Case, Not an Eq Set",cases[i]),
+      iserror2:true
+      )
+    ),
+  
+  if not iserror2 then
+  (
+    print("Valid Cases")
+    ),
+  
+  if not iserror and not iserror2 then	
+  return (true)
+  else
+  return (false)
+  );
+
+
+
+/* applySymmetry(iexplist):= */
+/* block( */
+/*   [_explist:iexplist,_debug:true], */
+/*   for b:1 thru length(_explist) step 1 do */
+/*   ( */
+/*     if (_debug=true) then print("_explist=",_explist), */
+/*     if op(_explist[b]) = "=" then */
+/*     ( */
+/*       [lhs:args(_explist[b])[1], */
+/*       rhs:args(_explist[b])[2]], */
+      
+/*       if string(op(lhs))="expectation" then */
+/*       ( */
+/*         [caselist:[],exprlist:[]], */
+/*         if string(op(rhs))="Cases" then */
+/*         ( */
+/*           [caseargs:args(rhs)], */
+/*           for caseindex:1 thru length(caseargs) step 1 do */
+/*           ( */
+/*             caselist:append(caselist,[[args(caseargs[caseindex])[1]]]), */
+/*             exprlist:append(exprlist,[args(caseargs[caseindex])[2]]) */
+/*             ), */
+/*           tmp2:createSymmetricCases(caselist), */
+/*           if (_debug=true) then print("caselist=",caselist), */
+/*           if (_debug=true) then print("exprlist=",exprlist), */
+/*           if (_debug=true) then print("tmp2=",tmp2) */
+/*           ) */
+/*         ) */
+/*       ) */
+/*     else print("??????????Format Error???????????") */
+/*     ), */
+/*   return(rulelist) */
+/*   ); */
+
+/* source case... format is list of lists [[i,j],[k]]*/
+createSymmetricEqSets(sourcecase):= 
+block(
+  [svars:listify(setify(flatten(sourcecase))),eqsetcases:[],
+  noOfSets:0,lengthOfSets:[], symmetricCases:[],noOfSetsg:0,
+  lengthOfSetsg:[]],
+  
+  eqsetcases:full_listify(eqsets(svars)),
+  noOfSets:length(sourcecase),
+  /*      print(eqsetcases),*/
+  for m:1 step 1 thru length(sourcecase) do
+  (
+    lengthOfSets:append(lengthOfSets,[length(sourcecase[m])])
+    ),
+  lengthOfSets:sort(lengthOfSets),
+  /*     print("signature=",noOfSets,":",lengthOfSets),*/
+  for n:1 step 1 thru length(eqsetcases) do
+  (
+    noOfSetsg:length(eqsetcases[n]),
+    lengthOfSetsg:[],
+    for x:1 step 1 thru noOfSetsg do
+    (
+      lengthOfSetsg:append(lengthOfSetsg,[length(eqsetcases[n][x])])
+      ),
+    lengthOfSetsg:sort(lengthOfSetsg),
+    /*          print("signatureg=",noOfSetsg,":",lengthOfSetsg), */
+    if noOfSets=noOfSetsg and lengthOfSets=lengthOfSetsg then
+    (
+      symmetricCases:append(symmetricCases,[eqsetcases[n]])
+      )
+    ),
+  /*	print("symmetricCases=",symmetricCases),*/
+  return (symmetricCases) 
+  /* output in list format */
+  );
+
+
+createSymmetricCases(symcase):=
+block(
+  [lSymCase:symcase,indiff_flag:0,sumexp:0,productexp:1,
+  Indiff_arglist:[],Diff_arglist:[],newIndiff_list:[],
+  newDiff_list:[],newDiff_Cases:[],tempDiff_Cases:[]],
+  /*	print("lSymCase=",lSymCase),*/
+  if string(op(lSymCase))="In" then
+  (
+    Indiff_arglist:args(lSymCase),
+    for j:1 step 1 thru length(Indiff_arglist) do    /* for each argument of Indifferent*/          
+    (
+      if string(op(Indiff_arglist[j]))="Df" then
+      (
+        Diff_arglist:args(Indiff_arglist[j]),
+        for k:1 step 1 thru length(Diff_arglist) do    /* for each argument of Different*/          
+        (
+          if string(op(Diff_arglist[k]))="Eq" then
+          (
+            Diff_arglist[k]:args(Diff_arglist[k])
+            )
+          else
+          (
+            print("Error in Format--in Create Symmetric Cases1---",symcase)
+            )
+          ),
+        newDiff_list:createSymmetricEqSets(Diff_arglist), newDiff_Cases:[],
+        for m:1 step 1 thru length(newDiff_list) do 
+        (	
+          tempDiff_Cases:[],
+          for n:1 step 1 thru length(newDiff_list[m]) do
+          (
+            tempDiff_Cases:append(tempDiff_Cases,[apply(Eq,newDiff_list[m][n])])
+            ),
+          newDiff_Cases:append(newDiff_Cases,[apply(Df,tempDiff_Cases)])
+          ),
+        newIndiff_list:append(newIndiff_list,[setify(newDiff_Cases)])
+        )
+      else
+      (
+        print ("Error in Format--in Create Symmetric Cases2")
+        )	
+      ),
+    /*			print("newInDiff_list=",newIndiff_list),*/
+    lSymCase:listify(createInDiffCases(newIndiff_list))
+    )
+  else
+  (
+    print ("Error in Format--in Create Symmetric Cases3")
+    ),
+  /*	print("lSymCase=",lSymCase),*/
+  return (lSymCase)	
+  );
+
+createInDiffCases(Indiffset):=
+block(
+  [cross_product:listify(apply(cartesian_product,Indiffset)),
+  lengthp:0,output:[]],
+  
+  lengthp:length(cross_product),
+  for i:1 step 1 thru lengthp do
+  (
+    output:append(output,[apply(In,cross_product[i])])
+    ),
+  return(output)
+  );
+
+
+
+deltaexp(dcases,ocases):=
+block
+(
+  [eqlist:dcases,indiff_flag:0,sumexp:0,productexp:1,subsetlist:0,
+  Indiff_arglist:[],diff_arglist:[],temp_diff_arglist:[],putdeltaresult:0],	
+  for i:1 step 1 thru length(eqlist) do    /* for each case -- first unfolding each case*/
+  (
+    productexp:1,
+    subsetlist:eqlist[i][1],
+    if string(op(subsetlist))="In" then
+    (
+      Indiff_arglist:args(subsetlist),
+      for j:1 step 1 thru length(Indiff_arglist) do    /* for each argument of Indifferent*/          
+      (
+        if string(op(Indiff_arglist[j]))="Df" then
+        (
+          diff_arglist:args(Indiff_arglist[j]),temp_diff_arglist:[],
+          for k:1 step 1 thru length(diff_arglist) do    /* for each argument of Different*/          
+          (
+            if string(op(diff_arglist[k]))="Eq" then
+            (
+              temp_diff_arglist:append(temp_diff_arglist,[args(diff_arglist[k])])
+              /*diff_arglist[k]:args(diff_arglist[k])*/
+              )
+            else
+            (
+              print("Error in Format----in Delta Exp 1 ",diff_arglist[k])
+              )
+            ),
+          putdeltaresult:putdelta(temp_diff_arglist),
+          productexp:productexp*putdeltaresult
+          )
+        else
+        (
+          print("Error in Format----in Delta Exp 2---",Indiff_arglist[j])
+          )	
+        )
+      )
+    else
+    (
+      print("Error in Format----in Delta Exp 3")
+      ),
+    productexp:productexp*ocases[i],
+    sumexp:sumexp+productexp	
+    ),
+  return (sumexp)
+  );
+
+
+putdelta(varlist):=
+block(
+  [vproductexp:1,m:0],
+  for j:1 step 1 thru length(varlist) do    /* for each equality or inequality set*/          
+  (
+    for k:1 step 1 thru length(varlist[j]) do 	 
+    (
+      if k=1 then
+      (
+        m:length(varlist),
+        for l:j+1 step 1 thru m do 
+        (	
+          vproductexp:vproductexp*(1-apply(d,[varlist[j][k],varlist[l][k]]))
+          )
+        )
+      else
+      (
+        vproductexp:vproductexp*(apply(d,[varlist[j][k-1],varlist[j][k]]))	
+        )
+      )
+    ),
+  return (vproductexp)
+  );

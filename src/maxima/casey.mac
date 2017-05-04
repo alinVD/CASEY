@@ -1,0 +1,13 @@
+file_search_maxima: ["/exports/adobra/cvs/CASEY/maxima/###.mac"];
+/* Loading all the code */
+load("delta");
+/* load("dsimplify");
+load("dRewrite"); */
+
+
+/* Loading all libraries */
+/* When a new library is written, it should be added to the list */
+load("randomHashRV"); 
+load("amsRV");
+load("samplingRV.mac");
+

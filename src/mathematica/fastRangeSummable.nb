@@ -1,0 +1,1075 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.1'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     37130,        959]*)
+(*NotebookOutlinePosition[     38069,        988]*)
+(*  CellTagsIndexPosition[     38025,        984]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell[BoxData[
+    \(F[\ 1\ ]\  := \ {\ 40.0, \ 24.0\ }\)], "Input"],
+
+Cell[BoxData[
+    \(F[n_]\  := \ 
+      Module[\ {l, x, y}, \ l = F[n - 1]; \ x = Part[l, 1]; \ 
+        y = Part[l, 2]; {\ x*40.0 + y*24.0, \ x*24.0 + y*40.0}]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(F[2]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \({2176, 1920}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(F[3]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \({8421376, 8355840}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[""], "Input"],
+
+Cell[BoxData[
+    \(\[IndentingNewLine]\)], "Input"],
+
+Cell[BoxData[
+    \(\ \)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(For[\ i = 1, \ 
+      i < 20, \(i++\), \ \ \ \[IndentingNewLine]\t\tModule[\ {l, x, y, 
+          eq}, \ \[IndentingNewLine]\tl\  = \ F[i]; \ x = Part[l, 1]; \ 
+        y = Part[l, 2]; \[IndentingNewLine]\t
+        eq\  = \ 3*\ 2^\((4*i)\) - 2*2^\((2*i)\); \[IndentingNewLine]\t
+        Print[\ i, "\< x=\>", \ x, "\< y=\>", y, \ "\< tot=\>", \ 
+          2^\((6*i)\)\ "\< eq=\>", \ eq, \ "\< y+2^(4*i)=\>", \ 
+          y + 2^\((4*i)\), "\< rat=\>", \((x - eq)\)*1.0/
+              y, \ "\< perf=\>", \ \((x - y)\)/
+            eq, \ "\< perf2=\>", \ \((x - y - 2^\((4*i)\))\)/\((eq - 
+                2^\((4*i)\))\), \ "\< rat2=\>", \ \((x - y - eq)\)/\((x + y - 
+                eq)\)]]\[IndentingNewLine]\t]\)], "Input"],
+
+Cell[BoxData[
+    InterpretationBox[\(1\[InvisibleSpace]" x="\[InvisibleSpace]40.`\
+\[InvisibleSpace]" y="\[InvisibleSpace]24.`\[InvisibleSpace]" tot="\
+\[InvisibleSpace]\(64\ " eq="\)\[InvisibleSpace]40\[InvisibleSpace]" \
+y+2^(4*i)="\[InvisibleSpace]40.`\[InvisibleSpace]" rat="\[InvisibleSpace]0.`\
+\[InvisibleSpace]" perf="\[InvisibleSpace]0.4`\[InvisibleSpace]" perf2="\
+\[InvisibleSpace]0.`\[InvisibleSpace]" rat2="\[InvisibleSpace]\(-1.`\)\),
+      SequenceForm[ 1, " x=", 40.0, " y=", 24.0, " tot=", 
+        Times[ 64, " eq="], 40, " y+2^(4*i)=", 40.0, " rat=", 0.0, " perf=", 
+        0.40000000000000002, " perf2=", 0.0, " rat2=", -1.0],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\(2\[InvisibleSpace]" x="\[InvisibleSpace]2176.`\
+\[InvisibleSpace]" y="\[InvisibleSpace]1920.`\[InvisibleSpace]" tot="\
+\[InvisibleSpace]\(4096\ " eq="\)\[InvisibleSpace]736\[InvisibleSpace]" \
+y+2^(4*i)="\[InvisibleSpace]2176.`\[InvisibleSpace]" \
+rat="\[InvisibleSpace]0.75`\[InvisibleSpace]" \
+perf="\[InvisibleSpace]0.34782608695652173`\[InvisibleSpace]" perf2="\
+\[InvisibleSpace]0.`\[InvisibleSpace]" \
+rat2="\[InvisibleSpace]\(-0.14285714285714288`\)\),
+      SequenceForm[ 2, " x=", 2176.0, " y=", 1920.0, " tot=", 
+        Times[ 4096, " eq="], 736, " y+2^(4*i)=", 2176.0, " rat=", 0.75, 
+        " perf=", 0.34782608695652173, " perf2=", 0.0, 
+        " rat2=", -0.14285714285714288],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\(3\[InvisibleSpace]" x="\[InvisibleSpace]133120.`\
+\[InvisibleSpace]" y="\[InvisibleSpace]129024.`\[InvisibleSpace]" tot="\
+\[InvisibleSpace]\(262144\ " eq="\)\[InvisibleSpace]12160\[InvisibleSpace]" \
+y+2^(4*i)="\[InvisibleSpace]133120.`\[InvisibleSpace]" \
+rat="\[InvisibleSpace]0.9375`\[InvisibleSpace]" \
+perf="\[InvisibleSpace]0.3368421052631579`\[InvisibleSpace]" perf2="\
+\[InvisibleSpace]0.`\[InvisibleSpace]" \
+rat2="\[InvisibleSpace]\(-0.03225806451612903`\)\),
+      SequenceForm[ 3, " x=", 133120.0, " y=", 129024.0, " tot=", 
+        Times[ 262144, " eq="], 12160, " y+2^(4*i)=", 133120.0, " rat=", 
+        0.9375, " perf=", 0.33684210526315789, " perf2=", 0.0, 
+        " rat2=", -0.032258064516129031],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\(4\[InvisibleSpace]" x="\[InvisibleSpace]8.421376`*^6\
+\[InvisibleSpace]" y="\[InvisibleSpace]8.35584`*^6\[InvisibleSpace]" tot="\
+\[InvisibleSpace]\(16777216\ " \
+eq="\)\[InvisibleSpace]196096\[InvisibleSpace]" \
+y+2^(4*i)="\[InvisibleSpace]8.421376`*^6\[InvisibleSpace]" rat="\
+\[InvisibleSpace]0.984375`\[InvisibleSpace]" \
+perf="\[InvisibleSpace]0.3342036553524804`\[InvisibleSpace]" perf2="\
+\[InvisibleSpace]0.`\[InvisibleSpace]" \
+rat2="\[InvisibleSpace]\(-0.007874015748031496`\)\),
+      SequenceForm[ 4, " x=", 8421376.0, " y=", 8355840.0, " tot=", 
+        Times[ 16777216, " eq="], 196096, " y+2^(4*i)=", 8421376.0, " rat=", 
+        0.984375, " perf=", 0.33420365535248042, " perf2=", 0.0, 
+        " rat2=", -0.007874015748031496],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\(5\[InvisibleSpace]" x="\[InvisibleSpace]5.373952`*^8\
+\[InvisibleSpace]" y="\[InvisibleSpace]5.36346624`*^8\[InvisibleSpace]" tot="\
+\[InvisibleSpace]\(1073741824\ " eq="\)\[InvisibleSpace]3143680\
+\[InvisibleSpace]" y+2^(4*i)="\[InvisibleSpace]5.373952`*^8\[InvisibleSpace]" \
+rat="\[InvisibleSpace]0.99609375`\[InvisibleSpace]" \
+perf="\[InvisibleSpace]0.33355048859934855`\[InvisibleSpace]" perf2="\
+\[InvisibleSpace]0.`\[InvisibleSpace]" \
+rat2="\[InvisibleSpace]\(-0.0019569471624266144`\)\),
+      SequenceForm[ 5, " x=", 537395200.0, " y=", 536346624.0, " tot=", 
+        Times[ 1073741824, " eq="], 3143680, " y+2^(4*i)=", 537395200.0, 
+        " rat=", 0.99609375, " perf=", 0.33355048859934855, " perf2=", 0.0, 
+        " rat2=", -0.0019569471624266144],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\(6\[InvisibleSpace]" \
+x="\[InvisibleSpace]3.4368126976`*^10\[InvisibleSpace]" \
+y="\[InvisibleSpace]3.435134976`*^10\[InvisibleSpace]" tot="\[InvisibleSpace]\
+\(68719476736\ " eq="\)\[InvisibleSpace]50323456\[InvisibleSpace]" \
+y+2^(4*i)="\[InvisibleSpace]3.4368126976`*^10\[InvisibleSpace]" rat="\
+\[InvisibleSpace]0.9990234375`\[InvisibleSpace]" \
+perf="\[InvisibleSpace]0.33338759563731074`\[InvisibleSpace]" perf2="\
+\[InvisibleSpace]0.`\[InvisibleSpace]" \
+rat2="\[InvisibleSpace]\(-0.0004885197850512946`\)\),
+      SequenceForm[ 6, " x=", 34368126976.0, " y=", 34351349760.0, " tot=", 
+        Times[ 68719476736, " eq="], 50323456, " y+2^(4*i)=", 34368126976.0, 
+        " rat=", 0.9990234375, " perf=", 0.33338759563731074, " perf2=", 0.0, 
+        " rat2=", -0.00048851978505129456],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\(7\[InvisibleSpace]" \
+x="\[InvisibleSpace]2.19915747328`*^12\[InvisibleSpace]" \
+y="\[InvisibleSpace]2.198889037824`*^12\[InvisibleSpace]" tot="\
+\[InvisibleSpace]\(4398046511104\ " eq="\)\[InvisibleSpace]805273600\
+\[InvisibleSpace]" y+2^(4*i)="\[InvisibleSpace]2.19915747328`*^12\
+\[InvisibleSpace]" rat="\[InvisibleSpace]0.999755859375`\[InvisibleSpace]" \
+perf="\[InvisibleSpace]0.3333468972533062`\[InvisibleSpace]" perf2="\
+\[InvisibleSpace]0.`\[InvisibleSpace]" \
+rat2="\[InvisibleSpace]\(-0.00012208521548040532`\)\),
+      SequenceForm[ 
+      7, " x=", 2199157473280.0, " y=", 2198889037824.0, " tot=", 
+        Times[ 4398046511104, " eq="], 805273600, " y+2^(4*i)=", 
+        2199157473280.0, " rat=", 0.999755859375, " perf=", 
+        0.33334689725330618, " perf2=", 0.0, 
+        " rat2=", -0.00012208521548040532],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\(8\[InvisibleSpace]" \
+x="\[InvisibleSpace]1.40739635838976`*^14\[InvisibleSpace]" y="\
+\[InvisibleSpace]1.4073534087168`*^14\[InvisibleSpace]" \
+tot="\[InvisibleSpace]\(281474976710656\ " eq="\)\[InvisibleSpace]12884770816\
+\[InvisibleSpace]" y+2^(4*i)="\[InvisibleSpace]1.40739635838976`*^14\
+\[InvisibleSpace]" rat="\[InvisibleSpace]0.99993896484375`\[InvisibleSpace]" \
+perf="\[InvisibleSpace]0.333336724209841`\[InvisibleSpace]" perf2="\
+\[InvisibleSpace]0.`\[InvisibleSpace]" \
+rat2="\[InvisibleSpace]\(-0.00003051850947599719`\)\),
+      SequenceForm[ 
+      8, " x=", 140739635838976.0, " y=", 140735340871680.0, " tot=", 
+        Times[ 281474976710656, " eq="], 12884770816, " y+2^(4*i)=", 
+        140739635838976.0, " rat=", 0.99993896484375, " perf=", 
+        0.33333672420984101, " perf2=", 0.0, 
+        " rat2=", -3.0518509475997192*^-05],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\(9\[InvisibleSpace]" \
+x="\[InvisibleSpace]9.00723361447936`*^15\[InvisibleSpace]" y="\
+\[InvisibleSpace]9.007164895002624`*^15\[InvisibleSpace]" tot="\
+\[InvisibleSpace]\(18014398509481984\ " eq="\)\[InvisibleSpace]206157905920\
+\[InvisibleSpace]" y+2^(4*i)="\[InvisibleSpace]9.00723361447936`*^15\
+\[InvisibleSpace]" \
+rat="\[InvisibleSpace]0.9999847412109375`\[InvisibleSpace]" perf="\
+\[InvisibleSpace]0.33333418104599266`\[InvisibleSpace]" perf2="\
+\[InvisibleSpace]0.`\[InvisibleSpace]" \
+rat2="\[InvisibleSpace]\(-7.629452739355006`*^-6\)\),
+      SequenceForm[ 
+      9, " x=", 9007233614479360.0, " y=", 9007164895002624.0, " tot=", 
+        Times[ 18014398509481984, " eq="], 206157905920, " y+2^(4*i)=", 
+        9007233614479360.0, " rat=", 0.9999847412109375, " perf=", 
+        0.33333418104599266, " perf2=", 0.0, 
+        " rat2=", -7.6294527393550061*^-06],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\(10\[InvisibleSpace]" \
+x="\[InvisibleSpace]5.764613020592374`*^17\[InvisibleSpace]" y="\
+\[InvisibleSpace]5.764602025476096`*^17\[InvisibleSpace]" tot="\
+\[InvisibleSpace]\(1152921504606846976\ " \
+eq="\)\[InvisibleSpace]3298532786176\[InvisibleSpace]" y+2^(4*i)="\
+\[InvisibleSpace]5.764613020592374`*^17\[InvisibleSpace]" rat="\
+\[InvisibleSpace]0.9999961853027344`\[InvisibleSpace]" \
+perf="\[InvisibleSpace]0.33333354526109393`\[InvisibleSpace]" perf2="\
+\[InvisibleSpace]0.`\[InvisibleSpace]" \
+rat2="\[InvisibleSpace]\(-1.907352270798246`*^-6\)\),
+      SequenceForm[ 
+      10, " x=", 5.7646130205923738*^+17, " y=", 5.764602025476096*^+17, 
+        " tot=", 
+        Times[ 1152921504606846976, " eq="], 3298532786176, " y+2^(4*i)=", 
+        5.7646130205923738*^+17, " rat=", 0.99999618530273438, " perf=", 
+        0.33333354526109393, " perf2=", 0.0, 
+        " rat2=", -1.907352270798246*^-06],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\(11\[InvisibleSpace]" \
+x="\[InvisibleSpace]3.6893496943512125`*^19\[InvisibleSpace]" y="\
+\[InvisibleSpace]3.689347935132608`*^19\[InvisibleSpace]" tot="\
+\[InvisibleSpace]\(73786976294838206464\ " \
+eq="\)\[InvisibleSpace]52776549744640\[InvisibleSpace]" y+2^(4*i)="\
+\[InvisibleSpace]3.6893496943512125`*^19\[InvisibleSpace]" rat="\
+\[InvisibleSpace]0.9999990463256836`\[InvisibleSpace]" \
+perf="\[InvisibleSpace]0.3333333863152482`\[InvisibleSpace]" perf2="\
+\[InvisibleSpace]0.`\[InvisibleSpace]" \
+rat2="\[InvisibleSpace]\(-4.768373855769089`*^-7\)\),
+      SequenceForm[ 
+      11, " x=", 3.6893496943512125*^+19, " y=", 3.6893479351326081*^+19, 
+        " tot=", 
+        Times[ 73786976294838206464, " eq="], 52776549744640, " y+2^(4*i)=", 
+        3.6893496943512125*^+19, " rat=", 0.99999904632568359, " perf=", 
+        0.33333338631524823, " perf2=", 0.0, 
+        " rat2=", -4.7683738557690886*^-07],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\(12\[InvisibleSpace]" \
+x="\[InvisibleSpace]2.361183382172311`*^21\[InvisibleSpace]" y="\
+\[InvisibleSpace]2.3611831006973343`*^21\[InvisibleSpace]" tot="\
+\[InvisibleSpace]\(4722366482869645213696\ " \
+eq="\)\[InvisibleSpace]844424896577536\[InvisibleSpace]" y+2^(4*i)="\
+\[InvisibleSpace]2.361183382172311`*^21\[InvisibleSpace]" rat="\
+\[InvisibleSpace]0.9999997615814209`\[InvisibleSpace]" \
+perf="\[InvisibleSpace]0.3333333465788105`\[InvisibleSpace]" perf2="\
+\[InvisibleSpace]0.`\[InvisibleSpace]" \
+rat2="\[InvisibleSpace]\(-1.1920930376163766`*^-7\)\),
+      SequenceForm[ 
+      12, " x=", 2.361183382172311*^+21, " y=", 2.3611831006973343*^+21, 
+        " tot=", 
+        Times[ 4722366482869645213696, " eq="], 844424896577536, 
+        " y+2^(4*i)=", 2.361183382172311*^+21, " rat=", 0.9999997615814209, 
+        " perf=", 0.33333334657881047, " perf2=", 0.0, 
+        " rat2=", -1.1920930376163766*^-07],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\(13\[InvisibleSpace]" \
+x="\[InvisibleSpace]1.5111572970362846`*^23\[InvisibleSpace]" y="\
+\[InvisibleSpace]1.5111572520002883`*^23\[InvisibleSpace]" tot="\
+\[InvisibleSpace]\(302231454903657293676544\ " \
+eq="\)\[InvisibleSpace]13510798747893760\[InvisibleSpace]" y+2^(4*i)="\
+\[InvisibleSpace]1.5111572970362846`*^23\[InvisibleSpace]" rat="\
+\[InvisibleSpace]0.9999999403953552`\[InvisibleSpace]" \
+perf="\[InvisibleSpace]0.3333333366447025`\[InvisibleSpace]" perf2="\
+\[InvisibleSpace]0.`\[InvisibleSpace]" \
+rat2="\[InvisibleSpace]\(-2.980232327587376`*^-8\)\),
+      SequenceForm[ 
+      13, " x=", 1.5111572970362846*^+23, " y=", 1.5111572520002883*^+23, 
+        " tot=", 
+        Times[ 302231454903657293676544, " eq="], 13510798747893760, 
+        " y+2^(4*i)=", 1.5111572970362846*^+23, " rat=", 0.99999994039535522, 
+        " perf=", 0.33333333664470249, " perf2=", 0.0, 
+        " rat2=", -2.9802323275873759*^-08],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\(14\[InvisibleSpace]" \
+x="\[InvisibleSpace]9.67140659294583`*^24\[InvisibleSpace]" y="\
+\[InvisibleSpace]9.671406520888236`*^24\[InvisibleSpace]" tot="\
+\[InvisibleSpace]\(19342813113834066795298816\ " \
+eq="\)\[InvisibleSpace]216172781576912896\[InvisibleSpace]" y+2^(4*i)="\
+\[InvisibleSpace]9.67140659294583`*^24\[InvisibleSpace]" rat="\
+\[InvisibleSpace]0.9999999850988387`\[InvisibleSpace]" \
+perf="\[InvisibleSpace]0.3333333341611756`\[InvisibleSpace]" perf2="\
+\[InvisibleSpace]0.`\[InvisibleSpace]" \
+rat2="\[InvisibleSpace]\(-7.450580652434981`*^-9\)\),
+      SequenceForm[ 
+      14, " x=", 9.6714065929458304*^+24, " y=", 9.6714065208882364*^+24, 
+        " tot=", 
+        Times[ 19342813113834066795298816, " eq="], 216172781576912896, 
+        " y+2^(4*i)=", 9.6714065929458304*^+24, " rat=", 0.9999999850988387, 
+        " perf=", 0.33333333416117561, " perf2=", 0.0, 
+        " rat2=", -7.450580652434981*^-09],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\(15\[InvisibleSpace]" \
+x="\[InvisibleSpace]6.189700202191509`*^26\[InvisibleSpace]" y="\
+\[InvisibleSpace]6.189700190662294`*^26\[InvisibleSpace]" tot="\
+\[InvisibleSpace]\(1237940039285380274899124224\ " \
+eq="\)\[InvisibleSpace]3458764511673057280\[InvisibleSpace]" y+2^(4*i)="\
+\[InvisibleSpace]6.189700202191509`*^26\[InvisibleSpace]" rat="\
+\[InvisibleSpace]0.9999999962747097`\[InvisibleSpace]" \
+perf="\[InvisibleSpace]0.33333333354029393`\[InvisibleSpace]" perf2="\
+\[InvisibleSpace]0.`\[InvisibleSpace]" \
+rat2="\[InvisibleSpace]\(-1.862645152700404`*^-9\)\),
+      SequenceForm[ 
+      15, " x=", 6.1897002021915089*^+26, " y=", 6.1897001906622939*^+26, 
+        " tot=", 
+        Times[ 1237940039285380274899124224, " eq="], 3458764511673057280, 
+        " y+2^(4*i)=", 6.1897002021915089*^+26, " rat=", 0.9999999962747097, 
+        " perf=", 0.33333333354029393, " perf2=", 0.0, 
+        " rat2=", -1.862645152700404*^-09],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\(16\[InvisibleSpace]" \
+x="\[InvisibleSpace]3.961408126635554`*^28\[InvisibleSpace]" y="\
+\[InvisibleSpace]3.9614081247908797`*^28\[InvisibleSpace]" tot="\
+\[InvisibleSpace]\(79228162514264337593543950336\ " \
+eq="\)\[InvisibleSpace]55340232212538720256\[InvisibleSpace]" y+2^(4*i)="\
+\[InvisibleSpace]3.961408126635554`*^28\[InvisibleSpace]" rat="\
+\[InvisibleSpace]0.9999999990686774`\[InvisibleSpace]" \
+perf="\[InvisibleSpace]0.3333333333850735`\[InvisibleSpace]" perf2="\
+\[InvisibleSpace]0.`\[InvisibleSpace]" \
+rat2="\[InvisibleSpace]\(-4.656612875245797`*^-10\)\),
+      SequenceForm[ 
+      16, " x=", 3.9614081266355541*^+28, " y=", 3.9614081247908797*^+28, 
+        " tot=", 
+        Times[ 79228162514264337593543950336, " eq="], 55340232212538720256, 
+        " y+2^(4*i)=", 3.9614081266355541*^+28, " rat=", 0.99999999906867743, 
+        " perf=", 0.33333333338507348, " perf2=", 0.0, 
+        " rat2=", -4.6566128752457969*^-10],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\(17\[InvisibleSpace]" \
+x="\[InvisibleSpace]2.535301200604033`*^30\[InvisibleSpace]" y="\
+\[InvisibleSpace]2.5353012003088849`*^30\[InvisibleSpace]" tot="\
+\[InvisibleSpace]\(5070602400912917605986812821504\ " \
+eq="\)\[InvisibleSpace]885443715503698739200\[InvisibleSpace]" y+2^(4*i)="\
+\[InvisibleSpace]2.535301200604033`*^30\[InvisibleSpace]" rat="\
+\[InvisibleSpace]0.9999999997671694`\[InvisibleSpace]" \
+perf="\[InvisibleSpace]0.33333333334626836`\[InvisibleSpace]" perf2="\
+\[InvisibleSpace]0.`\[InvisibleSpace]" \
+rat2="\[InvisibleSpace]\(-1.1641532184048734`*^-10\)\),
+      SequenceForm[ 
+      17, " x=", 2.5353012006040328*^+30, " y=", 2.5353012003088849*^+30, 
+        " tot=", 
+        Times[ 5070602400912917605986812821504, " eq="], 
+        885443715503698739200, " y+2^(4*i)=", 2.5353012006040328*^+30, 
+        " rat=", 0.99999999976716936, " perf=", 0.33333333334626836, 
+        " perf2=", 0.0, " rat2=", -1.1641532184048734*^-10],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\(18\[InvisibleSpace]" \
+x="\[InvisibleSpace]1.6225927683157455`*^32\[InvisibleSpace]" y="\
+\[InvisibleSpace]1.6225927682685218`*^32\[InvisibleSpace]" tot="\
+\[InvisibleSpace]\(324518553658426726783156020576256\ " eq="\)\
+\[InvisibleSpace]14167099448471496687616\[InvisibleSpace]" y+2^(4*i)="\
+\[InvisibleSpace]1.6225927683157455`*^32\[InvisibleSpace]" rat="\
+\[InvisibleSpace]0.9999999999417923`\[InvisibleSpace]" \
+perf="\[InvisibleSpace]0.3333333333365671`\[InvisibleSpace]" perf2="\
+\[InvisibleSpace]0.`\[InvisibleSpace]" \
+rat2="\[InvisibleSpace]\(-2.9103830457580737`*^-11\)\),
+      SequenceForm[ 
+      18, " x=", 1.6225927683157455*^+32, " y=", 1.6225927682685218*^+32, 
+        " tot=", 
+        Times[ 324518553658426726783156020576256, " eq="], 
+        14167099448471496687616, " y+2^(4*i)=", 1.6225927683157455*^+32, 
+        " rat=", 0.99999999994179234, " perf=", 0.33333333333656712, 
+        " perf2=", 0.0, " rat2=", -2.9103830457580737*^-11],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\(19\[InvisibleSpace]" \
+x="\[InvisibleSpace]1.0384593717107434`*^34\[InvisibleSpace]" y="\
+\[InvisibleSpace]1.0384593717031876`*^34\[InvisibleSpace]" tot="\
+\[InvisibleSpace]\(20769187434139310514121985316880384\ " eq="\)\
+\[InvisibleSpace]226673591177193214443520\[InvisibleSpace]" y+2^(4*i)="\
+\[InvisibleSpace]1.0384593717107434`*^34\[InvisibleSpace]" rat="\
+\[InvisibleSpace]0.9999999999854481`\[InvisibleSpace]" \
+perf="\[InvisibleSpace]0.3333333333341418`\[InvisibleSpace]" perf2="\
+\[InvisibleSpace]0.`\[InvisibleSpace]" \
+rat2="\[InvisibleSpace]\(-7.275957614236365`*^-12\)\),
+      SequenceForm[ 
+      19, " x=", 1.0384593717107434*^+34, " y=", 1.0384593717031876*^+34, 
+        " tot=", 
+        Times[ 20769187434139310514121985316880384, " eq="], 
+        226673591177193214443520, " y+2^(4*i)=", 1.0384593717107434*^+34, 
+        " rat=", 0.99999999998544808, " perf=", 0.33333333333414178, 
+        " perf2=", 0.0, " rat2=", -7.2759576142363655*^-12],
+      Editable->False]], "Print"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Print[\ 1, 2, 3]\)\)\)], "Input"],
+
+Cell[BoxData[
+    InterpretationBox[\(1\[InvisibleSpace]2\[InvisibleSpace]3\),
+      SequenceForm[ 1, 2, 3],
+      Editable->False]], "Print"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(a[1]\  = 
+      Factor[\ 3*w^2 - 2\ w]\[IndentingNewLine]
+    b[1]\  = \ Factor[w^3\  - \ 3\ w^2\  + 2  w]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(w\ \((\(-2\) + 3\ w)\)\)], "Output"],
+
+Cell[BoxData[
+    \(\((\(-2\) + w)\)\ \((\(-1\) + w)\)\ w\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[""], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(a[2]\  = \ 
+      Factor[Simplify[a[1]\ ^2 + b[1]^2]]\[IndentingNewLine]
+    b[2]\  = \ Factor[Simplify[2\ a[1]\ b[1]]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(w\^2\ \((8 - 24\ w + 22\ w\^2 - 6\ w\^3 + w\^4)\)\)], "Output"],
+
+Cell[BoxData[
+    \(2\ \((\(-2\) + w)\)\ \((\(-1\) + w)\)\ w\^2\ \((\(-2\) + 
+          3\ w)\)\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Clear[a, b]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(a[1]\  := \ 3\ w^2 - 2\ w\[IndentingNewLine]
+    b[1]\  := \ w^3 - a[1]\[IndentingNewLine]
+    a[n_]\  := \ a[n - 1]*a[1] + b[n - 1]*b[1]\[IndentingNewLine]
+    b[n_]\  := \ a[n - 1]*b[1] + b[n - 1]*a[1]\)\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(For[\ i = 1, \ i < 10, \ \(i++\), \ 
+      Print[\ i, "\< a[i]=\>", Factor[Simplify[a[i]]], \ "\< b[i]=\>", \ 
+        Factor[Simplify[b[i]]]]]\)], "Input"],
+
+Cell[BoxData[
+    InterpretationBox[\(1\[InvisibleSpace]" a[i]="\[InvisibleSpace]\(w\ \
+\((\(-2\) + 3\ w)\)\)\[InvisibleSpace]" b[i]="\[InvisibleSpace]\(\((\(-2\) + 
+              w)\)\ \((\(-1\) + w)\)\ w\)\),
+      SequenceForm[ 1, " a[i]=", 
+        Times[ w, 
+          Plus[ -2, 
+            Times[ 3, w]]], " b[i]=", 
+        Times[ 
+          Plus[ -2, w], 
+          Plus[ -1, w], w]],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\(2\[InvisibleSpace]" a[i]="\[InvisibleSpace]\(w\^2\ \
+\((8 - 24\ w + 22\ w\^2 - 6\ w\^3 + 
+              w\^4)\)\)\[InvisibleSpace]" b[i]="\[InvisibleSpace]\(2\ \((\(-2\
+\) + w)\)\ \((\(-1\) + w)\)\ w\^2\ \((\(-2\) + 3\ w)\)\)\),
+      SequenceForm[ 2, " a[i]=", 
+        Times[ 
+          Power[ w, 2], 
+          Plus[ 8, 
+            Times[ -24, w], 
+            Times[ 22, 
+              Power[ w, 2]], 
+            Times[ -6, 
+              Power[ w, 3]], 
+            Power[ w, 4]]], " b[i]=", 
+        Times[ 2, 
+          Plus[ -2, w], 
+          Plus[ -1, w], 
+          Power[ w, 2], 
+          Plus[ -2, 
+            Times[ 3, w]]]],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\(3\[InvisibleSpace]" a[i]="\[InvisibleSpace]\(w\^3\ \
+\((\(-2\) + 3\ w)\)\ \((16 - 48\ w + 48\ w\^2 - 18\ w\^3 + 
+              3\ w\^4)\)\)\[InvisibleSpace]" b[i]="\[InvisibleSpace]\(\((\(-2\
+\) + w)\)\ \((\(-1\) + w)\)\ w\^3\ \((16 - 48\ w + 40\ w\^2 - 6\ w\^3 + 
+              w\^4)\)\)\),
+      SequenceForm[ 3, " a[i]=", 
+        Times[ 
+          Power[ w, 3], 
+          Plus[ -2, 
+            Times[ 3, w]], 
+          Plus[ 16, 
+            Times[ -48, w], 
+            Times[ 48, 
+              Power[ w, 2]], 
+            Times[ -18, 
+              Power[ w, 3]], 
+            Times[ 3, 
+              Power[ w, 4]]]], " b[i]=", 
+        Times[ 
+          Plus[ -2, w], 
+          Plus[ -1, w], 
+          Power[ w, 3], 
+          Plus[ 16, 
+            Times[ -48, w], 
+            Times[ 40, 
+              Power[ w, 2]], 
+            Times[ -6, 
+              Power[ w, 3]], 
+            Power[ w, 4]]]],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\(4\[InvisibleSpace]" a[i]="\[InvisibleSpace]\(w\^4\ \
+\((128 - 768\ w + 1856\ w\^2 - 2304\ w\^3 + 1560\ w\^4 - 576\ w\^5 + 
+              116\ w\^6 - 12\ w\^7 + 
+              w\^8)\)\)\[InvisibleSpace]" b[i]="\[InvisibleSpace]\(4\ \((\(-2\
+\) + w)\)\ \((\(-1\) + w)\)\ w\^4\ \((\(-2\) + 3\ w)\)\ \((8 - 24\ w + 
+              22\ w\^2 - 6\ w\^3 + w\^4)\)\)\),
+      SequenceForm[ 4, " a[i]=", 
+        Times[ 
+          Power[ w, 4], 
+          Plus[ 128, 
+            Times[ -768, w], 
+            Times[ 1856, 
+              Power[ w, 2]], 
+            Times[ -2304, 
+              Power[ w, 3]], 
+            Times[ 1560, 
+              Power[ w, 4]], 
+            Times[ -576, 
+              Power[ w, 5]], 
+            Times[ 116, 
+              Power[ w, 6]], 
+            Times[ -12, 
+              Power[ w, 7]], 
+            Power[ w, 8]]], " b[i]=", 
+        Times[ 4, 
+          Plus[ -2, w], 
+          Plus[ -1, w], 
+          Power[ w, 4], 
+          Plus[ -2, 
+            Times[ 3, w]], 
+          Plus[ 8, 
+            Times[ -24, w], 
+            Times[ 22, 
+              Power[ w, 2]], 
+            Times[ -6, 
+              Power[ w, 3]], 
+            Power[ w, 4]]]],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\(5\[InvisibleSpace]" a[i]="\[InvisibleSpace]\(w\^5\ \
+\((\(-2\) + 3\ w)\)\ \((256 - 1536\ w + 3776\ w\^2 - 4896\ w\^3 + 
+              3616\ w\^4 - 1560\ w\^5 + 400\ w\^6 - 60\ w\^7 + 
+              5\ w\^8)\)\)\[InvisibleSpace]" b[i]="\[InvisibleSpace]\(\((\(-2\
+\) + w)\)\ \((\(-1\) + w)\)\ w\^5\ \((256 - 1536\ w + 3648\ w\^2 - 
+              4320\ w\^3 + 2656\ w\^4 - 840\ w\^5 + 152\ w\^6 - 12\ w\^7 + 
+              w\^8)\)\)\),
+      SequenceForm[ 5, " a[i]=", 
+        Times[ 
+          Power[ w, 5], 
+          Plus[ -2, 
+            Times[ 3, w]], 
+          Plus[ 256, 
+            Times[ -1536, w], 
+            Times[ 3776, 
+              Power[ w, 2]], 
+            Times[ -4896, 
+              Power[ w, 3]], 
+            Times[ 3616, 
+              Power[ w, 4]], 
+            Times[ -1560, 
+              Power[ w, 5]], 
+            Times[ 400, 
+              Power[ w, 6]], 
+            Times[ -60, 
+              Power[ w, 7]], 
+            Times[ 5, 
+              Power[ w, 8]]]], " b[i]=", 
+        Times[ 
+          Plus[ -2, w], 
+          Plus[ -1, w], 
+          Power[ w, 5], 
+          Plus[ 256, 
+            Times[ -1536, w], 
+            Times[ 3648, 
+              Power[ w, 2]], 
+            Times[ -4320, 
+              Power[ w, 3]], 
+            Times[ 2656, 
+              Power[ w, 4]], 
+            Times[ -840, 
+              Power[ w, 5]], 
+            Times[ 152, 
+              Power[ w, 6]], 
+            Times[ -12, 
+              Power[ w, 7]], 
+            Power[ w, 8]]]],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\(6\[InvisibleSpace]" a[i]="\[InvisibleSpace]\(w\^6\ \
+\((8 - 24\ w + 22\ w\^2 - 6\ w\^3 + w\^4)\)\ \((256 - 1536\ w + 3712\ w\^2 - 
+              4608\ w\^3 + 3104\ w\^4 - 1104\ w\^5 + 188\ w\^6 - 12\ w\^7 + 
+              w\^8)\)\)\[InvisibleSpace]" b[i]="\[InvisibleSpace]\(2\ \((\(-2\
+\) + w)\)\ \((\(-1\) + w)\)\ w\^6\ \((\(-2\) + 3\ w)\)\ \((16 - 48\ w + 
+              40\ w\^2 - 6\ w\^3 + w\^4)\)\ \((16 - 48\ w + 48\ w\^2 - 
+              18\ w\^3 + 3\ w\^4)\)\)\),
+      SequenceForm[ 6, " a[i]=", 
+        Times[ 
+          Power[ w, 6], 
+          Plus[ 8, 
+            Times[ -24, w], 
+            Times[ 22, 
+              Power[ w, 2]], 
+            Times[ -6, 
+              Power[ w, 3]], 
+            Power[ w, 4]], 
+          Plus[ 256, 
+            Times[ -1536, w], 
+            Times[ 3712, 
+              Power[ w, 2]], 
+            Times[ -4608, 
+              Power[ w, 3]], 
+            Times[ 3104, 
+              Power[ w, 4]], 
+            Times[ -1104, 
+              Power[ w, 5]], 
+            Times[ 188, 
+              Power[ w, 6]], 
+            Times[ -12, 
+              Power[ w, 7]], 
+            Power[ w, 8]]], " b[i]=", 
+        Times[ 2, 
+          Plus[ -2, w], 
+          Plus[ -1, w], 
+          Power[ w, 6], 
+          Plus[ -2, 
+            Times[ 3, w]], 
+          Plus[ 16, 
+            Times[ -48, w], 
+            Times[ 40, 
+              Power[ w, 2]], 
+            Times[ -6, 
+              Power[ w, 3]], 
+            Power[ w, 4]], 
+          Plus[ 16, 
+            Times[ -48, w], 
+            Times[ 48, 
+              Power[ w, 2]], 
+            Times[ -18, 
+              Power[ w, 3]], 
+            Times[ 3, 
+              Power[ w, 4]]]]],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\(7\[InvisibleSpace]" a[i]="\[InvisibleSpace]\(w\^7\ \
+\((\(-2\) + 3\ w)\)\ \((4096 - 36864\ w + 145408\ w\^2 - 330240\ w\^3 + 
+              477696\ w\^4 - 460800\ w\^5 + 302912\ w\^6 - 137088\ w\^7 + 
+              42896\ w\^8 - 9240\ w\^9 + 1344\ w\^10 - 126\ w\^11 + 
+              7\ w\^12)\)\)\[InvisibleSpace]" \
+b[i]="\[InvisibleSpace]\(\((\(-2\) + w)\)\ \((\(-1\) + w)\)\ w\^7\ \((4096 - 
+              36864\ w + 143360\ w\^2 - 314880\ w\^3 + 429056\ w\^4 - 
+              376320\ w\^5 + 215104\ w\^6 - 80640\ w\^7 + 20016\ w\^8 - 
+              3240\ w\^9 + 336\ w\^10 - 18\ w\^11 + w\^12)\)\)\),
+      SequenceForm[ 7, " a[i]=", 
+        Times[ 
+          Power[ w, 7], 
+          Plus[ -2, 
+            Times[ 3, w]], 
+          Plus[ 4096, 
+            Times[ -36864, w], 
+            Times[ 145408, 
+              Power[ w, 2]], 
+            Times[ -330240, 
+              Power[ w, 3]], 
+            Times[ 477696, 
+              Power[ w, 4]], 
+            Times[ -460800, 
+              Power[ w, 5]], 
+            Times[ 302912, 
+              Power[ w, 6]], 
+            Times[ -137088, 
+              Power[ w, 7]], 
+            Times[ 42896, 
+              Power[ w, 8]], 
+            Times[ -9240, 
+              Power[ w, 9]], 
+            Times[ 1344, 
+              Power[ w, 10]], 
+            Times[ -126, 
+              Power[ w, 11]], 
+            Times[ 7, 
+              Power[ w, 12]]]], " b[i]=", 
+        Times[ 
+          Plus[ -2, w], 
+          Plus[ -1, w], 
+          Power[ w, 7], 
+          Plus[ 4096, 
+            Times[ -36864, w], 
+            Times[ 143360, 
+              Power[ w, 2]], 
+            Times[ -314880, 
+              Power[ w, 3]], 
+            Times[ 429056, 
+              Power[ w, 4]], 
+            Times[ -376320, 
+              Power[ w, 5]], 
+            Times[ 215104, 
+              Power[ w, 6]], 
+            Times[ -80640, 
+              Power[ w, 7]], 
+            Times[ 20016, 
+              Power[ w, 8]], 
+            Times[ -3240, 
+              Power[ w, 9]], 
+            Times[ 336, 
+              Power[ w, 10]], 
+            Times[ -18, 
+              Power[ w, 11]], 
+            Power[ w, 12]]]],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\(8\[InvisibleSpace]" a[i]="\[InvisibleSpace]\(w\^8\ \
+\((32768 - 393216\ w + 2129920\ w\^2 - 6881280\ w\^3 + 14766080\ w\^4 - 
+              22192128\ w\^5 + 24027136\ w\^6 - 19015680\ w\^7 + 
+              11073920\ w\^8 - 4753920\ w\^9 + 1501696\ w\^10 - 
+              346752\ w\^11 + 57680\ w\^12 - 6720\ w\^13 + 520\ w\^14 - 
+              24\ w\^15 + 
+              w\^16)\)\)\[InvisibleSpace]" b[i]="\[InvisibleSpace]\(8\ \
+\((\(-2\) + w)\)\ \((\(-1\) + w)\)\ w\^8\ \((\(-2\) + 3\ w)\)\ \((8 - 24\ w + 
+              22\ w\^2 - 6\ w\^3 + w\^4)\)\ \((128 - 768\ w + 1856\ w\^2 - 
+              2304\ w\^3 + 1560\ w\^4 - 576\ w\^5 + 116\ w\^6 - 12\ w\^7 + 
+              w\^8)\)\)\),
+      SequenceForm[ 8, " a[i]=", 
+        Times[ 
+          Power[ w, 8], 
+          Plus[ 32768, 
+            Times[ -393216, w], 
+            Times[ 2129920, 
+              Power[ w, 2]], 
+            Times[ -6881280, 
+              Power[ w, 3]], 
+            Times[ 14766080, 
+              Power[ w, 4]], 
+            Times[ -22192128, 
+              Power[ w, 5]], 
+            Times[ 24027136, 
+              Power[ w, 6]], 
+            Times[ -19015680, 
+              Power[ w, 7]], 
+            Times[ 11073920, 
+              Power[ w, 8]], 
+            Times[ -4753920, 
+              Power[ w, 9]], 
+            Times[ 1501696, 
+              Power[ w, 10]], 
+            Times[ -346752, 
+              Power[ w, 11]], 
+            Times[ 57680, 
+              Power[ w, 12]], 
+            Times[ -6720, 
+              Power[ w, 13]], 
+            Times[ 520, 
+              Power[ w, 14]], 
+            Times[ -24, 
+              Power[ w, 15]], 
+            Power[ w, 16]]], " b[i]=", 
+        Times[ 8, 
+          Plus[ -2, w], 
+          Plus[ -1, w], 
+          Power[ w, 8], 
+          Plus[ -2, 
+            Times[ 3, w]], 
+          Plus[ 8, 
+            Times[ -24, w], 
+            Times[ 22, 
+              Power[ w, 2]], 
+            Times[ -6, 
+              Power[ w, 3]], 
+            Power[ w, 4]], 
+          Plus[ 128, 
+            Times[ -768, w], 
+            Times[ 1856, 
+              Power[ w, 2]], 
+            Times[ -2304, 
+              Power[ w, 3]], 
+            Times[ 1560, 
+              Power[ w, 4]], 
+            Times[ -576, 
+              Power[ w, 5]], 
+            Times[ 116, 
+              Power[ w, 6]], 
+            Times[ -12, 
+              Power[ w, 7]], 
+            Power[ w, 8]]]],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\(9\[InvisibleSpace]" a[i]="\[InvisibleSpace]\(w\^9\ \
+\((\(-2\) + 3\ w)\)\ \((16 - 48\ w + 48\ w\^2 - 18\ w\^3 + 
+              3\ w\^4)\)\ \((4096 - 36864\ w + 144384\ w\^2 - 322560\ w\^3 + 
+              453120\ w\^4 - 417024\ w\^5 + 255360\ w\^6 - 104544\ w\^7 + 
+              28800\ w\^8 - 5400\ w\^9 + 684\ w\^10 - 54\ w\^11 + 
+              3\ w\^12)\)\)\[InvisibleSpace]" \
+b[i]="\[InvisibleSpace]\(\((\(-2\) + w)\)\ \((\(-1\) + w)\)\ w\^9\ \((16 - 
+              48\ w + 40\ w\^2 - 6\ w\^3 + w\^4)\)\ \((4096 - 36864\ w + 
+              144384\ w\^2 - 322560\ w\^3 + 453120\ w\^4 - 417024\ w\^5 + 
+              255232\ w\^6 - 103968\ w\^7 + 27840\ w\^8 - 4680\ w\^9 + 
+              444\ w\^10 - 18\ w\^11 + w\^12)\)\)\),
+      SequenceForm[ 9, " a[i]=", 
+        Times[ 
+          Power[ w, 9], 
+          Plus[ -2, 
+            Times[ 3, w]], 
+          Plus[ 16, 
+            Times[ -48, w], 
+            Times[ 48, 
+              Power[ w, 2]], 
+            Times[ -18, 
+              Power[ w, 3]], 
+            Times[ 3, 
+              Power[ w, 4]]], 
+          Plus[ 4096, 
+            Times[ -36864, w], 
+            Times[ 144384, 
+              Power[ w, 2]], 
+            Times[ -322560, 
+              Power[ w, 3]], 
+            Times[ 453120, 
+              Power[ w, 4]], 
+            Times[ -417024, 
+              Power[ w, 5]], 
+            Times[ 255360, 
+              Power[ w, 6]], 
+            Times[ -104544, 
+              Power[ w, 7]], 
+            Times[ 28800, 
+              Power[ w, 8]], 
+            Times[ -5400, 
+              Power[ w, 9]], 
+            Times[ 684, 
+              Power[ w, 10]], 
+            Times[ -54, 
+              Power[ w, 11]], 
+            Times[ 3, 
+              Power[ w, 12]]]], " b[i]=", 
+        Times[ 
+          Plus[ -2, w], 
+          Plus[ -1, w], 
+          Power[ w, 9], 
+          Plus[ 16, 
+            Times[ -48, w], 
+            Times[ 40, 
+              Power[ w, 2]], 
+            Times[ -6, 
+              Power[ w, 3]], 
+            Power[ w, 4]], 
+          Plus[ 4096, 
+            Times[ -36864, w], 
+            Times[ 144384, 
+              Power[ w, 2]], 
+            Times[ -322560, 
+              Power[ w, 3]], 
+            Times[ 453120, 
+              Power[ w, 4]], 
+            Times[ -417024, 
+              Power[ w, 5]], 
+            Times[ 255232, 
+              Power[ w, 6]], 
+            Times[ -103968, 
+              Power[ w, 7]], 
+            Times[ 27840, 
+              Power[ w, 8]], 
+            Times[ -4680, 
+              Power[ w, 9]], 
+            Times[ 444, 
+              Power[ w, 10]], 
+            Times[ -18, 
+              Power[ w, 11]], 
+            Power[ w, 12]]]],
+      Editable->False]], "Print"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Expand[\((w - 2)\)^12]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(4096 - 24576\ w + 67584\ w\^2 - 112640\ w\^3 + 126720\ w\^4 - 
+      101376\ w\^5 + 59136\ w\^6 - 25344\ w\^7 + 7920\ w\^8 - 1760\ w\^9 + 
+      264\ w\^10 - 24\ w\^11 + w\^12\)], "Output"]
+}, Open  ]]
+},
+FrontEndVersion->"5.1 for X",
+ScreenRectangle->{{0, 2720}, {0, 1024}},
+WindowSize->{1272, 994},
+WindowMargins->{{Automatic, 14}, {Automatic, 406}},
+PrintingPageRange->{Automatic, Automatic},
+PrintingOptions->{"PaperSize"->{612, 792},
+"PaperOrientation"->"Portrait",
+"PostScriptOutputFile":>FrontEnd`FileName[{$RootDirectory, "exports", \
+"adobra", "cvs", "CASEY", "mathematica"}, "Untitled-3.ps", CharacterEncoding \
+-> "iso8859-1"],
+"Magnification"->1}
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1754, 51, 67, 1, 27, "Input"],
+Cell[1824, 54, 173, 3, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[2022, 61, 68, 1, 43, "Input"],
+Cell[2093, 64, 46, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2176, 70, 68, 1, 43, "Input"],
+Cell[2247, 73, 52, 1, 27, "Output"]
+}, Open  ]],
+Cell[2314, 77, 26, 0, 27, "Input"],
+Cell[2343, 79, 52, 1, 43, "Input"],
+Cell[2398, 82, 35, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[2458, 87, 744, 12, 123, "Input"],
+Cell[3205, 101, 682, 10, 23, "Print"],
+Cell[3890, 113, 765, 13, 23, "Print"],
+Cell[4658, 128, 789, 13, 23, "Print"],
+Cell[5450, 143, 816, 14, 25, "Print"],
+Cell[6269, 159, 836, 13, 25, "Print"],
+Cell[7108, 174, 865, 14, 25, "Print"],
+Cell[7976, 190, 902, 16, 25, "Print"],
+Cell[8881, 208, 927, 16, 25, "Print"],
+Cell[9811, 226, 945, 17, 25, "Print"],
+Cell[10759, 245, 978, 18, 25, "Print"],
+Cell[11740, 265, 985, 18, 25, "Print"],
+Cell[12728, 285, 988, 18, 25, "Print"],
+Cell[13719, 305, 1000, 18, 25, "Print"],
+Cell[14722, 325, 999, 18, 25, "Print"],
+Cell[15724, 345, 1008, 18, 25, "Print"],
+Cell[16735, 365, 1015, 18, 43, "Print"],
+Cell[17753, 385, 1023, 18, 43, "Print"],
+Cell[18779, 405, 1032, 18, 43, "Print"],
+Cell[19814, 425, 1037, 18, 43, "Print"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[20888, 448, 80, 1, 43, "Input"],
+Cell[20971, 451, 142, 3, 23, "Print"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[21150, 459, 170, 3, 59, "Input"],
+Cell[21323, 464, 56, 1, 27, "Output"],
+Cell[21382, 467, 71, 1, 27, "Output"]
+}, Open  ]],
+Cell[21468, 471, 26, 0, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[21519, 475, 183, 3, 59, "Input"],
+Cell[21705, 480, 83, 1, 29, "Output"],
+Cell[21791, 483, 109, 2, 29, "Output"]
+}, Open  ]],
+Cell[21915, 488, 75, 1, 43, "Input"],
+Cell[21993, 491, 267, 4, 91, "Input"],
+
+Cell[CellGroupData[{
+Cell[22285, 499, 176, 3, 27, "Input"],
+Cell[22464, 504, 427, 11, 23, "Print"],
+Cell[22894, 517, 715, 21, 25, "Print"],
+Cell[23612, 540, 989, 30, 25, "Print"],
+Cell[24604, 572, 1261, 38, 25, "Print"],
+Cell[25868, 612, 1591, 48, 43, "Print"],
+Cell[27462, 662, 1775, 54, 43, "Print"],
+Cell[29240, 718, 2253, 66, 43, "Print"],
+Cell[31496, 786, 2504, 74, 61, "Print"],
+Cell[34003, 862, 2776, 83, 43, "Print"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[36816, 950, 86, 1, 43, "Input"],
+Cell[36905, 953, 209, 3, 29, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

@@ -1,0 +1,1377 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.1'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     65173,       1214]*)
+(*NotebookOutlinePosition[     65987,       1243]*)
+(*  CellTagsIndexPosition[     65898,       1237]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+    \(\(\( (*Loading\ the\ simplification\ \
+rules*) \)\(\[IndentingNewLine]\)\(\(<< "\<~/cvs/CASEY/mathematica/Delta.m\>"\
+\)\(\[IndentingNewLine]\)
+    \)\)\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(Sum::"itform"\), \(\(:\)\(\ \)\), "\<\"Argument \\!\\(L__\\) at \
+position \\!\\(3\\) does not have the correct form for an iterator. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::itform\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Sum::"itform"\), \(\(:\)\(\ \)\), "\<\"Argument \\!\\(L__\\) at \
+position \\!\\(2\\) does not have the correct form for an iterator. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::itform\\\"]\\)\"\>"}]], \
+"Message"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(\( (*\ X[i, l]\ is\ 1\ if\ item\ i\ belongs\ to\ bucket\ l, \ 
+      0\ otherwise\ *) \)\(\[IndentingNewLine]\)\(\(\(Clear[ExBase, R, 
+      J]\)\(\[IndentingNewLine]\)
+    \) (*\ J[l_]\  := \ N/n\ \ *) \[IndentingNewLine]
+    R[l_]\  := \ J[l]/N\[IndentingNewLine]
+    \(\(R[l_, i_]\  := 
+      R[l]\)\(\ \)\( (*\((J[l] - i)\)/\((N - i)\)\ \ *) \)\(\ \)\( (*\ 
+      Should\ be\  - i\ both\ up\ and\ down\ *) \)\(\[IndentingNewLine]\)
+    \) (*\[IndentingNewLine]R[l_]\  := \ \(1/n\[IndentingNewLine]
+        R[l_, i_]\  := \ 1/n\)\[IndentingNewLine]*) \[IndentingNewLine]
+    ExBase[X[i_, l_]]\  := \ R[l]\[IndentingNewLine]
+    ExBase[X[i_, l_] X[j_, k_]]\  := \ 
+      R[l] d[l, k] d[i, j] + R[l]\ R[l, 1] d[l, k] \((1 - d[i, j])\) + 
+        R[l] R[k]\ \((1 - d[i, j])\)\ \((1 - d[l, k])\)\[IndentingNewLine]
+    ExBase[X[i_, l_] X[j_, l_] X[m_, k_] X[n_, k_]]\  := \ 
+      d[l, k] \((R[l] \((1 - R[l, 1] R[l, 2] R[l, 3])\) d[i, j] d[i, m] 
+                d[i, n] + 
+              R[l] R[l, 
+                  1] \((1 - 
+                    R[l, 2] R[l, 3])\) \((d[i, j] d[i, m] \((1 - d[i, n])\) + 
+                    d[i, j] d[i, n] \((1 - d[i, m])\) + 
+                    d[i, m] d[i, n] \((1 - d[i, j])\) + 
+                    d[j, m] d[j, n] \((1 - d[i, j])\) + 
+                    d[i, j] d[m, n] \((1 - d[i, m])\) + 
+                    d[i, m] d[j, n] \((1 - d[i, j])\) + 
+                    d[i, n] d[j, m] \((1 - d[i, j])\))\)\  + \ 
+              R[l] R[l, 1] 
+                R[l, 2] \((1 - 
+                    R[l, 3])\) \((d[i, 
+                        j] \((1 - d[i, m])\) \((1 - d[i, n])\) \((1 - 
+                          d[m, n])\) + 
+                    d[i, m] \((1 - d[i, j])\) \((1 - d[i, n])\) \((1 - 
+                          d[j, n])\) + 
+                    d[i, n] \((1 - d[i, j])\) \((1 - d[i, m])\) \((1 - 
+                          d[j, m])\)\  + \ 
+                    d[j, m] \((1 - d[i, j])\) \((1 - d[j, n])\) \((1 - 
+                          d[i, n])\)\  + \ 
+                    d[j, n] \((1 - d[i, j])\) \((1 - d[j, m])\) \((1 - 
+                          d[i, m])\) + 
+                    d[m, n] \((1 - d[i, m])\) \((1 - d[j, m])\) \((1 - 
+                          d[i, j])\))\)\  + \ 
+              R[l] R[l, 1] R[l, 2] R[l, 3]\ )\) + \((1 - d[l, k])\) \((1 - 
+              d[i, m])\) \((1 - d[i, n])\) \((1 - d[j, m])\) \((1 - 
+              d[j, n])\) \((\ 
+            R[l] d[i, j] + 
+              R[l] R[l, 1] \((1 - d[i, j])\))\) \((R[k] d[m, n] + 
+              R[k] R[k, 1] \((1 - d[m, n])\))\)\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\( (*\ 
+      defining\ the\ random\ variable\ *) \)\(\[IndentingNewLine]\)\( (*\ 
+      Average\ in\ a\ bucket\ for\ a\ given\ relation\ *) \)\(\
+\[IndentingNewLine]\)\(\(\(Av[f_, l_]\  := \ 
+      Module[\ {i}, \ 
+        Sum[\ X[i, l]\ f[i], \ {i, N}]/J[l]]\)\(\[IndentingNewLine]\)
+    \) (*\ estimate\ of\ the\ size\ of\ the\ join\ *) \[IndentingNewLine]
+    M\  := \ Module[\ {l}, \ 
+        Sum[\ Av[f, l]\ Av[g, l]\ J[l], \ {l, n}]]\)\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(DSimplify[\ Ex[M]\ ]\)\(\ \)\( (*\ 
+      result\ with\ R[l, i] = R[l]\ *) \)\(\ \)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\[Sum]\+\(l$132 = 1\)\%n\(\[Sum]\+\(i$150 = 1\)\%N\(\[Sum]\+\(i$157 = 1\
+\)\%N ExBase[\(f[i$150]\ g[i$157]\ X[i$150, l$132]\ X[i$157, \
+l$132]\)\/J[l$132]]\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(DSimplify[\ 
+      DSimplify[\ Var[M]\ ]\ ]\)\(\ \)\( (*result\ with\ R[l, i] = 
+        R[l]*) \)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(1\/N\^4\)\((2\ n\ N\^2\ P[f\ g\^2]\ S[f] + 
+        2\ n\ N\^2\ P[f\^2\ g]\ S[g] - 4\ N\ P[f\ g\^2]\ S[f]\ S[J] - 
+        2\ n\ N\ P[f\ g\^2]\ S[f]\ S[J] - 4\ N\ P[f\^2\ g]\ S[g]\ S[J] - 
+        2\ n\ N\ P[f\^2\ g]\ S[g]\ S[J] + 
+        2\ P[f\ g]\ S[f]\ S[g]\ \((N - S[J])\)\ S[J] + 
+        4\ P[f\ g\^2]\ S[f]\ S[J]\^2 + 4\ P[f\^2\ g]\ S[g]\ S[J]\^2 + 
+        P[f\ g]\^2\ \((n\ N\^2 - 2\ N\ S[J] + S[J]\^2)\) + 
+        N\ S[g]\^2\ S[J]\ SJ[f] - S[g]\^2\ S[J]\^2\ SJ[f] + 
+        N\ S[f]\^2\ S[J]\ SJ[g] - S[f]\^2\ S[J]\^2\ SJ[g] + 
+        n\ N\^2\ SJ[f]\ SJ[g] - 2\ N\ S[J]\ SJ[f]\ SJ[g] + 
+        S[J]\^2\ SJ[f]\ SJ[g] + 
+        P[f\^2\ g\^2]\ \((4\ \((2 + n)\)\ N\ S[J] - 6\ S[J]\^2 + 
+              N\^2\ \((\(-n\)\ \((6 + n)\) + 
+                    N\ \(\[Sum]\+\(l$6830 = 1\)\%n \
+1\/J[l$6830]\))\))\))\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \($RecursionLimit = 1024\)], "Input"],
+
+Cell[BoxData[
+    \(1024\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\($RecursionLimit = 2048\)\(\[IndentingNewLine]\)
+    \)\)], "Input"],
+
+Cell[BoxData[
+    \(2048\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(DSimplify[Ex[M]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(P[f\ g]\ \((n\ N - S[J])\) + S[f]\ S[g]\ S[J]\)\/N\^2\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[""], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(DSimplify[DSimplify[Var[M]]]\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(1\/N\^4\)\((2\ n\ N\^2\ P[f\ g\^2]\ S[f] + 
+        2\ n\ N\^2\ P[f\^2\ g]\ S[g] - 4\ N\ P[f\ g\^2]\ S[f]\ S[J] - 
+        2\ n\ N\ P[f\ g\^2]\ S[f]\ S[J] - 4\ N\ P[f\^2\ g]\ S[g]\ S[J] - 
+        2\ n\ N\ P[f\^2\ g]\ S[g]\ S[J] + 
+        2\ P[f\ g]\ S[f]\ S[g]\ \((N - S[J])\)\ S[J] + 
+        4\ P[f\ g\^2]\ S[f]\ S[J]\^2 + 4\ P[f\^2\ g]\ S[g]\ S[J]\^2 + 
+        P[f\ g]\^2\ \((n\ N\^2 - 2\ N\ S[J] + S[J]\^2)\) + 
+        N\ S[g]\^2\ S[J]\ SJ[f] - S[g]\^2\ S[J]\^2\ SJ[f] + 
+        N\ S[f]\^2\ S[J]\ SJ[g] - S[f]\^2\ S[J]\^2\ SJ[g] + 
+        n\ N\^2\ SJ[f]\ SJ[g] - 2\ N\ S[J]\ SJ[f]\ SJ[g] + 
+        S[J]\^2\ SJ[f]\ SJ[g] + 
+        P[f\^2\ g\^2]\ \((4\ \((2 + n)\)\ N\ S[J] - 6\ S[J]\^2 + 
+              N\^2\ \((\(-n\)\ \((6 + n)\) + 
+                    N\ \(\[Sum]\+\(l$13474 = 1\)\%n \
+1\/J[l$13474]\))\))\))\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Simplify[\(1\/\(\((\(-3\) + N)\)\ \((\(-2\) + 
+                    N)\)\ \((\(-1\) + N)\)\^2\ N\^2\)\) \((\(-12\)\ n\ P[
+                  f\ g\^2]\ S[f] + 12\ n\^2\ P[f\ g\^2]\ S[f] - 
+              4\ n\ N\ P[f\ g\^2]\ S[f] + 2\ n\^2\ N\ P[f\ g\^2]\ S[f] + 
+              2\ n\ N\^2\ P[f\ g\^2]\ S[f] - 
+              8\ n\^2\ N\^2\ P[f\ g\^2]\ S[f] + 
+              4\ n\ N\^3\ P[f\ g\^2]\ S[f] + 
+              2\ n\^2\ N\^3\ P[f\ g\^2]\ S[f] + 
+              2\ n\ N\^4\ P[f\ g\^2]\ S[f] - 12\ n\ P[f\^2\ g]\ S[g] + 
+              12\ n\^2\ P[f\^2\ g]\ S[g] - 4\ n\ N\ P[f\^2\ g]\ S[g] + 
+              2\ n\^2\ N\ P[f\^2\ g]\ S[g] + 2\ n\ N\^2\ P[f\^2\ g]\ S[g] - 
+              8\ n\^2\ N\^2\ P[f\^2\ g]\ S[g] + 
+              4\ n\ N\^3\ P[f\^2\ g]\ S[g] + 
+              2\ n\^2\ N\^3\ P[f\^2\ g]\ S[g] + 
+              2\ n\ N\^4\ P[f\^2\ g]\ S[g] - 6\ n\ S[f]\^2\ S[g]\^2 - 
+              6\ n\ N\ S[f]\^2\ S[g]\^2 + 10\ n\ N\^2\ S[f]\^2\ S[g]\^2 + 
+              36\ P[f\ g\^2]\ S[f]\ S[J] - 36\ n\ P[f\ g\^2]\ S[f]\ S[J] - 
+              12\ N\ P[f\ g\^2]\ S[f]\ S[J] + 
+              18\ n\ N\ P[f\ g\^2]\ S[f]\ S[J] - 
+              4\ N\^2\ P[f\ g\^2]\ S[f]\ S[J] + 
+              4\ n\ N\^2\ P[f\ g\^2]\ S[f]\ S[J] - 
+              4\ N\^3\ P[f\ g\^2]\ S[f]\ S[J] - 
+              2\ n\ N\^3\ P[f\ g\^2]\ S[f]\ S[J] + 
+              36\ P[f\^2\ g]\ S[g]\ S[J] - 36\ n\ P[f\^2\ g]\ S[g]\ S[J] - 
+              12\ N\ P[f\^2\ g]\ S[g]\ S[J] + 
+              18\ n\ N\ P[f\^2\ g]\ S[g]\ S[J] - 
+              4\ N\^2\ P[f\^2\ g]\ S[g]\ S[J] + 
+              4\ n\ N\^2\ P[f\^2\ g]\ S[g]\ S[J] - 
+              4\ N\^3\ P[f\^2\ g]\ S[g]\ S[J] - 
+              2\ n\ N\^3\ P[f\^2\ g]\ S[g]\ S[J] + 
+              12\ S[f]\^2\ S[g]\^2\ S[J] - 4\ N\ S[f]\^2\ S[g]\^2\ S[J] - 
+              4\ N\^2\ S[f]\^2\ S[g]\^2\ S[J] + 
+              24\ P[f\ g\^2]\ S[f]\ S[J]\^2 - 
+              20\ N\ P[f\ g\^2]\ S[f]\ S[J]\^2 + 
+              4\ N\^2\ P[f\ g\^2]\ S[f]\ S[J]\^2 + 
+              24\ P[f\^2\ g]\ S[g]\ S[J]\^2 - 
+              20\ N\ P[f\^2\ g]\ S[g]\ S[J]\^2 + 
+              4\ N\^2\ P[f\^2\ g]\ S[g]\ S[J]\^2 + 6\ n\ S[g]\^2\ SJ[f] - 
+              6\ n\^2\ S[g]\^2\ SJ[f] - 3\ n\ N\ S[g]\^2\ SJ[f] + 
+              5\ n\^2\ N\ S[g]\^2\ SJ[f] + 2\ n\ N\^2\ S[g]\^2\ SJ[f] - 
+              n\^2\ N\^2\ S[g]\^2\ SJ[f] - 3\ n\ N\^3\ S[g]\^2\ SJ[f] - 
+              12\ S[g]\^2\ S[J]\ SJ[f] + 12\ n\ S[g]\^2\ S[J]\ SJ[f] + 
+              7\ N\ S[g]\^2\ S[J]\ SJ[f] - 10\ n\ N\ S[g]\^2\ S[J]\ SJ[f] + 
+              2\ n\ N\^2\ S[g]\^2\ S[J]\ SJ[f] + N\^3\ S[g]\^2\ S[J]\ SJ[f] - 
+              6\ S[g]\^2\ S[J]\^2\ SJ[f] + 5\ N\ S[g]\^2\ S[J]\^2\ SJ[f] - 
+              N\^2\ S[g]\^2\ S[J]\^2\ SJ[f] + 6\ n\ S[f]\^2\ SJ[g] - 
+              6\ n\^2\ S[f]\^2\ SJ[g] - 3\ n\ N\ S[f]\^2\ SJ[g] + 
+              5\ n\^2\ N\ S[f]\^2\ SJ[g] + 2\ n\ N\^2\ S[f]\^2\ SJ[g] - 
+              n\^2\ N\^2\ S[f]\^2\ SJ[g] - 3\ n\ N\^3\ S[f]\^2\ SJ[g] - 
+              12\ S[f]\^2\ S[J]\ SJ[g] + 12\ n\ S[f]\^2\ S[J]\ SJ[g] + 
+              7\ N\ S[f]\^2\ S[J]\ SJ[g] - 10\ n\ N\ S[f]\^2\ S[J]\ SJ[g] + 
+              2\ n\ N\^2\ S[f]\^2\ S[J]\ SJ[g] + N\^3\ S[f]\^2\ S[J]\ SJ[g] - 
+              6\ S[f]\^2\ S[J]\^2\ SJ[g] + 5\ N\ S[f]\^2\ S[J]\^2\ SJ[g] - 
+              N\^2\ S[f]\^2\ S[J]\^2\ SJ[g] - 6\ n\ SJ[f]\ SJ[g] + 
+              6\ n\^2\ SJ[f]\ SJ[g] + 6\ n\ N\ SJ[f]\ SJ[g] - 
+              5\ n\^2\ N\ SJ[f]\ SJ[g] - 3\ n\ N\^2\ SJ[f]\ SJ[g] + 
+              n\^2\ N\^2\ SJ[f]\ SJ[g] + n\ N\^4\ SJ[f]\ SJ[g] + 
+              12\ S[J]\ SJ[f]\ SJ[g] - 12\ n\ S[J]\ SJ[f]\ SJ[g] - 
+              10\ N\ S[J]\ SJ[f]\ SJ[g] + 10\ n\ N\ S[J]\ SJ[f]\ SJ[g] + 
+              4\ N\^2\ S[J]\ SJ[f]\ SJ[g] - 2\ n\ N\^2\ S[J]\ SJ[f]\ SJ[g] - 
+              2\ N\^3\ S[J]\ SJ[f]\ SJ[g] + 6\ S[J]\^2\ SJ[f]\ SJ[g] - 
+              5\ N\ S[J]\^2\ SJ[f]\ SJ[g] + N\^2\ S[J]\^2\ SJ[f]\ SJ[g] - 
+              24\ P[f\ g\^2]\ S[f]\ SJ[J] + 16\ N\ P[f\ g\^2]\ S[f]\ SJ[J] - 
+              24\ P[f\^2\ g]\ S[g]\ SJ[J] + 16\ N\ P[f\^2\ g]\ S[g]\ SJ[J] - 
+              6\ S[f]\^2\ S[g]\^2\ SJ[J] + 4\ N\ S[f]\^2\ S[g]\^2\ SJ[J] + 
+              6\ S[g]\^2\ SJ[f]\ SJ[J] - 4\ N\ S[g]\^2\ SJ[f]\ SJ[J] + 
+              6\ S[f]\^2\ SJ[g]\ SJ[J] - 4\ N\ S[f]\^2\ SJ[g]\ SJ[J] - 
+              6\ SJ[f]\ SJ[g]\ SJ[J] + 4\ N\ SJ[f]\ SJ[g]\ SJ[J] + 
+              2\ N\^2\ P[f\ g\^2]\ S[
+                  f]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+              2\ N\^4\ P[f\ g\^2]\ S[
+                  f]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) + 
+              2\ N\^2\ P[f\^2\ g]\ S[
+                  g]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+              2\ N\^4\ P[f\^2\ g]\ S[
+                  g]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) + 
+              6\ N\ S[f]\^2\ S[g]\^2\ \(\[Sum]\+\(l$348 = 1\)\%n \
+1\/J[l$348]\) - 
+              6\ N\^2\ S[f]\^2\ S[g]\^2\ \(\[Sum]\+\(l$348 = 1\)\%n \
+1\/J[l$348]\) - 
+              2\ N\^2\ S[g]\^2\ SJ[
+                  f]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) + 
+              2\ N\^3\ S[g]\^2\ SJ[
+                  f]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+              2\ N\^2\ S[f]\^2\ SJ[
+                  g]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) + 
+              2\ N\^3\ S[f]\^2\ SJ[
+                  g]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+              N\^2\ SJ[f]\ SJ[g]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) + 
+              2\ N\^3\ SJ[f]\ SJ[
+                  g]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+              N\^4\ SJ[f]\ SJ[g]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+              2\ P[f\ g]\ S[f]\ S[
+                  g]\ \((\(-6\)\ n + 6\ n\^2 - 5\ n\ N - 5\ n\^2\ N + 
+                    2\ n\ N\^2 + n\^2\ N\^2 + 
+                    5\ n\ N\^3 - \((\(-18\) + 3\ N + 6\ N\^2 + N\^3 + 
+                          2\ n\ \((6 - 5\ N + N\^2)\))\)\ S[
+                        J] + \((6 - 5\ N + N\^2)\)\ S[J]\^2 + 
+                    4\ \((\(-3\) + 2\ N)\)\ SJ[J] + 
+                    4\ N\^2\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+                    4\ N\^3\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\))\) + 
+              P[f\ g]\^2\ \((\(-6\)\ n + 6\ n\^2 + 7\ n\ N - 5\ n\^2\ N - 
+                    11\ n\ N\^2 + n\^2\ N\^2 + 5\ n\ N\^3 + n\ N\^4 - 
+                    2\ \((\(-6\) - N + 2\ N\^2 + N\^3 + 
+                          n\ \((6 - 5\ N + N\^2)\))\)\ S[
+                        J] + \((6 - 5\ N + N\^2)\)\ S[J]\^2 + 
+                    4\ \((\(-3\) + 2\ N)\)\ SJ[J] - 
+                    2\ N\^2\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) + 
+                    4\ N\^3\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+                    2\ N\^4\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\))\) + 
+              P[f\^2\ g\^2]\ \((18\ n - 18\ n\^2 - 3\ n\ N + 3\ n\^2\ N + 
+                    n\^2\ N\^2 + 3\ n\ N\^3 + 3\ n\^2\ N\^3 - 6\ n\ N\^4 - 
+                    n\^2\ N\^4 + 
+                    4\ \((2\ \((\(-6\) + 2\ N + N\^3)\) + 
+                          n\ \((12 - 4\ N - 3\ N\^2 + N\^3)\))\)\ S[J] - 
+                    6\ \((6 - 5\ N + N\^2)\)\ S[J]\^2 + \((36 - 24\ N)\)\ SJ[
+                        J] - N\^3\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) + 
+                    N\^5\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\))\))\) /. 
+        S[J] \[Rule] N]\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(1\/\(\((\(-1\) + N)\)\^2\ N\^2\ \((6 - 5\ N + 
+              N\^2)\)\)\)\((\(-12\)\ n\ P[f\ g\^2]\ S[f] + 
+        12\ n\^2\ P[f\ g\^2]\ S[f] + 36\ N\ P[f\ g\^2]\ S[f] - 
+        40\ n\ N\ P[f\ g\^2]\ S[f] + 2\ n\^2\ N\ P[f\ g\^2]\ S[f] + 
+        12\ N\^2\ P[f\ g\^2]\ S[f] + 20\ n\ N\^2\ P[f\ g\^2]\ S[f] - 
+        8\ n\^2\ N\^2\ P[f\ g\^2]\ S[f] - 24\ N\^3\ P[f\ g\^2]\ S[f] + 
+        8\ n\ N\^3\ P[f\ g\^2]\ S[f] + 2\ n\^2\ N\^3\ P[f\ g\^2]\ S[f] - 
+        12\ n\ P[f\^2\ g]\ S[g] + 12\ n\^2\ P[f\^2\ g]\ S[g] + 
+        36\ N\ P[f\^2\ g]\ S[g] - 40\ n\ N\ P[f\^2\ g]\ S[g] + 
+        2\ n\^2\ N\ P[f\^2\ g]\ S[g] + 12\ N\^2\ P[f\^2\ g]\ S[g] + 
+        20\ n\ N\^2\ P[f\^2\ g]\ S[g] - 8\ n\^2\ N\^2\ P[f\^2\ g]\ S[g] - 
+        24\ N\^3\ P[f\^2\ g]\ S[g] + 8\ n\ N\^3\ P[f\^2\ g]\ S[g] + 
+        2\ n\^2\ N\^3\ P[f\^2\ g]\ S[g] - 6\ n\ S[f]\^2\ S[g]\^2 + 
+        12\ N\ S[f]\^2\ S[g]\^2 - 6\ n\ N\ S[f]\^2\ S[g]\^2 - 
+        4\ N\^2\ S[f]\^2\ S[g]\^2 + 10\ n\ N\^2\ S[f]\^2\ S[g]\^2 - 
+        4\ N\^3\ S[f]\^2\ S[g]\^2 + 6\ n\ S[g]\^2\ SJ[f] - 
+        6\ n\^2\ S[g]\^2\ SJ[f] - 12\ N\ S[g]\^2\ SJ[f] + 
+        9\ n\ N\ S[g]\^2\ SJ[f] + 5\ n\^2\ N\ S[g]\^2\ SJ[f] + 
+        N\^2\ S[g]\^2\ SJ[f] - 8\ n\ N\^2\ S[g]\^2\ SJ[f] - 
+        n\^2\ N\^2\ S[g]\^2\ SJ[f] + 5\ N\^3\ S[g]\^2\ SJ[f] - 
+        n\ N\^3\ S[g]\^2\ SJ[f] + 6\ n\ S[f]\^2\ SJ[g] - 
+        6\ n\^2\ S[f]\^2\ SJ[g] - 12\ N\ S[f]\^2\ SJ[g] + 
+        9\ n\ N\ S[f]\^2\ SJ[g] + 5\ n\^2\ N\ S[f]\^2\ SJ[g] + 
+        N\^2\ S[f]\^2\ SJ[g] - 8\ n\ N\^2\ S[f]\^2\ SJ[g] - 
+        n\^2\ N\^2\ S[f]\^2\ SJ[g] + 5\ N\^3\ S[f]\^2\ SJ[g] - 
+        n\ N\^3\ S[f]\^2\ SJ[g] - 6\ n\ SJ[f]\ SJ[g] + 
+        6\ n\^2\ SJ[f]\ SJ[g] + 12\ N\ SJ[f]\ SJ[g] - 6\ n\ N\ SJ[f]\ SJ[g] - 
+        5\ n\^2\ N\ SJ[f]\ SJ[g] - 4\ N\^2\ SJ[f]\ SJ[g] + 
+        7\ n\ N\^2\ SJ[f]\ SJ[g] + n\^2\ N\^2\ SJ[f]\ SJ[g] - 
+        N\^3\ SJ[f]\ SJ[g] - 2\ n\ N\^3\ SJ[f]\ SJ[g] - N\^4\ SJ[f]\ SJ[g] + 
+        n\ N\^4\ SJ[f]\ SJ[g] - 24\ P[f\ g\^2]\ S[f]\ SJ[J] + 
+        16\ N\ P[f\ g\^2]\ S[f]\ SJ[J] - 24\ P[f\^2\ g]\ S[g]\ SJ[J] + 
+        16\ N\ P[f\^2\ g]\ S[g]\ SJ[J] - 6\ S[f]\^2\ S[g]\^2\ SJ[J] + 
+        4\ N\ S[f]\^2\ S[g]\^2\ SJ[J] + 6\ S[g]\^2\ SJ[f]\ SJ[J] - 
+        4\ N\ S[g]\^2\ SJ[f]\ SJ[J] + 6\ S[f]\^2\ SJ[g]\ SJ[J] - 
+        4\ N\ S[f]\^2\ SJ[g]\ SJ[J] - 6\ SJ[f]\ SJ[g]\ SJ[J] + 
+        4\ N\ SJ[f]\ SJ[g]\ SJ[J] + 
+        2\ N\^2\ P[f\ g\^2]\ S[f]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+        2\ N\^4\ P[f\ g\^2]\ S[f]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) + 
+        2\ N\^2\ P[f\^2\ g]\ S[g]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+        2\ N\^4\ P[f\^2\ g]\ S[g]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) + 
+        6\ N\ S[f]\^2\ S[g]\^2\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+        6\ N\^2\ S[f]\^2\ S[g]\^2\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+        2\ N\^2\ S[g]\^2\ SJ[f]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) + 
+        2\ N\^3\ S[g]\^2\ SJ[f]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+        2\ N\^2\ S[f]\^2\ SJ[g]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) + 
+        2\ N\^3\ S[f]\^2\ SJ[g]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+        N\^2\ SJ[f]\ SJ[g]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) + 
+        2\ N\^3\ SJ[f]\ SJ[g]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+        N\^4\ SJ[f]\ SJ[g]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+        2\ P[f\ g]\ S[f]\ S[
+            g]\ \((\(-6\)\ n + 6\ n\^2 + 18\ N - 17\ n\ N - 5\ n\^2\ N + 
+              3\ N\^2 + 12\ n\ N\^2 + n\^2\ N\^2 - 11\ N\^3 + 3\ n\ N\^3 + 
+              4\ \((\(-3\) + 2\ N)\)\ SJ[J] - 
+              4\ \((\(-1\) + 
+                    N)\)\ N\^2\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\))\) + 
+        P[f\ g]\^2\ \((\(-6\)\ n + 6\ n\^2 + 12\ N - 5\ n\ N - 5\ n\^2\ N + 
+              8\ N\^2 - n\ N\^2 + n\^2\ N\^2 - 9\ N\^3 + 3\ n\ N\^3 - N\^4 + 
+              n\ N\^4 + 4\ \((\(-3\) + 2\ N)\)\ SJ[J] - 
+              2\ \((\(-1\) + N)\)\^2\ N\^2\ \(\[Sum]\+\(l$348 = 1\)\%n \
+1\/J[l$348]\))\) + 
+        P[f\^2\ g\^2]\ \((18\ n - 18\ n\^2 - 48\ N + 45\ n\ N + 3\ n\^2\ N - 
+              20\ N\^2 - 16\ n\ N\^2 + n\^2\ N\^2 + 30\ N\^3 - 9\ n\ N\^3 + 
+              3\ n\^2\ N\^3 + 2\ N\^4 - 2\ n\ N\^4 - 
+              n\^2\ N\^4 + \((36 - 24\ N)\)\ SJ[J] + 
+              N\^3\ \((\(-1\) + 
+                    N\^2)\)\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\))\))\)\)\
+\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(dRewrite[\(1\/\(\((\(-3\) + N)\)\ \((\(-2\) + 
+                  N)\)\ \((\(-1\) + N)\)\^2\ N\^2\)\) \((\(-12\)\ n\ P[
+                f\ g\^2]\ S[f] + 12\ n\^2\ P[f\ g\^2]\ S[f] + 
+            36\ N\ P[f\ g\^2]\ S[f] - 40\ n\ N\ P[f\ g\^2]\ S[f] + 
+            2\ n\^2\ N\ P[f\ g\^2]\ S[f] + 12\ N\^2\ P[f\ g\^2]\ S[f] + 
+            20\ n\ N\^2\ P[f\ g\^2]\ S[f] - 8\ n\^2\ N\^2\ P[f\ g\^2]\ S[f] - 
+            24\ N\^3\ P[f\ g\^2]\ S[f] + 8\ n\ N\^3\ P[f\ g\^2]\ S[f] + 
+            2\ n\^2\ N\^3\ P[f\ g\^2]\ S[f] - 12\ n\ P[f\^2\ g]\ S[g] + 
+            12\ n\^2\ P[f\^2\ g]\ S[g] + 36\ N\ P[f\^2\ g]\ S[g] - 
+            40\ n\ N\ P[f\^2\ g]\ S[g] + 2\ n\^2\ N\ P[f\^2\ g]\ S[g] + 
+            12\ N\^2\ P[f\^2\ g]\ S[g] + 20\ n\ N\^2\ P[f\^2\ g]\ S[g] - 
+            8\ n\^2\ N\^2\ P[f\^2\ g]\ S[g] - 24\ N\^3\ P[f\^2\ g]\ S[g] + 
+            8\ n\ N\^3\ P[f\^2\ g]\ S[g] + 2\ n\^2\ N\^3\ P[f\^2\ g]\ S[g] - 
+            6\ n\ S[f]\^2\ S[g]\^2 + 12\ N\ S[f]\^2\ S[g]\^2 - 
+            6\ n\ N\ S[f]\^2\ S[g]\^2 - 4\ N\^2\ S[f]\^2\ S[g]\^2 + 
+            10\ n\ N\^2\ S[f]\^2\ S[g]\^2 - 4\ N\^3\ S[f]\^2\ S[g]\^2 + 
+            6\ n\ S[g]\^2\ SJ[f] - 6\ n\^2\ S[g]\^2\ SJ[f] - 
+            12\ N\ S[g]\^2\ SJ[f] + 9\ n\ N\ S[g]\^2\ SJ[f] + 
+            5\ n\^2\ N\ S[g]\^2\ SJ[f] + N\^2\ S[g]\^2\ SJ[f] - 
+            8\ n\ N\^2\ S[g]\^2\ SJ[f] - n\^2\ N\^2\ S[g]\^2\ SJ[f] + 
+            5\ N\^3\ S[g]\^2\ SJ[f] - n\ N\^3\ S[g]\^2\ SJ[f] + 
+            6\ n\ S[f]\^2\ SJ[g] - 6\ n\^2\ S[f]\^2\ SJ[g] - 
+            12\ N\ S[f]\^2\ SJ[g] + 9\ n\ N\ S[f]\^2\ SJ[g] + 
+            5\ n\^2\ N\ S[f]\^2\ SJ[g] + N\^2\ S[f]\^2\ SJ[g] - 
+            8\ n\ N\^2\ S[f]\^2\ SJ[g] - n\^2\ N\^2\ S[f]\^2\ SJ[g] + 
+            5\ N\^3\ S[f]\^2\ SJ[g] - n\ N\^3\ S[f]\^2\ SJ[g] - 
+            6\ n\ SJ[f]\ SJ[g] + 6\ n\^2\ SJ[f]\ SJ[g] + 
+            12\ N\ SJ[f]\ SJ[g] - 6\ n\ N\ SJ[f]\ SJ[g] - 
+            5\ n\^2\ N\ SJ[f]\ SJ[g] - 4\ N\^2\ SJ[f]\ SJ[g] + 
+            7\ n\ N\^2\ SJ[f]\ SJ[g] + n\^2\ N\^2\ SJ[f]\ SJ[g] - 
+            N\^3\ SJ[f]\ SJ[g] - 2\ n\ N\^3\ SJ[f]\ SJ[g] - 
+            N\^4\ SJ[f]\ SJ[g] + n\ N\^4\ SJ[f]\ SJ[g] - 
+            24\ P[f\ g\^2]\ S[f]\ SJ[J] + 16\ N\ P[f\ g\^2]\ S[f]\ SJ[J] - 
+            24\ P[f\^2\ g]\ S[g]\ SJ[J] + 16\ N\ P[f\^2\ g]\ S[g]\ SJ[J] - 
+            6\ S[f]\^2\ S[g]\^2\ SJ[J] + 4\ N\ S[f]\^2\ S[g]\^2\ SJ[J] + 
+            6\ S[g]\^2\ SJ[f]\ SJ[J] - 4\ N\ S[g]\^2\ SJ[f]\ SJ[J] + 
+            6\ S[f]\^2\ SJ[g]\ SJ[J] - 4\ N\ S[f]\^2\ SJ[g]\ SJ[J] - 
+            6\ SJ[f]\ SJ[g]\ SJ[J] + 4\ N\ SJ[f]\ SJ[g]\ SJ[J] + 
+            2\ N\^2\ P[f\ g\^2]\ S[
+                f]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+            2\ N\^4\ P[f\ g\^2]\ S[
+                f]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) + 
+            2\ N\^2\ P[f\^2\ g]\ S[
+                g]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+            2\ N\^4\ P[f\^2\ g]\ S[
+                g]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) + 
+            6\ N\ S[f]\^2\ S[g]\^2\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) \
+- 6\ N\^2\ S[f]\^2\ S[g]\^2\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+            2\ N\^2\ S[g]\^2\ SJ[
+                f]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) + 
+            2\ N\^3\ S[g]\^2\ SJ[
+                f]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+            2\ N\^2\ S[f]\^2\ SJ[
+                g]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) + 
+            2\ N\^3\ S[f]\^2\ SJ[
+                g]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+            N\^2\ SJ[f]\ SJ[g]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) + 
+            2\ N\^3\ SJ[f]\ SJ[g]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+            N\^4\ SJ[f]\ SJ[g]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+            2\ P[f\ g]\ S[f]\ S[
+                g]\ \((\(-6\)\ n + 6\ n\^2 + 18\ N - 17\ n\ N - 5\ n\^2\ N + 
+                  3\ N\^2 + 12\ n\ N\^2 + n\^2\ N\^2 - 11\ N\^3 + 
+                  3\ n\ N\^3 + 4\ \((\(-3\) + 2\ N)\)\ SJ[J] - 
+                  4\ \((\(-1\) + 
+                        N)\)\ N\^2\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\))\
+\) + P[f\ g]\^2\ \((\(-6\)\ n + 6\ n\^2 + 12\ N - 5\ n\ N - 5\ n\^2\ N + 
+                  8\ N\^2 - n\ N\^2 + n\^2\ N\^2 - 9\ N\^3 + 3\ n\ N\^3 - 
+                  N\^4 + n\ N\^4 + 4\ \((\(-3\) + 2\ N)\)\ SJ[J] - 
+                  2\ \((\(-1\) + N)\)\^2\ N\^2\ \(\[Sum]\+\(l$348 = 1\)\%n \
+1\/J[l$348]\))\) + 
+            P[f\^2\ g\^2]\ \((18\ n - 18\ n\^2 - 48\ N + 45\ n\ N + 
+                  3\ n\^2\ N - 20\ N\^2 - 16\ n\ N\^2 + n\^2\ N\^2 + 
+                  30\ N\^3 - 9\ n\ N\^3 + 3\ n\^2\ N\^3 + 2\ N\^4 - 
+                  2\ n\ N\^4 - n\^2\ N\^4 + \((36 - 24\ N)\)\ SJ[J] + 
+                  N\^3\ \((\(-1\) + 
+                        N\^2)\)\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\))\))\
+\)]\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(1\/\(\((\(-3\) + N)\)\ \((\(-2\) + 
+              N)\)\ \((\(-1\) + N)\)\^2\ N\^2\)\)\((\(-12\)\ n\ P[f\ g\^2]\ S[
+            f] + 12\ n\^2\ P[f\ g\^2]\ S[f] + 36\ N\ P[f\ g\^2]\ S[f] - 
+        40\ n\ N\ P[f\ g\^2]\ S[f] + 2\ n\^2\ N\ P[f\ g\^2]\ S[f] + 
+        12\ N\^2\ P[f\ g\^2]\ S[f] + 20\ n\ N\^2\ P[f\ g\^2]\ S[f] - 
+        8\ n\^2\ N\^2\ P[f\ g\^2]\ S[f] - 24\ N\^3\ P[f\ g\^2]\ S[f] + 
+        8\ n\ N\^3\ P[f\ g\^2]\ S[f] + 2\ n\^2\ N\^3\ P[f\ g\^2]\ S[f] - 
+        12\ n\ P[f\^2\ g]\ S[g] + 12\ n\^2\ P[f\^2\ g]\ S[g] + 
+        36\ N\ P[f\^2\ g]\ S[g] - 40\ n\ N\ P[f\^2\ g]\ S[g] + 
+        2\ n\^2\ N\ P[f\^2\ g]\ S[g] + 12\ N\^2\ P[f\^2\ g]\ S[g] + 
+        20\ n\ N\^2\ P[f\^2\ g]\ S[g] - 8\ n\^2\ N\^2\ P[f\^2\ g]\ S[g] - 
+        24\ N\^3\ P[f\^2\ g]\ S[g] + 8\ n\ N\^3\ P[f\^2\ g]\ S[g] + 
+        2\ n\^2\ N\^3\ P[f\^2\ g]\ S[g] - 6\ n\ S[f]\^2\ S[g]\^2 + 
+        12\ N\ S[f]\^2\ S[g]\^2 - 6\ n\ N\ S[f]\^2\ S[g]\^2 - 
+        4\ N\^2\ S[f]\^2\ S[g]\^2 + 10\ n\ N\^2\ S[f]\^2\ S[g]\^2 - 
+        4\ N\^3\ S[f]\^2\ S[g]\^2 + 6\ n\ S[g]\^2\ SJ[f] - 
+        6\ n\^2\ S[g]\^2\ SJ[f] - 12\ N\ S[g]\^2\ SJ[f] + 
+        9\ n\ N\ S[g]\^2\ SJ[f] + 5\ n\^2\ N\ S[g]\^2\ SJ[f] + 
+        N\^2\ S[g]\^2\ SJ[f] - 8\ n\ N\^2\ S[g]\^2\ SJ[f] - 
+        n\^2\ N\^2\ S[g]\^2\ SJ[f] + 5\ N\^3\ S[g]\^2\ SJ[f] - 
+        n\ N\^3\ S[g]\^2\ SJ[f] + 6\ n\ S[f]\^2\ SJ[g] - 
+        6\ n\^2\ S[f]\^2\ SJ[g] - 12\ N\ S[f]\^2\ SJ[g] + 
+        9\ n\ N\ S[f]\^2\ SJ[g] + 5\ n\^2\ N\ S[f]\^2\ SJ[g] + 
+        N\^2\ S[f]\^2\ SJ[g] - 8\ n\ N\^2\ S[f]\^2\ SJ[g] - 
+        n\^2\ N\^2\ S[f]\^2\ SJ[g] + 5\ N\^3\ S[f]\^2\ SJ[g] - 
+        n\ N\^3\ S[f]\^2\ SJ[g] - 6\ n\ SJ[f]\ SJ[g] + 
+        6\ n\^2\ SJ[f]\ SJ[g] + 12\ N\ SJ[f]\ SJ[g] - 6\ n\ N\ SJ[f]\ SJ[g] - 
+        5\ n\^2\ N\ SJ[f]\ SJ[g] - 4\ N\^2\ SJ[f]\ SJ[g] + 
+        7\ n\ N\^2\ SJ[f]\ SJ[g] + n\^2\ N\^2\ SJ[f]\ SJ[g] - 
+        N\^3\ SJ[f]\ SJ[g] - 2\ n\ N\^3\ SJ[f]\ SJ[g] - N\^4\ SJ[f]\ SJ[g] + 
+        n\ N\^4\ SJ[f]\ SJ[g] - 24\ P[f\ g\^2]\ S[f]\ SJ[J] + 
+        16\ N\ P[f\ g\^2]\ S[f]\ SJ[J] - 24\ P[f\^2\ g]\ S[g]\ SJ[J] + 
+        16\ N\ P[f\^2\ g]\ S[g]\ SJ[J] - 6\ S[f]\^2\ S[g]\^2\ SJ[J] + 
+        4\ N\ S[f]\^2\ S[g]\^2\ SJ[J] + 6\ S[g]\^2\ SJ[f]\ SJ[J] - 
+        4\ N\ S[g]\^2\ SJ[f]\ SJ[J] + 6\ S[f]\^2\ SJ[g]\ SJ[J] - 
+        4\ N\ S[f]\^2\ SJ[g]\ SJ[J] - 6\ SJ[f]\ SJ[g]\ SJ[J] + 
+        4\ N\ SJ[f]\ SJ[g]\ SJ[J] + 
+        2\ N\^2\ P[f\ g\^2]\ S[f]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+        2\ N\^4\ P[f\ g\^2]\ S[f]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) + 
+        2\ N\^2\ P[f\^2\ g]\ S[g]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+        2\ N\^4\ P[f\^2\ g]\ S[g]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) + 
+        6\ N\ S[f]\^2\ S[g]\^2\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+        6\ N\^2\ S[f]\^2\ S[g]\^2\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+        2\ N\^2\ S[g]\^2\ SJ[f]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) + 
+        2\ N\^3\ S[g]\^2\ SJ[f]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+        2\ N\^2\ S[f]\^2\ SJ[g]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) + 
+        2\ N\^3\ S[f]\^2\ SJ[g]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+        N\^2\ SJ[f]\ SJ[g]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) + 
+        2\ N\^3\ SJ[f]\ SJ[g]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+        N\^4\ SJ[f]\ SJ[g]\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\) - 
+        2\ P[f\ g]\ S[f]\ S[
+            g]\ \((\(-6\)\ n + 6\ n\^2 + 18\ N - 17\ n\ N - 5\ n\^2\ N + 
+              3\ N\^2 + 12\ n\ N\^2 + n\^2\ N\^2 - 11\ N\^3 + 3\ n\ N\^3 + 
+              4\ \((\(-3\) + 2\ N)\)\ SJ[J] - 
+              4\ \((\(-1\) + 
+                    N)\)\ N\^2\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\))\) + 
+        P[f\ g]\^2\ \((\(-6\)\ n + 6\ n\^2 + 12\ N - 5\ n\ N - 5\ n\^2\ N + 
+              8\ N\^2 - n\ N\^2 + n\^2\ N\^2 - 9\ N\^3 + 3\ n\ N\^3 - N\^4 + 
+              n\ N\^4 + 4\ \((\(-3\) + 2\ N)\)\ SJ[J] - 
+              2\ \((\(-1\) + N)\)\^2\ N\^2\ \(\[Sum]\+\(l$348 = 1\)\%n \
+1\/J[l$348]\))\) + 
+        P[f\^2\ g\^2]\ \((18\ n - 18\ n\^2 - 48\ N + 45\ n\ N + 3\ n\^2\ N - 
+              20\ N\^2 - 16\ n\ N\^2 + n\^2\ N\^2 + 30\ N\^3 - 9\ n\ N\^3 + 
+              3\ n\^2\ N\^3 + 2\ N\^4 - 2\ n\ N\^4 - 
+              n\^2\ N\^4 + \((36 - 24\ N)\)\ SJ[J] + 
+              N\^3\ \((\(-1\) + 
+                    N\^2)\)\ \(\[Sum]\+\(l$348 = 1\)\%n 1\/J[l$348]\))\))\)\)\
+\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(w := Expand[\((\(-12\)\ n\ P[f\ g\^2]\ S[f] + 
+              12\ n\^2\ P[f\ g\^2]\ S[f] + 36\ N\ P[f\ g\^2]\ S[f] - 
+              40\ n\ N\ P[f\ g\^2]\ S[f] + 2\ n\^2\ N\ P[f\ g\^2]\ S[f] + 
+              12\ N\^2\ P[f\ g\^2]\ S[f] + 20\ n\ N\^2\ P[f\ g\^2]\ S[f] - 
+              8\ n\^2\ N\^2\ P[f\ g\^2]\ S[f] - 24\ N\^3\ P[f\ g\^2]\ S[f] + 
+              8\ n\ N\^3\ P[f\ g\^2]\ S[f] + 
+              2\ n\^2\ N\^3\ P[f\ g\^2]\ S[f] - 12\ n\ P[f\^2\ g]\ S[g] + 
+              12\ n\^2\ P[f\^2\ g]\ S[g] + 36\ N\ P[f\^2\ g]\ S[g] - 
+              40\ n\ N\ P[f\^2\ g]\ S[g] + 2\ n\^2\ N\ P[f\^2\ g]\ S[g] + 
+              12\ N\^2\ P[f\^2\ g]\ S[g] + 20\ n\ N\^2\ P[f\^2\ g]\ S[g] - 
+              8\ n\^2\ N\^2\ P[f\^2\ g]\ S[g] - 24\ N\^3\ P[f\^2\ g]\ S[g] + 
+              8\ n\ N\^3\ P[f\^2\ g]\ S[g] + 
+              2\ n\^2\ N\^3\ P[f\^2\ g]\ S[g] - 6\ n\ S[f]\^2\ S[g]\^2 + 
+              12\ N\ S[f]\^2\ S[g]\^2 - 6\ n\ N\ S[f]\^2\ S[g]\^2 - 
+              4\ N\^2\ S[f]\^2\ S[g]\^2 + 10\ n\ N\^2\ S[f]\^2\ S[g]\^2 - 
+              4\ N\^3\ S[f]\^2\ S[g]\^2 + 
+              2\ N\^2\ P[f\ g\^2]\ S[f]\ S[1\/J] - 
+              2\ N\^4\ P[f\ g\^2]\ S[f]\ S[1\/J] + 
+              2\ N\^2\ P[f\^2\ g]\ S[g]\ S[1\/J] - 
+              2\ N\^4\ P[f\^2\ g]\ S[g]\ S[1\/J] + 
+              6\ N\ S[f]\^2\ S[g]\^2\ S[1\/J] - 
+              6\ N\^2\ S[f]\^2\ S[g]\^2\ S[1\/J] + 6\ n\ S[g]\^2\ SJ[f] - 
+              6\ n\^2\ S[g]\^2\ SJ[f] - 12\ N\ S[g]\^2\ SJ[f] + 
+              9\ n\ N\ S[g]\^2\ SJ[f] + 5\ n\^2\ N\ S[g]\^2\ SJ[f] + 
+              N\^2\ S[g]\^2\ SJ[f] - 8\ n\ N\^2\ S[g]\^2\ SJ[f] - 
+              n\^2\ N\^2\ S[g]\^2\ SJ[f] + 5\ N\^3\ S[g]\^2\ SJ[f] - 
+              n\ N\^3\ S[g]\^2\ SJ[f] - 2\ N\^2\ S[g]\^2\ S[1\/J]\ SJ[f] + 
+              2\ N\^3\ S[g]\^2\ S[1\/J]\ SJ[f] + 6\ n\ S[f]\^2\ SJ[g] - 
+              6\ n\^2\ S[f]\^2\ SJ[g] - 12\ N\ S[f]\^2\ SJ[g] + 
+              9\ n\ N\ S[f]\^2\ SJ[g] + 5\ n\^2\ N\ S[f]\^2\ SJ[g] + 
+              N\^2\ S[f]\^2\ SJ[g] - 8\ n\ N\^2\ S[f]\^2\ SJ[g] - 
+              n\^2\ N\^2\ S[f]\^2\ SJ[g] + 5\ N\^3\ S[f]\^2\ SJ[g] - 
+              n\ N\^3\ S[f]\^2\ SJ[g] - 2\ N\^2\ S[f]\^2\ S[1\/J]\ SJ[g] + 
+              2\ N\^3\ S[f]\^2\ S[1\/J]\ SJ[g] - 6\ n\ SJ[f]\ SJ[g] + 
+              6\ n\^2\ SJ[f]\ SJ[g] + 12\ N\ SJ[f]\ SJ[g] - 
+              6\ n\ N\ SJ[f]\ SJ[g] - 5\ n\^2\ N\ SJ[f]\ SJ[g] - 
+              4\ N\^2\ SJ[f]\ SJ[g] + 7\ n\ N\^2\ SJ[f]\ SJ[g] + 
+              n\^2\ N\^2\ SJ[f]\ SJ[g] - N\^3\ SJ[f]\ SJ[g] - 
+              2\ n\ N\^3\ SJ[f]\ SJ[g] - N\^4\ SJ[f]\ SJ[g] + 
+              n\ N\^4\ SJ[f]\ SJ[g] - N\^2\ S[1\/J]\ SJ[f]\ SJ[g] + 
+              2\ N\^3\ S[1\/J]\ SJ[f]\ SJ[g] - N\^4\ S[1\/J]\ SJ[f]\ SJ[g] - 
+              24\ P[f\ g\^2]\ S[f]\ SJ[J] + 16\ N\ P[f\ g\^2]\ S[f]\ SJ[J] - 
+              24\ P[f\^2\ g]\ S[g]\ SJ[J] + 16\ N\ P[f\^2\ g]\ S[g]\ SJ[J] - 
+              6\ S[f]\^2\ S[g]\^2\ SJ[J] + 4\ N\ S[f]\^2\ S[g]\^2\ SJ[J] + 
+              6\ S[g]\^2\ SJ[f]\ SJ[J] - 4\ N\ S[g]\^2\ SJ[f]\ SJ[J] + 
+              6\ S[f]\^2\ SJ[g]\ SJ[J] - 4\ N\ S[f]\^2\ SJ[g]\ SJ[J] - 
+              6\ SJ[f]\ SJ[g]\ SJ[J] + 4\ N\ SJ[f]\ SJ[g]\ SJ[J] + 
+              P[f\^2\ g\^2]\ \((18\ n - 18\ n\^2 - 48\ N + 45\ n\ N + 
+                    3\ n\^2\ N - 20\ N\^2 - 16\ n\ N\^2 + n\^2\ N\^2 + 
+                    30\ N\^3 - 9\ n\ N\^3 + 3\ n\^2\ N\^3 + 2\ N\^4 - 
+                    2\ n\ N\^4 - n\^2\ N\^4 + 
+                    N\^3\ \((\(-1\) + N\^2)\)\ S[1\/J] + \((36 - 24\ N)\)\ SJ[
+                        J])\) - 
+              2\ P[f\ g]\ S[f]\ S[
+                  g]\ \((\(-6\)\ n + 6\ n\^2 + 18\ N - 17\ n\ N - 
+                    5\ n\^2\ N + 3\ N\^2 + 12\ n\ N\^2 + n\^2\ N\^2 - 
+                    11\ N\^3 + 3\ n\ N\^3 - 
+                    4\ \((\(-1\) + N)\)\ N\^2\ S[1\/J] + 
+                    4\ \((\(-3\) + 2\ N)\)\ SJ[J])\) + 
+              P[f\ g]\^2\ \((\(-6\)\ n + 6\ n\^2 + 12\ N - 5\ n\ N - 
+                    5\ n\^2\ N + 8\ N\^2 - n\ N\^2 + n\^2\ N\^2 - 9\ N\^3 + 
+                    3\ n\ N\^3 - N\^4 + n\ N\^4 - 
+                    2\ \((\(-1\) + N)\)\^2\ N\^2\ S[1\/J] + 
+                    4\ \((\(-3\) + 2\ N)\)\ SJ[J])\))\) /. {SJ[J] \[Rule] 
+              N^2/n, S[1/J] \[Rule] n^2/N}]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\((Simplify[extractTerms[w, P[f\ g^2] S[f]]])\) P[f\ g^2] 
+        S[f] + \((Simplify[extractTerms[w, P[f^2\ g] S[g]]])\) P[f^2  g] 
+        S[g]\)], "Input"],
+
+Cell[BoxData[
+    \(extractTerms[\(-\(\(1\/n\)\((\((\(-1\) + 
+                    n)\)\ \((\((4\ N\^2\ \((\(-3\) + 2\ N)\) - 
+                          n\ N\ \((\(-12\) + 4\ N + N\^2 + N\^3)\) + 
+                          n\^2\ \((\(-6\) + 7\ N - 5\ N\^2 + 
+                                2\ N\^3)\))\)\ P[f\ g]\^2 + \((12\ \((3 - 
+                                2\ N)\)\ N\^2 - 
+                          3\ n\^2\ \((\(-6\) + N + N\^3)\) + 
+                          2\ n\ N\ \((\(-24\) + 8\ N + 3\ N\^2 + 
+                                N\^3)\))\)\ P[f\^2\ g\^2] - 
+                    2\ \((4\ N\^2\ \((\(-3\) + 2\ N)\) - 
+                          3\ n\ N\ \((\(-6\) + 3\ N + N\^2)\) + 
+                          n\^2\ \((\(-6\) + N + 3\ N\^2)\))\)\ P[f\ g]\ S[
+                        f]\ S[g] + \((n - 
+                          N)\)\ \((4\ \((\(-3\) + 2\ N)\)\ \((n - 2\ N + 
+                                n\ N)\)\ P[f\ g\^2]\ S[f] + 
+                          4\ \((\(-3\) + 2\ N)\)\ \((n - 2\ N + n\ N)\)\ P[
+                              f\^2\ g]\ S[g] - 6\ n\ S[f]\^2\ S[g]\^2 + 
+                          6\ N\ S[f]\^2\ S[g]\^2 + 
+                          6\ n\ N\ S[f]\^2\ S[g]\^2 - 
+                          4\ N\^2\ S[f]\^2\ S[g]\^2 + 6\ n\ S[g]\^2\ SJ[f] - 
+                          6\ N\ S[g]\^2\ SJ[f] - 3\ n\ N\ S[g]\^2\ SJ[f] + 
+                          4\ N\^2\ S[g]\^2\ SJ[f] - n\ N\^2\ S[g]\^2\ SJ[f] + 
+                          6\ n\ S[f]\^2\ SJ[g] - 6\ N\ S[f]\^2\ SJ[g] - 
+                          3\ n\ N\ S[f]\^2\ SJ[g] + 4\ N\^2\ S[f]\^2\ SJ[g] - 
+                          n\ N\^2\ S[f]\^2\ SJ[g] - 6\ n\ SJ[f]\ SJ[g] + 
+                          6\ N\ SJ[f]\ SJ[g] + 6\ n\ N\ SJ[f]\ SJ[g] - 
+                          4\ N\^2\ SJ[f]\ SJ[g] - 3\ n\ N\^2\ SJ[f]\ SJ[g] + 
+                          n\ N\^3\ SJ[f]\ SJ[g])\))\))\)\)\), 
+          P[f\ g\^2]\ S[f]]\ P[f\ g\^2]\ S[f] + 
+      extractTerms[\(-\(\(1\/n\)\((\((\(-1\) + 
+                    n)\)\ \((\((4\ N\^2\ \((\(-3\) + 2\ N)\) - 
+                          n\ N\ \((\(-12\) + 4\ N + N\^2 + N\^3)\) + 
+                          n\^2\ \((\(-6\) + 7\ N - 5\ N\^2 + 
+                                2\ N\^3)\))\)\ P[f\ g]\^2 + \((12\ \((3 - 
+                                2\ N)\)\ N\^2 - 
+                          3\ n\^2\ \((\(-6\) + N + N\^3)\) + 
+                          2\ n\ N\ \((\(-24\) + 8\ N + 3\ N\^2 + 
+                                N\^3)\))\)\ P[f\^2\ g\^2] - 
+                    2\ \((4\ N\^2\ \((\(-3\) + 2\ N)\) - 
+                          3\ n\ N\ \((\(-6\) + 3\ N + N\^2)\) + 
+                          n\^2\ \((\(-6\) + N + 3\ N\^2)\))\)\ P[f\ g]\ S[
+                        f]\ S[g] + \((n - 
+                          N)\)\ \((4\ \((\(-3\) + 2\ N)\)\ \((n - 2\ N + 
+                                n\ N)\)\ P[f\ g\^2]\ S[f] + 
+                          4\ \((\(-3\) + 2\ N)\)\ \((n - 2\ N + n\ N)\)\ P[
+                              f\^2\ g]\ S[g] - 6\ n\ S[f]\^2\ S[g]\^2 + 
+                          6\ N\ S[f]\^2\ S[g]\^2 + 
+                          6\ n\ N\ S[f]\^2\ S[g]\^2 - 
+                          4\ N\^2\ S[f]\^2\ S[g]\^2 + 6\ n\ S[g]\^2\ SJ[f] - 
+                          6\ N\ S[g]\^2\ SJ[f] - 3\ n\ N\ S[g]\^2\ SJ[f] + 
+                          4\ N\^2\ S[g]\^2\ SJ[f] - n\ N\^2\ S[g]\^2\ SJ[f] + 
+                          6\ n\ S[f]\^2\ SJ[g] - 6\ N\ S[f]\^2\ SJ[g] - 
+                          3\ n\ N\ S[f]\^2\ SJ[g] + 4\ N\^2\ S[f]\^2\ SJ[g] - 
+                          n\ N\^2\ S[f]\^2\ SJ[g] - 6\ n\ SJ[f]\ SJ[g] + 
+                          6\ N\ SJ[f]\ SJ[g] + 6\ n\ N\ SJ[f]\ SJ[g] - 
+                          4\ N\^2\ SJ[f]\ SJ[g] - 3\ n\ N\^2\ SJ[f]\ SJ[g] + 
+                          n\ N\^3\ SJ[f]\ SJ[g])\))\))\)\)\), 
+          P[f\^2\ g]\ S[g]]\ P[f\^2\ g]\ S[g]\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(DSimplify[DSimplify[Var[M]]]\)\(\ \)\( (*\ 
+      simplified\ *) \)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(1\/N\^4\)\((2\ n\ N\^2\ P[f\ g\^2]\ S[f] + 
+        2\ n\ N\^2\ P[f\^2\ g]\ S[g] - 4\ N\ P[f\ g\^2]\ S[f]\ S[J] - 
+        2\ n\ N\ P[f\ g\^2]\ S[f]\ S[J] - 4\ N\ P[f\^2\ g]\ S[g]\ S[J] - 
+        2\ n\ N\ P[f\^2\ g]\ S[g]\ S[J] + 
+        2\ P[f\ g]\ S[f]\ S[g]\ \((N - S[J])\)\ S[J] + 
+        4\ P[f\ g\^2]\ S[f]\ S[J]\^2 + 4\ P[f\^2\ g]\ S[g]\ S[J]\^2 + 
+        P[f\ g]\^2\ \((n\ N\^2 - 2\ N\ S[J] + S[J]\^2)\) + 
+        N\ S[g]\^2\ S[J]\ SJ[f] - S[g]\^2\ S[J]\^2\ SJ[f] + 
+        N\ S[f]\^2\ S[J]\ SJ[g] - S[f]\^2\ S[J]\^2\ SJ[g] + 
+        n\ N\^2\ SJ[f]\ SJ[g] - 2\ N\ S[J]\ SJ[f]\ SJ[g] + 
+        S[J]\^2\ SJ[f]\ SJ[g] + 
+        P[f\^2\ g\^2]\ \((4\ \((2 + n)\)\ N\ S[J] - 6\ S[J]\^2 + 
+              N\^2\ \((\(-n\)\ \((6 + n)\) + 
+                    N\ \(\[Sum]\+\(l$20230 = 1\)\%n \
+1\/J[l$20230]\))\))\))\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\((\((\((w /. {_Integer\ x_ \[Rule] x})\) /. {n \[Rule] 1, 
+              N \[Rule] 1})\) /. _Integer\ x_ \[Rule] x)\)\)], "Input"],
+
+Cell[BoxData[
+    \(P[f\ g]\^2 + P[f\^2\ g\^2] + P[f\ g\^2]\ S[f] + P[f\^2\ g]\ S[g] + 
+      P[f\ g]\ S[f]\ S[g] + S[f]\^2\ S[g]\^2 + S[g]\^2\ SJ[f] + 
+      S[f]\^2\ SJ[g] + SJ[f]\ SJ[g]\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(Lst\  := 
+      P[f\ g]\^2 + P[f\^2\ g\^2] + P[f\ g\^2]\ S[f] + P[f\^2\ g]\ S[g] + 
+        P[f\ g]\ S[f]\ S[g] + S[f]\^2\ S[g]\^2 + S[g]\^2\ SJ[f] + 
+        S[f]\^2\ SJ[g] + SJ[f]\ SJ[g]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Map[\ Function[x, \((Simplify[extractTerms[w, x]])\) x], \ 
+      Lst]\)], "Input"],
+
+Cell[BoxData[
+    \(extractTerms[\(-\(\(1\/n\)\((\((\(-1\) + 
+                    n)\)\ \((\((4\ N\^2\ \((\(-3\) + 2\ N)\) - 
+                          n\ N\ \((\(-12\) + 4\ N + N\^2 + N\^3)\) + 
+                          n\^2\ \((\(-6\) + 7\ N - 5\ N\^2 + 
+                                2\ N\^3)\))\)\ P[f\ g]\^2 + \((12\ \((3 - 
+                                2\ N)\)\ N\^2 - 
+                          3\ n\^2\ \((\(-6\) + N + N\^3)\) + 
+                          2\ n\ N\ \((\(-24\) + 8\ N + 3\ N\^2 + 
+                                N\^3)\))\)\ P[f\^2\ g\^2] - 
+                    2\ \((4\ N\^2\ \((\(-3\) + 2\ N)\) - 
+                          3\ n\ N\ \((\(-6\) + 3\ N + N\^2)\) + 
+                          n\^2\ \((\(-6\) + N + 3\ N\^2)\))\)\ P[f\ g]\ S[
+                        f]\ S[g] + \((n - 
+                          N)\)\ \((4\ \((\(-3\) + 2\ N)\)\ \((n - 2\ N + 
+                                n\ N)\)\ P[f\ g\^2]\ S[f] + 
+                          4\ \((\(-3\) + 2\ N)\)\ \((n - 2\ N + n\ N)\)\ P[
+                              f\^2\ g]\ S[g] - 6\ n\ S[f]\^2\ S[g]\^2 + 
+                          6\ N\ S[f]\^2\ S[g]\^2 + 
+                          6\ n\ N\ S[f]\^2\ S[g]\^2 - 
+                          4\ N\^2\ S[f]\^2\ S[g]\^2 + 6\ n\ S[g]\^2\ SJ[f] - 
+                          6\ N\ S[g]\^2\ SJ[f] - 3\ n\ N\ S[g]\^2\ SJ[f] + 
+                          4\ N\^2\ S[g]\^2\ SJ[f] - n\ N\^2\ S[g]\^2\ SJ[f] + 
+                          6\ n\ S[f]\^2\ SJ[g] - 6\ N\ S[f]\^2\ SJ[g] - 
+                          3\ n\ N\ S[f]\^2\ SJ[g] + 4\ N\^2\ S[f]\^2\ SJ[g] - 
+                          n\ N\^2\ S[f]\^2\ SJ[g] - 6\ n\ SJ[f]\ SJ[g] + 
+                          6\ N\ SJ[f]\ SJ[g] + 6\ n\ N\ SJ[f]\ SJ[g] - 
+                          4\ N\^2\ SJ[f]\ SJ[g] - 3\ n\ N\^2\ SJ[f]\ SJ[g] + 
+                          n\ N\^3\ SJ[f]\ SJ[g])\))\))\)\)\), 
+          P[f\ g]\^2]\ P[f\ g]\^2 + 
+      extractTerms[\(-\(\(1\/n\)\((\((\(-1\) + 
+                    n)\)\ \((\((4\ N\^2\ \((\(-3\) + 2\ N)\) - 
+                          n\ N\ \((\(-12\) + 4\ N + N\^2 + N\^3)\) + 
+                          n\^2\ \((\(-6\) + 7\ N - 5\ N\^2 + 
+                                2\ N\^3)\))\)\ P[f\ g]\^2 + \((12\ \((3 - 
+                                2\ N)\)\ N\^2 - 
+                          3\ n\^2\ \((\(-6\) + N + N\^3)\) + 
+                          2\ n\ N\ \((\(-24\) + 8\ N + 3\ N\^2 + 
+                                N\^3)\))\)\ P[f\^2\ g\^2] - 
+                    2\ \((4\ N\^2\ \((\(-3\) + 2\ N)\) - 
+                          3\ n\ N\ \((\(-6\) + 3\ N + N\^2)\) + 
+                          n\^2\ \((\(-6\) + N + 3\ N\^2)\))\)\ P[f\ g]\ S[
+                        f]\ S[g] + \((n - 
+                          N)\)\ \((4\ \((\(-3\) + 2\ N)\)\ \((n - 2\ N + 
+                                n\ N)\)\ P[f\ g\^2]\ S[f] + 
+                          4\ \((\(-3\) + 2\ N)\)\ \((n - 2\ N + n\ N)\)\ P[
+                              f\^2\ g]\ S[g] - 6\ n\ S[f]\^2\ S[g]\^2 + 
+                          6\ N\ S[f]\^2\ S[g]\^2 + 
+                          6\ n\ N\ S[f]\^2\ S[g]\^2 - 
+                          4\ N\^2\ S[f]\^2\ S[g]\^2 + 6\ n\ S[g]\^2\ SJ[f] - 
+                          6\ N\ S[g]\^2\ SJ[f] - 3\ n\ N\ S[g]\^2\ SJ[f] + 
+                          4\ N\^2\ S[g]\^2\ SJ[f] - n\ N\^2\ S[g]\^2\ SJ[f] + 
+                          6\ n\ S[f]\^2\ SJ[g] - 6\ N\ S[f]\^2\ SJ[g] - 
+                          3\ n\ N\ S[f]\^2\ SJ[g] + 4\ N\^2\ S[f]\^2\ SJ[g] - 
+                          n\ N\^2\ S[f]\^2\ SJ[g] - 6\ n\ SJ[f]\ SJ[g] + 
+                          6\ N\ SJ[f]\ SJ[g] + 6\ n\ N\ SJ[f]\ SJ[g] - 
+                          4\ N\^2\ SJ[f]\ SJ[g] - 3\ n\ N\^2\ SJ[f]\ SJ[g] + 
+                          n\ N\^3\ SJ[f]\ SJ[g])\))\))\)\)\), 
+          P[f\^2\ g\^2]]\ P[f\^2\ g\^2] + 
+      extractTerms[\(-\(\(1\/n\)\((\((\(-1\) + 
+                    n)\)\ \((\((4\ N\^2\ \((\(-3\) + 2\ N)\) - 
+                          n\ N\ \((\(-12\) + 4\ N + N\^2 + N\^3)\) + 
+                          n\^2\ \((\(-6\) + 7\ N - 5\ N\^2 + 
+                                2\ N\^3)\))\)\ P[f\ g]\^2 + \((12\ \((3 - 
+                                2\ N)\)\ N\^2 - 
+                          3\ n\^2\ \((\(-6\) + N + N\^3)\) + 
+                          2\ n\ N\ \((\(-24\) + 8\ N + 3\ N\^2 + 
+                                N\^3)\))\)\ P[f\^2\ g\^2] - 
+                    2\ \((4\ N\^2\ \((\(-3\) + 2\ N)\) - 
+                          3\ n\ N\ \((\(-6\) + 3\ N + N\^2)\) + 
+                          n\^2\ \((\(-6\) + N + 3\ N\^2)\))\)\ P[f\ g]\ S[
+                        f]\ S[g] + \((n - 
+                          N)\)\ \((4\ \((\(-3\) + 2\ N)\)\ \((n - 2\ N + 
+                                n\ N)\)\ P[f\ g\^2]\ S[f] + 
+                          4\ \((\(-3\) + 2\ N)\)\ \((n - 2\ N + n\ N)\)\ P[
+                              f\^2\ g]\ S[g] - 6\ n\ S[f]\^2\ S[g]\^2 + 
+                          6\ N\ S[f]\^2\ S[g]\^2 + 
+                          6\ n\ N\ S[f]\^2\ S[g]\^2 - 
+                          4\ N\^2\ S[f]\^2\ S[g]\^2 + 6\ n\ S[g]\^2\ SJ[f] - 
+                          6\ N\ S[g]\^2\ SJ[f] - 3\ n\ N\ S[g]\^2\ SJ[f] + 
+                          4\ N\^2\ S[g]\^2\ SJ[f] - n\ N\^2\ S[g]\^2\ SJ[f] + 
+                          6\ n\ S[f]\^2\ SJ[g] - 6\ N\ S[f]\^2\ SJ[g] - 
+                          3\ n\ N\ S[f]\^2\ SJ[g] + 4\ N\^2\ S[f]\^2\ SJ[g] - 
+                          n\ N\^2\ S[f]\^2\ SJ[g] - 6\ n\ SJ[f]\ SJ[g] + 
+                          6\ N\ SJ[f]\ SJ[g] + 6\ n\ N\ SJ[f]\ SJ[g] - 
+                          4\ N\^2\ SJ[f]\ SJ[g] - 3\ n\ N\^2\ SJ[f]\ SJ[g] + 
+                          n\ N\^3\ SJ[f]\ SJ[g])\))\))\)\)\), 
+          P[f\ g\^2]\ S[f]]\ P[f\ g\^2]\ S[f] + 
+      extractTerms[\(-\(\(1\/n\)\((\((\(-1\) + 
+                    n)\)\ \((\((4\ N\^2\ \((\(-3\) + 2\ N)\) - 
+                          n\ N\ \((\(-12\) + 4\ N + N\^2 + N\^3)\) + 
+                          n\^2\ \((\(-6\) + 7\ N - 5\ N\^2 + 
+                                2\ N\^3)\))\)\ P[f\ g]\^2 + \((12\ \((3 - 
+                                2\ N)\)\ N\^2 - 
+                          3\ n\^2\ \((\(-6\) + N + N\^3)\) + 
+                          2\ n\ N\ \((\(-24\) + 8\ N + 3\ N\^2 + 
+                                N\^3)\))\)\ P[f\^2\ g\^2] - 
+                    2\ \((4\ N\^2\ \((\(-3\) + 2\ N)\) - 
+                          3\ n\ N\ \((\(-6\) + 3\ N + N\^2)\) + 
+                          n\^2\ \((\(-6\) + N + 3\ N\^2)\))\)\ P[f\ g]\ S[
+                        f]\ S[g] + \((n - 
+                          N)\)\ \((4\ \((\(-3\) + 2\ N)\)\ \((n - 2\ N + 
+                                n\ N)\)\ P[f\ g\^2]\ S[f] + 
+                          4\ \((\(-3\) + 2\ N)\)\ \((n - 2\ N + n\ N)\)\ P[
+                              f\^2\ g]\ S[g] - 6\ n\ S[f]\^2\ S[g]\^2 + 
+                          6\ N\ S[f]\^2\ S[g]\^2 + 
+                          6\ n\ N\ S[f]\^2\ S[g]\^2 - 
+                          4\ N\^2\ S[f]\^2\ S[g]\^2 + 6\ n\ S[g]\^2\ SJ[f] - 
+                          6\ N\ S[g]\^2\ SJ[f] - 3\ n\ N\ S[g]\^2\ SJ[f] + 
+                          4\ N\^2\ S[g]\^2\ SJ[f] - n\ N\^2\ S[g]\^2\ SJ[f] + 
+                          6\ n\ S[f]\^2\ SJ[g] - 6\ N\ S[f]\^2\ SJ[g] - 
+                          3\ n\ N\ S[f]\^2\ SJ[g] + 4\ N\^2\ S[f]\^2\ SJ[g] - 
+                          n\ N\^2\ S[f]\^2\ SJ[g] - 6\ n\ SJ[f]\ SJ[g] + 
+                          6\ N\ SJ[f]\ SJ[g] + 6\ n\ N\ SJ[f]\ SJ[g] - 
+                          4\ N\^2\ SJ[f]\ SJ[g] - 3\ n\ N\^2\ SJ[f]\ SJ[g] + 
+                          n\ N\^3\ SJ[f]\ SJ[g])\))\))\)\)\), 
+          P[f\^2\ g]\ S[g]]\ P[f\^2\ g]\ S[g] + 
+      extractTerms[\(-\(\(1\/n\)\((\((\(-1\) + 
+                    n)\)\ \((\((4\ N\^2\ \((\(-3\) + 2\ N)\) - 
+                          n\ N\ \((\(-12\) + 4\ N + N\^2 + N\^3)\) + 
+                          n\^2\ \((\(-6\) + 7\ N - 5\ N\^2 + 
+                                2\ N\^3)\))\)\ P[f\ g]\^2 + \((12\ \((3 - 
+                                2\ N)\)\ N\^2 - 
+                          3\ n\^2\ \((\(-6\) + N + N\^3)\) + 
+                          2\ n\ N\ \((\(-24\) + 8\ N + 3\ N\^2 + 
+                                N\^3)\))\)\ P[f\^2\ g\^2] - 
+                    2\ \((4\ N\^2\ \((\(-3\) + 2\ N)\) - 
+                          3\ n\ N\ \((\(-6\) + 3\ N + N\^2)\) + 
+                          n\^2\ \((\(-6\) + N + 3\ N\^2)\))\)\ P[f\ g]\ S[
+                        f]\ S[g] + \((n - 
+                          N)\)\ \((4\ \((\(-3\) + 2\ N)\)\ \((n - 2\ N + 
+                                n\ N)\)\ P[f\ g\^2]\ S[f] + 
+                          4\ \((\(-3\) + 2\ N)\)\ \((n - 2\ N + n\ N)\)\ P[
+                              f\^2\ g]\ S[g] - 6\ n\ S[f]\^2\ S[g]\^2 + 
+                          6\ N\ S[f]\^2\ S[g]\^2 + 
+                          6\ n\ N\ S[f]\^2\ S[g]\^2 - 
+                          4\ N\^2\ S[f]\^2\ S[g]\^2 + 6\ n\ S[g]\^2\ SJ[f] - 
+                          6\ N\ S[g]\^2\ SJ[f] - 3\ n\ N\ S[g]\^2\ SJ[f] + 
+                          4\ N\^2\ S[g]\^2\ SJ[f] - n\ N\^2\ S[g]\^2\ SJ[f] + 
+                          6\ n\ S[f]\^2\ SJ[g] - 6\ N\ S[f]\^2\ SJ[g] - 
+                          3\ n\ N\ S[f]\^2\ SJ[g] + 4\ N\^2\ S[f]\^2\ SJ[g] - 
+                          n\ N\^2\ S[f]\^2\ SJ[g] - 6\ n\ SJ[f]\ SJ[g] + 
+                          6\ N\ SJ[f]\ SJ[g] + 6\ n\ N\ SJ[f]\ SJ[g] - 
+                          4\ N\^2\ SJ[f]\ SJ[g] - 3\ n\ N\^2\ SJ[f]\ SJ[g] + 
+                          n\ N\^3\ SJ[f]\ SJ[g])\))\))\)\)\), 
+          P[f\ g]\ S[f]\ S[g]]\ P[f\ g]\ S[f]\ S[g] + 
+      extractTerms[\(-\(\(1\/n\)\((\((\(-1\) + 
+                    n)\)\ \((\((4\ N\^2\ \((\(-3\) + 2\ N)\) - 
+                          n\ N\ \((\(-12\) + 4\ N + N\^2 + N\^3)\) + 
+                          n\^2\ \((\(-6\) + 7\ N - 5\ N\^2 + 
+                                2\ N\^3)\))\)\ P[f\ g]\^2 + \((12\ \((3 - 
+                                2\ N)\)\ N\^2 - 
+                          3\ n\^2\ \((\(-6\) + N + N\^3)\) + 
+                          2\ n\ N\ \((\(-24\) + 8\ N + 3\ N\^2 + 
+                                N\^3)\))\)\ P[f\^2\ g\^2] - 
+                    2\ \((4\ N\^2\ \((\(-3\) + 2\ N)\) - 
+                          3\ n\ N\ \((\(-6\) + 3\ N + N\^2)\) + 
+                          n\^2\ \((\(-6\) + N + 3\ N\^2)\))\)\ P[f\ g]\ S[
+                        f]\ S[g] + \((n - 
+                          N)\)\ \((4\ \((\(-3\) + 2\ N)\)\ \((n - 2\ N + 
+                                n\ N)\)\ P[f\ g\^2]\ S[f] + 
+                          4\ \((\(-3\) + 2\ N)\)\ \((n - 2\ N + n\ N)\)\ P[
+                              f\^2\ g]\ S[g] - 6\ n\ S[f]\^2\ S[g]\^2 + 
+                          6\ N\ S[f]\^2\ S[g]\^2 + 
+                          6\ n\ N\ S[f]\^2\ S[g]\^2 - 
+                          4\ N\^2\ S[f]\^2\ S[g]\^2 + 6\ n\ S[g]\^2\ SJ[f] - 
+                          6\ N\ S[g]\^2\ SJ[f] - 3\ n\ N\ S[g]\^2\ SJ[f] + 
+                          4\ N\^2\ S[g]\^2\ SJ[f] - n\ N\^2\ S[g]\^2\ SJ[f] + 
+                          6\ n\ S[f]\^2\ SJ[g] - 6\ N\ S[f]\^2\ SJ[g] - 
+                          3\ n\ N\ S[f]\^2\ SJ[g] + 4\ N\^2\ S[f]\^2\ SJ[g] - 
+                          n\ N\^2\ S[f]\^2\ SJ[g] - 6\ n\ SJ[f]\ SJ[g] + 
+                          6\ N\ SJ[f]\ SJ[g] + 6\ n\ N\ SJ[f]\ SJ[g] - 
+                          4\ N\^2\ SJ[f]\ SJ[g] - 3\ n\ N\^2\ SJ[f]\ SJ[g] + 
+                          n\ N\^3\ SJ[f]\ SJ[g])\))\))\)\)\), 
+          S[f]\^2\ S[g]\^2]\ S[f]\^2\ S[g]\^2 + 
+      extractTerms[\(-\(\(1\/n\)\((\((\(-1\) + 
+                    n)\)\ \((\((4\ N\^2\ \((\(-3\) + 2\ N)\) - 
+                          n\ N\ \((\(-12\) + 4\ N + N\^2 + N\^3)\) + 
+                          n\^2\ \((\(-6\) + 7\ N - 5\ N\^2 + 
+                                2\ N\^3)\))\)\ P[f\ g]\^2 + \((12\ \((3 - 
+                                2\ N)\)\ N\^2 - 
+                          3\ n\^2\ \((\(-6\) + N + N\^3)\) + 
+                          2\ n\ N\ \((\(-24\) + 8\ N + 3\ N\^2 + 
+                                N\^3)\))\)\ P[f\^2\ g\^2] - 
+                    2\ \((4\ N\^2\ \((\(-3\) + 2\ N)\) - 
+                          3\ n\ N\ \((\(-6\) + 3\ N + N\^2)\) + 
+                          n\^2\ \((\(-6\) + N + 3\ N\^2)\))\)\ P[f\ g]\ S[
+                        f]\ S[g] + \((n - 
+                          N)\)\ \((4\ \((\(-3\) + 2\ N)\)\ \((n - 2\ N + 
+                                n\ N)\)\ P[f\ g\^2]\ S[f] + 
+                          4\ \((\(-3\) + 2\ N)\)\ \((n - 2\ N + n\ N)\)\ P[
+                              f\^2\ g]\ S[g] - 6\ n\ S[f]\^2\ S[g]\^2 + 
+                          6\ N\ S[f]\^2\ S[g]\^2 + 
+                          6\ n\ N\ S[f]\^2\ S[g]\^2 - 
+                          4\ N\^2\ S[f]\^2\ S[g]\^2 + 6\ n\ S[g]\^2\ SJ[f] - 
+                          6\ N\ S[g]\^2\ SJ[f] - 3\ n\ N\ S[g]\^2\ SJ[f] + 
+                          4\ N\^2\ S[g]\^2\ SJ[f] - n\ N\^2\ S[g]\^2\ SJ[f] + 
+                          6\ n\ S[f]\^2\ SJ[g] - 6\ N\ S[f]\^2\ SJ[g] - 
+                          3\ n\ N\ S[f]\^2\ SJ[g] + 4\ N\^2\ S[f]\^2\ SJ[g] - 
+                          n\ N\^2\ S[f]\^2\ SJ[g] - 6\ n\ SJ[f]\ SJ[g] + 
+                          6\ N\ SJ[f]\ SJ[g] + 6\ n\ N\ SJ[f]\ SJ[g] - 
+                          4\ N\^2\ SJ[f]\ SJ[g] - 3\ n\ N\^2\ SJ[f]\ SJ[g] + 
+                          n\ N\^3\ SJ[f]\ SJ[g])\))\))\)\)\), 
+          S[g]\^2\ SJ[f]]\ S[g]\^2\ SJ[f] + 
+      extractTerms[\(-\(\(1\/n\)\((\((\(-1\) + 
+                    n)\)\ \((\((4\ N\^2\ \((\(-3\) + 2\ N)\) - 
+                          n\ N\ \((\(-12\) + 4\ N + N\^2 + N\^3)\) + 
+                          n\^2\ \((\(-6\) + 7\ N - 5\ N\^2 + 
+                                2\ N\^3)\))\)\ P[f\ g]\^2 + \((12\ \((3 - 
+                                2\ N)\)\ N\^2 - 
+                          3\ n\^2\ \((\(-6\) + N + N\^3)\) + 
+                          2\ n\ N\ \((\(-24\) + 8\ N + 3\ N\^2 + 
+                                N\^3)\))\)\ P[f\^2\ g\^2] - 
+                    2\ \((4\ N\^2\ \((\(-3\) + 2\ N)\) - 
+                          3\ n\ N\ \((\(-6\) + 3\ N + N\^2)\) + 
+                          n\^2\ \((\(-6\) + N + 3\ N\^2)\))\)\ P[f\ g]\ S[
+                        f]\ S[g] + \((n - 
+                          N)\)\ \((4\ \((\(-3\) + 2\ N)\)\ \((n - 2\ N + 
+                                n\ N)\)\ P[f\ g\^2]\ S[f] + 
+                          4\ \((\(-3\) + 2\ N)\)\ \((n - 2\ N + n\ N)\)\ P[
+                              f\^2\ g]\ S[g] - 6\ n\ S[f]\^2\ S[g]\^2 + 
+                          6\ N\ S[f]\^2\ S[g]\^2 + 
+                          6\ n\ N\ S[f]\^2\ S[g]\^2 - 
+                          4\ N\^2\ S[f]\^2\ S[g]\^2 + 6\ n\ S[g]\^2\ SJ[f] - 
+                          6\ N\ S[g]\^2\ SJ[f] - 3\ n\ N\ S[g]\^2\ SJ[f] + 
+                          4\ N\^2\ S[g]\^2\ SJ[f] - n\ N\^2\ S[g]\^2\ SJ[f] + 
+                          6\ n\ S[f]\^2\ SJ[g] - 6\ N\ S[f]\^2\ SJ[g] - 
+                          3\ n\ N\ S[f]\^2\ SJ[g] + 4\ N\^2\ S[f]\^2\ SJ[g] - 
+                          n\ N\^2\ S[f]\^2\ SJ[g] - 6\ n\ SJ[f]\ SJ[g] + 
+                          6\ N\ SJ[f]\ SJ[g] + 6\ n\ N\ SJ[f]\ SJ[g] - 
+                          4\ N\^2\ SJ[f]\ SJ[g] - 3\ n\ N\^2\ SJ[f]\ SJ[g] + 
+                          n\ N\^3\ SJ[f]\ SJ[g])\))\))\)\)\), 
+          S[f]\^2\ SJ[g]]\ S[f]\^2\ SJ[g] + 
+      extractTerms[\(-\(\(1\/n\)\((\((\(-1\) + 
+                    n)\)\ \((\((4\ N\^2\ \((\(-3\) + 2\ N)\) - 
+                          n\ N\ \((\(-12\) + 4\ N + N\^2 + N\^3)\) + 
+                          n\^2\ \((\(-6\) + 7\ N - 5\ N\^2 + 
+                                2\ N\^3)\))\)\ P[f\ g]\^2 + \((12\ \((3 - 
+                                2\ N)\)\ N\^2 - 
+                          3\ n\^2\ \((\(-6\) + N + N\^3)\) + 
+                          2\ n\ N\ \((\(-24\) + 8\ N + 3\ N\^2 + 
+                                N\^3)\))\)\ P[f\^2\ g\^2] - 
+                    2\ \((4\ N\^2\ \((\(-3\) + 2\ N)\) - 
+                          3\ n\ N\ \((\(-6\) + 3\ N + N\^2)\) + 
+                          n\^2\ \((\(-6\) + N + 3\ N\^2)\))\)\ P[f\ g]\ S[
+                        f]\ S[g] + \((n - 
+                          N)\)\ \((4\ \((\(-3\) + 2\ N)\)\ \((n - 2\ N + 
+                                n\ N)\)\ P[f\ g\^2]\ S[f] + 
+                          4\ \((\(-3\) + 2\ N)\)\ \((n - 2\ N + n\ N)\)\ P[
+                              f\^2\ g]\ S[g] - 6\ n\ S[f]\^2\ S[g]\^2 + 
+                          6\ N\ S[f]\^2\ S[g]\^2 + 
+                          6\ n\ N\ S[f]\^2\ S[g]\^2 - 
+                          4\ N\^2\ S[f]\^2\ S[g]\^2 + 6\ n\ S[g]\^2\ SJ[f] - 
+                          6\ N\ S[g]\^2\ SJ[f] - 3\ n\ N\ S[g]\^2\ SJ[f] + 
+                          4\ N\^2\ S[g]\^2\ SJ[f] - n\ N\^2\ S[g]\^2\ SJ[f] + 
+                          6\ n\ S[f]\^2\ SJ[g] - 6\ N\ S[f]\^2\ SJ[g] - 
+                          3\ n\ N\ S[f]\^2\ SJ[g] + 4\ N\^2\ S[f]\^2\ SJ[g] - 
+                          n\ N\^2\ S[f]\^2\ SJ[g] - 6\ n\ SJ[f]\ SJ[g] + 
+                          6\ N\ SJ[f]\ SJ[g] + 6\ n\ N\ SJ[f]\ SJ[g] - 
+                          4\ N\^2\ SJ[f]\ SJ[g] - 3\ n\ N\^2\ SJ[f]\ SJ[g] + 
+                          n\ N\^3\ SJ[f]\ SJ[g])\))\))\)\)\), 
+          SJ[f]\ SJ[g]]\ SJ[f]\ SJ[g]\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(N[Expand[
+        Simplify[\(1\/\(\((\(-3\) + N)\)\ \((\(-2\) + 
+                        N)\)\ \((\(-1\) + N)\)\^2\)\) \((\(\((4\ N\^2\ \
+\((\(-3\) + 2\ N)\) + n\^3\ \((6 - 7\ N + 5\ N\^2 - 2\ N\^3)\) - n\ N\ \
+\((\(-12\) - 8\ N + 9\ N\^2 + N\^3)\) + n\^2\ \((\(-6\) - 5\ N - N\^2 + 3\ \
+N\^3 + N\^4)\))\)\ P[f\ g]\^2\)\/n + \(\((12\ \((3 - 2\ N)\)\ N\^2 + 3\ n\^3\ \
+\((\(-6\) + N + N\^3)\) + 2\ n\ N\ \((\(-24\) - 10\ N + 15\ N\^2 + N\^3)\) + \
+n\^2\ \((18 + 45\ N - 16\ N\^2 - 9\ N\^3 - 2\ N\^4)\))\)\ P[f\^2\ g\^2]\)\/n \
+- \(4\ \((\(-1\) + n)\)\ \((\(-3\) + 2\ N)\)\ \((2\ N\^2 + n\^2\ \((1 + N)\) \
+- n\ N\ \((3 + N)\))\)\ P[f\ g\^2]\ S[f]\)\/n - \(4\ \((\(-1\) + n)\)\ \
+\((\(-3\) + 2\ N)\)\ \((2\ N\^2 + n\^2\ \((1 + N)\) - n\ N\ \((3 + N)\))\)\ \
+P[f\^2\ g]\ S[g]\)\/n + \(2\ \((\(-1\) + n)\)\ \((4\ N\^2\ \((\(-3\) + 2\ \
+N)\) - 3\ n\ N\ \((\(-6\) + 3\ N + N\^2)\) + n\^2\ \((\(-6\) + N + 3\ \
+N\^2)\))\)\ P[f\ g]\ S[f]\ S[g]\)\/n - \(2\ \((3\ n\^3\ \((\(-1\) + N)\) + \
+\((3 - 2\ N)\)\ N\^2 + n\^2\ \((3 + 3\ N - 5\ N\^2)\) + 2\ n\ N\ \((\(-3\) + \
+N + N\^2)\))\)\ S[f]\^2\ S[g]\^2\)\/n + \(\((\(-1\) + n)\)\ \((2\ N\^2\ \
+\((\(-3\) + 2\ N)\) + n\^2\ \((\(-6\) + 3\ N + N\^2)\) - n\ N\ \((\(-12\) + 7\
+\ N + N\^2)\))\)\ S[g]\^2\ SJ[f]\)\/n + \(\((\(-1\) + n)\)\ \((2\ N\^2\ \
+\((\(-3\) + 2\ N)\) + n\^2\ \((\(-6\) + 3\ N + N\^2)\) - n\ N\ \((\(-12\) + 7\
+\ N + N\^2)\))\)\ S[f]\^2\ SJ[g]\)\/n + \(\((2\ N\^2\ \((\(-3\) + 2\ N)\) - n\
+\^3\ \((\(-6\) + 6\ N - 3\ N\^2 + N\^3)\) - n\ N\ \((\(-12\) + 4\ N + N\^2 + \
+N\^3)\) + n\^2\ \((\(-6\) - 6\ N + 7\ N\^2 - 2\ N\^3 + N\^4)\))\)\ SJ[f]\ \
+SJ[g]\)\/n)\) /. {n \[Rule] 1000, N \[Rule] 10000}]]]\)], "Input"],
+
+Cell[BoxData[
+    \(799.9088841234654`\ P[f\ g]\^2 - 1700.0869314226043`\ P[f\^2\ g\^2] + 
+      0.7183083747569169`\ P[f\ g\^2]\ S[f] + 
+      0.7183083747569169`\ P[f\^2\ g]\ S[g] - 
+      0.5384164269720406`\ P[f\ g]\ S[f]\ S[g] - 
+      0.0003058594982578652`\ S[f]\^2\ S[g]\^2 - 
+      0.0896401143941803`\ S[g]\^2\ SJ[f] - 
+      0.0896401143941803`\ S[f]\^2\ SJ[g] + 
+      899.4594330648835`\ SJ[f]\ SJ[g]\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(N[Expand[\(1\/61685195677963\) \((10\ \((55445586217667\ P[f\ g]\^2 - 
+                  110964455329001\ P[f\^2\ g\^2] - 
+                  24422441334\ P[f\ g]\ S[f]\ S[g] + 
+                  111\ \((319991994\ P[f\ g\^2]\ S[f] + 
+                        319991994\ P[f\^2\ g]\ S[g] - 
+                        19967003\ S[f]\^2\ S[g]\^2 - 
+                        30017997\ S[g]\^2\ SJ[f] - 30017997\ S[f]\^2\ SJ[g] + 
+                        499830032997\ SJ[f]\ SJ[g])\))\))\)]]\)], "Input"],
+
+Cell[BoxData[
+    \(8.988475372134534`\ P[f\ g]\^2 - 17.988830887123697`\ P[f\^2\ g\^2] + 
+      0.00575812574534625`\ P[f\ g\^2]\ S[f] + 
+      0.00575812574534625`\ P[f\^2\ g]\ S[g] - 
+      0.003959206267497487`\ P[f\ g]\ S[f]\ S[g] - 
+      0.0003592980955383084`\ S[f]\^2\ S[g]\^2 - 
+      0.0005401616433860733`\ S[g]\^2\ SJ[f] - 
+      0.0005401616433860733`\ S[f]\^2\ SJ[g] + 
+      8.99423809114828`\ SJ[f]\ SJ[g]\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(DSimplify[DSimplify[Var[M]]]\)\(\ \)\( (*\ 
+      simplification\ R[l] = R[l, i]\ \ *) \)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(1\/N\^4\)\((2\ n\ N\^2\ P[f\ g\^2]\ S[f] + 
+        2\ n\ N\^2\ P[f\^2\ g]\ S[g] - 4\ N\ P[f\ g\^2]\ S[f]\ S[J] - 
+        2\ n\ N\ P[f\ g\^2]\ S[f]\ S[J] - 4\ N\ P[f\^2\ g]\ S[g]\ S[J] - 
+        2\ n\ N\ P[f\^2\ g]\ S[g]\ S[J] + 
+        2\ P[f\ g]\ S[f]\ S[g]\ \((N - S[J])\)\ S[J] + 
+        4\ P[f\ g\^2]\ S[f]\ S[J]\^2 + 4\ P[f\^2\ g]\ S[g]\ S[J]\^2 + 
+        P[f\ g]\^2\ \((n\ N\^2 - 2\ N\ S[J] + S[J]\^2)\) + 
+        N\ S[g]\^2\ S[J]\ SJ[f] - S[g]\^2\ S[J]\^2\ SJ[f] + 
+        N\ S[f]\^2\ S[J]\ SJ[g] - S[f]\^2\ S[J]\^2\ SJ[g] + 
+        n\ N\^2\ SJ[f]\ SJ[g] - 2\ N\ S[J]\ SJ[f]\ SJ[g] + 
+        S[J]\^2\ SJ[f]\ SJ[g] + 
+        P[f\^2\ g\^2]\ \((4\ \((2 + n)\)\ N\ S[J] - 6\ S[J]\^2 + 
+              N\^2\ \((\(-n\)\ \((6 + n)\) + 
+                    N\ \(\[Sum]\+\(l$26722 = 1\)\%n \
+1\/J[l$26722]\))\))\))\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Simplify[\(1\/N\^4\) \((2\ n\ N\^2\ P[f\ g\^2]\ S[f] + 
+              2\ n\ N\^2\ P[f\^2\ g]\ S[g] - 4\ N\ P[f\ g\^2]\ S[f]\ S[J] - 
+              2\ n\ N\ P[f\ g\^2]\ S[f]\ S[J] - 
+              4\ N\ P[f\^2\ g]\ S[g]\ S[J] - 
+              2\ n\ N\ P[f\^2\ g]\ S[g]\ S[J] + 
+              2\ P[f\ g]\ S[f]\ S[g]\ \((N - S[J])\)\ S[J] + 
+              4\ P[f\ g\^2]\ S[f]\ S[J]\^2 + 4\ P[f\^2\ g]\ S[g]\ S[J]\^2 + 
+              P[f\ g]\^2\ \((n\ N\^2 - 2\ N\ S[J] + S[J]\^2)\) + 
+              N\ S[g]\^2\ S[J]\ SJ[f] - S[g]\^2\ S[J]\^2\ SJ[f] + 
+              N\ S[f]\^2\ S[J]\ SJ[g] - S[f]\^2\ S[J]\^2\ SJ[g] + 
+              n\ N\^2\ SJ[f]\ SJ[g] - 2\ N\ S[J]\ SJ[f]\ SJ[g] + 
+              S[J]\^2\ SJ[f]\ SJ[g] + 
+              P[f\^2\ g\^2]\ \((4\ \((2 + n)\)\ N\ S[J] - 6\ S[J]\^2 + 
+                    N\^2\ \((\(-n\)\ \((6 + n)\) + 
+                          N\ \(\[Sum]\+\(l$8574 = 1\)\%n \
+1\/J[l$8574]\))\))\))\) /. S[J] \[Rule] N]\)], "Input"],
+
+Cell[BoxData[
+    \(\(\((\(-1\) + n)\)\ P[f\ g]\^2 + \((\(-1\) + n)\)\ SJ[f]\ SJ[g] + \
+P[f\^2\ g\^2]\ \((2 - 2\ n - n\^2 + N\ \(\[Sum]\+\(l$8574 = 1\)\%n \
+1\/J[l$8574]\))\)\)\/N\^2\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Simplify[
+      DSimplify[Ex[M]] /. S[J] \[Rule] N]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\((\(-1\) + n)\)\ P[f\ g] + S[f]\ S[g]\)\/N\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(\(?DSolve\)\(\[IndentingNewLine]\)
+    \)\)\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{"\<\"DSolve[eqn, y, x] solves a differential equation for the \
+function y, with independent variable x. DSolve[{eqn1, eqn2, ...  }, {y1, y2, \
+...  }, x] solves a list of differential equations. DSolve[eqn, y, {x1, x2, \
+... }] solves a partial differential equation.\"\>", " ", 
+      ButtonBox[
+        StyleBox["More\[Ellipsis]",
+          "SR"],
+        ButtonData:>"DSolve",
+        Active->True,
+        ButtonStyle->"RefGuideLink"]}]], "Print",
+  CellTags->"Info3324747921-3140946"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(DSolve[
+      x^3\ \(\(Derivative[3]\)[f]\)[x] + a[2] x^2\ \(f''\)[x] + \ 
+          a[1] x\ \(f'\)[x] \[Equal] \ 2, \ f, x]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \({{f \[Rule] 
+          Function[{x}, \(x\^\(1 + 1\/2\ \((1 - \@\(\(-4\)\ a[1] + \((\(-1\) \
++ a[2])\)\^2\) - a[2])\)\)\ C[1]\)\/\(1 + 1\/2\ \((1 - \@\(\(-4\)\ a[1] + \((\
+\(-1\) + a[2])\)\^2\) - a[2])\)\) + \(x\^\(1 + 1\/2\ \((1 + \@\(\(-4\)\ a[1] \
++ \((\(-1\) + a[2])\)\^2\) - a[2])\)\)\ C[2]\)\/\(1 + 1\/2\ \((1 + \@\(\(-4\)\
+\ a[1] + \((\(-1\) + a[2])\)\^2\) - a[2])\)\) + 
+              C[3] + \(2\ Log[x]\)\/\(2 + a[1] - a[2]\)]}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(s\)], "Input"],
+
+Cell[BoxData[
+    \(s\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(f[x]\ \\.f \[Rule] \((C[2] + \(2\ Log[#1]\)\/3 - 
+            C[1]\/\(3\ #1\^3\) &)\)\)], "Input"],
+
+Cell[BoxData[
+    \(Syntax::"sntxb" \(\(:\)\(\ \)\) "\<Expression cannot begin with \
+\"\!\(\(\(\(\(f[x]\)\) \\.f\)\) \[Rule] \(\((\(\(\(\(\(C[2]\)\) + \
+\(2\(\(Log[#1]\)\)\)\/3 - \(C[1]\)\/\(3 #1\^3\)\)\) &\))\)\)\)\".\!\(\"\"\) \
+\!\(\*ButtonBox[\"More\[Ellipsis]\", ButtonStyle->\"RefGuideLinkText\", \
+ButtonFrame->None, ButtonData:>\"General::sntxb\"]\)\>"\)], "Message"],
+
+Cell[BoxData[
+    StyleBox[
+      RowBox[{
+        ErrorBox[\(f[x] \\.f\)], 
+        "\[Rule]", \((C[2] + \(2  Log[#1]\)\/3 - C[1]\/\(3  #1\^3\) &)\)}],
+      ShowStringCharacters->True]], "Message"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(f[x]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(f[x]\)], "Output"]
+}, Open  ]]
+},
+FrontEndVersion->"5.1 for X",
+ScreenRectangle->{{0, 1024}, {0, 768}},
+WindowSize->{1016, 694},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+ShowSelection->True
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{
+  "Info3324747921-3140946"->{
+    Cell[62952, 1144, 516, 11, 39, "Print",
+      CellTags->"Info3324747921-3140946"]}
+  }
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{
+  {"Info3324747921-3140946", 65785, 1230}
+  }
+*)
+
+(*NotebookFileOutline
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[1776, 53, 185, 4, 59, "Input"],
+Cell[1964, 59, 329, 5, 23, "Message"],
+Cell[2296, 66, 329, 5, 23, "Message"]
+}, Open  ]],
+Cell[2640, 74, 2599, 47, 331, "Input"],
+Cell[5242, 123, 502, 9, 107, "Input"],
+
+Cell[CellGroupData[{
+Cell[5769, 136, 145, 2, 43, "Input"],
+Cell[5917, 140, 193, 3, 67, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[6147, 148, 160, 3, 43, "Input"],
+Cell[6310, 153, 862, 15, 180, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[7209, 173, 55, 1, 27, "Input"],
+Cell[7267, 176, 38, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[7342, 182, 91, 2, 43, "Input"],
+Cell[7436, 186, 38, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[7511, 192, 80, 1, 43, "Input"],
+Cell[7594, 195, 89, 1, 46, "Output"]
+}, Open  ]],
+Cell[7698, 199, 26, 0, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[7749, 203, 61, 1, 27, "Input"],
+Cell[7813, 206, 864, 15, 180, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[8714, 226, 7345, 119, 1103, "Input"],
+Cell[16062, 347, 4439, 68, 744, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[20538, 420, 4849, 77, 830, "Input"],
+Cell[25390, 499, 4456, 68, 741, "Output"]
+}, Open  ]],
+Cell[29861, 570, 4270, 65, 573, "Input"],
+
+Cell[CellGroupData[{
+Cell[34156, 639, 178, 3, 27, "Input"],
+Cell[34337, 644, 3844, 58, 335, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[38218, 707, 129, 2, 43, "Input"],
+Cell[38350, 711, 864, 15, 137, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[39251, 731, 151, 2, 27, "Input"],
+Cell[39405, 735, 202, 3, 29, "Output"]
+}, Open  ]],
+Cell[39622, 741, 221, 4, 31, "Input"],
+
+Cell[CellGroupData[{
+Cell[39868, 749, 103, 2, 27, "Input"],
+Cell[39974, 753, 17186, 261, 1043, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[57197, 1019, 1686, 23, 312, "Input"],
+Cell[58886, 1044, 427, 8, 47, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[59350, 1057, 516, 8, 125, "Input"],
+Cell[59869, 1067, 436, 8, 47, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[60342, 1080, 151, 2, 43, "Input"],
+Cell[60496, 1084, 864, 15, 137, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[61397, 1104, 979, 16, 180, "Input"],
+Cell[62379, 1122, 196, 3, 54, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[62612, 1130, 115, 2, 43, "Input"],
+Cell[62730, 1134, 79, 1, 44, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[62846, 1140, 103, 2, 59, "Input"],
+Cell[62952, 1144, 516, 11, 39, "Print",
+  CellTags->"Info3324747921-3140946"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[63505, 1160, 188, 3, 43, "Input"],
+Cell[63696, 1165, 470, 7, 73, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[64203, 1177, 34, 1, 27, "Input"],
+Cell[64240, 1180, 35, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[64312, 1186, 118, 2, 45, "Input"],
+Cell[64433, 1190, 376, 5, 33, "Message"],
+Cell[64812, 1197, 199, 5, 37, "Message"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[65048, 1207, 68, 1, 43, "Input"],
+Cell[65119, 1210, 38, 1, 27, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

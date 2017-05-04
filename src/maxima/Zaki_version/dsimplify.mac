@@ -1,0 +1,255 @@
+/*****************************************************************************************************************************************************/
+dsimplifycommon(eqc):=
+block
+(
+      [commoninput:eqc, eqd:eqc],
+	sumexpand:false, /* to restrict renaming of indices of sums inside the rule definition otherwise rd2&3 wont work*/
+	matchdeclare([_i,_j,_k,_l],all),
+	apply(defrule,[rd1,d(_i,_i),1]),
+	apply(defrule,[rd4,d(_i,_j)^_k,d(_i,_j)]),
+	apply(defrule,[rd2,sum(d(_i,_j),_j,1,_k),1]),
+	apply(defrule,[rd3,sum(d(_i,_j),_i,1,_k),1]),
+	eqd:apply(apply1,['commoninput,rd1,rd4,rd2,rd3]),
+	
+	while(commoninput#eqd) do /* Fixed Point*/
+	(
+		commoninput:eqd,
+		eqd:apply(apply1,['commoninput,rd1,rd4,rd2,rd3])
+	),
+	matchdeclare([_i,_j,_k,_l],false),
+	return (eqd)
+);
+
+/*****************************************************************************************************************************************************/
+dsimplifyproducts(eq1):=
+block
+(
+	[prodargs:[], prodinput:eq1, result:0],
+
+	if not atom(prodinput) then
+	(
+		prodargs:args(prodinput),
+
+		for a:1 thru length(prodargs) step 1 do
+		(
+	       if not atom(prodargs[a]) then
+	       (
+			if string(op(prodargs[a]))="sum" then
+			(
+				prodargs[a]:dsimplifysummands(prodargs[a])
+	        	)
+			else if op(prodargs[a])="*" then
+			(
+				prodargs[a]:dsimplifyproducts(prodargs[a])
+			)
+	        )
+	   	),
+		result:apply(op(prodinput),prodargs),
+		return (result)
+	)
+	else
+		return(prodinput)
+);
+
+/*****************************************************************************************************************************************************/
+
+dsimplifysummands(summandinput):=
+block
+( 
+	[result:0,inputeq:summandinput,sumargs,searchvar,summandargs:[],flag:1,index:1,uniquevar1,uniquevar2,subeq,sublist1,sublist2,subresult:0,tmpres,temp1,temp2,temp3,temp4,temp5,temp6,temp7,temp8,subst1,subst2],
+	sumargs:args(inputeq),
+	searchvar:sumargs[2],
+	if op(sumargs[1])#"*" then
+      (  
+       if string(op(sumargs[1]))="sum" then
+       (
+		temp1:sumargs[1],
+		temp2:sumargs[2],
+		temp3:sumargs[3],
+		temp4:sumargs[4],
+		subresult:dsimplifysummands(temp1),
+		result:apply(sum,[subresult,temp2,temp3,temp4]),
+		return (result)
+	 )
+	 elseif string(op(sumargs[1]))="d" then
+	 (
+            uniquevar1:?gensym(),
+            uniquevar2:?gensym(),
+            apply(matchdeclare,[[uniquevar1,uniquevar2],all]),
+		apply(defmatch,[patt1,d(uniquevar1,searchvar)]),
+		apply(defmatch,[patt2,d(searchvar,uniquevar2)]),
+		sublist1:apply(patt1,[sumargs[1]]),
+		sublist2:apply(patt2,[sumargs[1]]),
+	    if listp(sublist1) then
+			(
+			    subresult:1,
+            	flag:0,
+            	return (subresult)
+			)
+			elseif listp(sublist2) then
+			(
+			    subresult:1,
+            	flag:0,
+            	return (subresult)
+			)
+            else
+            (
+                subresult:inputeq,
+                flag:0,
+                return(subresult)
+            )
+         )
+         else 
+         (
+                return(inputeq)       
+         )
+      ),
+	if op(sumargs[1])="*" then
+    (
+	 summandargs:args(sumargs[1]),
+     while index<=length(summandargs) and flag=1  do
+	(
+         if not atom(summandargs[index]) then
+         (
+            uniquevar1:?gensym(),
+            uniquevar2:?gensym(),
+            apply(matchdeclare,[[uniquevar1,uniquevar2],all]),
+		apply(defmatch,[patt1,d(uniquevar1,searchvar)]),
+		apply(defmatch,[patt2,d(searchvar,uniquevar2)]),
+
+	      temp6:summandargs,
+		temp:summandargs[index],	
+			
+		subst1:apply(apply,[patt1,[summandargs[index]]]),
+		subst2:apply(apply,[patt2,[summandargs[index]]]),
+		
+
+            if listp(subst1) then
+		(
+				subeq:apply("*",summandargs),
+				subeq:delete(summandargs[index],subeq),
+                		uniquevar1:apply(subst,[subst1,uniquevar1]),
+				subresult:apply(subst,[[searchvar=uniquevar1],subeq]),
+            	flag:0,
+            	return (subresult)
+		)
+		elseif listp(subst2) then
+		(
+				subeq:(apply("*",summandargs)),
+				subeq:quotient(subeq,summandargs[index]),
+                		uniquevar2:apply(subst,[subst2,uniquevar2]),
+				subresult:apply(subst,[[searchvar=uniquevar2],subeq]),
+				
+            	flag:0,
+            	return (subresult)
+		),
+			
+		    if string(op(summandargs[index]))="sum" then
+		    (
+		       tmpres:dsimplifysummands(temp),
+			   temp6[index]:tmpres
+            )
+          ),
+           index:index+1
+    )),
+    if flag=1 or index > length(summandargs) then
+    (
+		subeq:apply("*",temp6),
+		result:apply(op(inputeq),[subeq,sumargs[2],sumargs[3],sumargs[4]]),
+		return (result)
+	)
+	else
+	    return(subresult)
+);
+
+/*****************************************************************************************************************************************************/
+dsimplifyadditions(eqadd):=
+block
+(
+     [subresult:0,result:0,additionsinput:eqadd, additionargs:[],summandinput:0,productinput:0],
+     additionargs:args(additionsinput),
+	for aindex:1 thru length(additionargs) step 1 do
+     ( 
+        if not atom(additionargs[aindex]) then
+        (
+      	if string(op(additionargs[aindex]))="sum" then
+    		(
+			summandinput:additionargs[aindex],
+    			additionargs[aindex]:dsimplifysummands(summandinput)
+            )
+            elseif op(additionargs[aindex])="*" then
+		(
+			productinput:additionargs[aindex],
+    			additionargs[aindex]:dsimplifyproducts(productinput)
+            )
+		elseif op(additionargs[aindex])="-" then
+            (
+            	subresult:dsimplifyproducts(args(additionargs[aindex])[1]),
+    	    		additionargs[aindex]:apply("-",[subresult])
+    	   	)
+		elseif op(additionargs[aindex])="//" then
+            (
+			productinput:additionargs[aindex],
+    			additionargs[aindex]:dsimplifyproducts(productinput)
+    	   	)
+	
+  	   )
+   ),
+	result:apply(op(additionsinput),additionargs),
+	return (result)
+);
+
+/*****************************************************************************************************************************************************/
+dsimplify2(eq2):=
+block(
+ 	[ineq1:eq2,eqop1,result:eq2],
+	if not atom(ineq1) then
+	(
+		eqop1:op(ineq1)
+	)
+	else
+	(
+		print("ineq1=",ineq1),
+		return(ineq1)
+	),
+
+
+	if string(eqop1)="sum" then 
+	(
+		result:dsimplifysummands(ineq1)
+	)
+	elseif eqop1="*" then
+	(
+		result:dsimplifyproducts(ineq1)
+	)
+	elseif eqop1="+" or eqop1="-" then
+	(
+		result:dsimplifyadditions(ineq1)
+	)
+	elseif eqop1="//" then
+	(
+		result:dsimplifyproducts(ineq1)
+	)
+	else
+	(
+		result:ineq1
+	),
+
+	return (result)
+);
+
+/*****************************************************************************************************************************************************/
+dsimplify(deq):=
+block(
+	[_deq:deq,dsmpeq1,dsmpeq2],
+	declare(sum,linear),
+	_deq:expand(_deq),
+	dsmpeq2:dsimplifycommon(_deq),
+      	dsmpeq1:dsimplify2(dsmpeq2),
+     	while (dsmpeq1#dsmpeq2) do /*Fixed Point .. sumexpand should be false at this point*/
+    	( 
+      		dsmpeq2:dsimplifycommon(dsmpeq1),
+      		dsmpeq1:dsimplify2(dsmpeq2)
+    	),
+	return (dsmpeq1)
+);

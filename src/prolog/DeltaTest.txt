@@ -1,0 +1,33 @@
+initRV(blah).
+
+makeRVFamily(x,randomHistogram,[a,b],[expectation(x)==5]).
+
+makeRVFamily(y,rippleJoin,[z],[expectation(y)==6]).
+
+nb_getval(rvlist,RESULT).
+
+makeRV(rh,randomHistogram,[t,u]).
+
+makeRVFamily(x, randomHistogram, [r],[expectation(x(I,L)) == r(L)]).
+
+initRV(blah).
+
+makeRVFamily(x, randomHistogram, [r],[expectation(x(I,L)) == r(L),expectation(x(I, L)*x(J, K)) == r(L)*d(L, K)*d(I, J) + r(L)*r(L, 1)*d(L, K)*(1 - d(I, J)) + r(L)*r(K)*(1 - d(I, J))*(1 - d(L, K)),expectation(x(I, L)*x(J, L)*x(M, K)*x(N, K)) == d(L, K)*(r(L)*(1 - r(L, 1)*r(L, 2)*r(L, 3))*d(I, J)*d(I, M)*d(I, N) + r(L)*r(L, 1)*(1 - r(L, 2)*r(L, 3))*(d(I, J)*d(I, M)*(1 - d(I, N)) + d(I, J)*d(I, N)*(1 - d(I, M)) + d(I, M)*d(I, N)*(1 - d(I,J)) + d(J, M)*d(J, N)*(1 - d(I, J)) + d(I, J)*d(M, N)*(1 - d(I, M)) + d(I, M)*d(J, N)*(1 - d(I, J)) + d(I, N)*d(J, M)*(1 - d(I, J))) + r(L)*r(L, 1)*r(L, 2)*(1 - r(L, 3))*(d(I, J)*(1 - d(I, M))*(1 - d(I, N))*(1 - d(M, N)) + d(I, M)*(1 - d(I, J))*(1 - d(I,N))*(1 - d(J, N)) + d(I, N)*(1 - d(I, J))*(1 - d(I, M))*(1 - d(J, M)) + d(J, M)*(1 - d(I, J))*(1 -  d(J, N))*(1 - d(I, N)) + d(J, N)*(1 - d(I, J))*(1 - d(J, M))*(1 - d(I, M)) + d(M, N)*(1 - d(I, M))*(1 - d(J, M))*(1 - d(I, J))) + r(L)*r(L, 1)*r(L, 2)*r(L, 3) ) + (1 - d(L, K))*(1 - d(I, M))*(1 - d(I, N))*(1 - d(J, M))*(1 - d(J, N))*( r(L)*d(I, J) + r(L)*r(L, 1)*(1 - d(I, J)))*(r(K)*d(M, N) + r(K)*r(K, 1)*(1 - d(M,N)))]).
+
+makeRV(x,randomHistogram,[r]).
+
+ex(sum(sum(x(i1, l)*f(i1), i1, 1, n)*j(l)* (sum(x(i2, l)*f(i2), i2, 1, n)*j(l))*j(l), l1, 1, n),EXPECTED),dSimplify(EXPECTED,S),dRewrite(S,R),write(S).
+
+ex(sum(x(i1, l)*f(i1), i1, 1, n)* sum(x(i2, l)*f(i2), i2, 1, n),RESULT).
+
+ex(sum(sum(x(i1, l)*f(i1), i1, 1, n)*j(l)* (sum(x(i2, l)*f(i2), i2, 1, n)*j(l))*j(l), l1, 1, n),RESULT).
+
+(* defining the random variable *)
+(* Average in a bucket for a given relation *)
+av(F,L, sum( x(I, L)*f(I), I,1,n)/j(L)) :- gensym(i,I).
+(* estimate of the size of the join *)
+M := Module[ {l}, Sum[ Av[f, l] Av[g, l] J[l], {l, n}]]
+
+sum(sum(x(i1, l)*f(i1), i1, 1, n)/j(l)* (sum(x(i2, l)*f(i2), i2, 1, n)/j(l))*j(l), l1, 1, n)
+
+ex(sum(sum(x(i1, l)*f(i1), i1, 1, n)*j(l)* (sum(x(i2, l)*f(i2), i2, 1, n)*j(l))*j(l), l1, 1, n),RESULT).

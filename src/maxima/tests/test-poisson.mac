@@ -1,0 +1,14 @@
+makeRV(X, PoissonSampling, [p]);
+makeRV(Y, PoissonSampling, [q]);
+
+Z: sum( sum( A[i,j]*X[i]*Y[j], j, 1, M), i, 1, N);
+
+
+
+
+
+W: sum( sum( A[i,j]*X[i]*X[j], j, 1, N), i, 1, N);
+
+U: sum( sum( A[i]*A[j]*X[i]*X[j], j, 1, N), i, 1, N);
+
+V: sum( sum( sum( sum( X[i]*X[j]*X[k]*X[l],l,1,N),k,1,N), j, 1, N), i, 1, N);

@@ -1,0 +1,290 @@
+
+/*************************************************************************************************/
+
+/* New canonize - parsing irrespective of complete format and checking indices present in each case */
+
+/* final canonize begins */
+canonize(full_caseslist, indexlist):=
+block(
+ [caseslist:[],locallist:[],Indiff_arglist:[],Diff_arglist:[],flat_Indifflist:[],flat_caseslist:[],copy_flatlist:[],checklist:[],temp_DiffCases:[],new_DiffCases:[],new_Cases:[], made_list:[]],
+  caseslist:copylist(full_caseslist),
+  print("#1 caseslist is ", caseslist),  
+  for i:1 step 1 thru length(caseslist) do /* for each elem of case list, ie In */
+  (
+    locallist:copylist(caseslist[i]),
+	print("caseslist[i] is ",caseslist[i]),
+	if not atom(locallist[1]) and string(op(locallist[1]))="In" then
+	(
+		print("caseslist[i] in - error",caseslist[i]),	
+		made_list:append(made_list,caseslist[i]),	
+		print("made_list is ", made_list),	
+		Indiff_arglist:args(locallist[1]),
+		flat_Indifflist:[],
+		for j:1 step 1 thru length(Indiff_arglist) do
+		(
+			if not atom(Indiff_arglist[j]) and string(op(Indiff_arglist[j]))="Df" then
+			(
+				Diff_arglist:args(Indiff_arglist[j]),
+				for k:1 step 1 thru length(Diff_arglist) do
+				(
+					if not atom(Diff_arglist[k]) and string(op(Diff_arglist[k]))="Eq" then
+		 			( 
+						Diff_arglist[k]:args(Diff_arglist[k])
+					)
+					else
+					(
+						if atom(Diff_arglist[k]) then
+						(
+							Diff_arglist[k]:[Diff_arglist[k]]
+						)
+						else
+						(
+							print("Error in format - #3"),
+							return()
+						)
+					)
+				)
+			)
+			else
+			(
+				if not atom(Indiff_arglist[j]) and string(op(Indiff_arglist[j]))="Eq" then
+				(
+					Diff_arglist:[args(Indiff_arglist[j])]
+				)
+				else
+				(
+					if(atom(Indiff_arglist[j])) then
+					(
+						Diff_arglist:[[Indiff_arglist[j]]]
+					)
+					else
+					(
+						print("Error in format - #4"),
+						return()
+					)
+				)
+			),
+			flat_Indifflist:append(flat_Indifflist,[Diff_arglist])
+		)
+	)
+	else
+	(
+		if not atom(locallist[1]) and string(op(locallist[1]))="Df" then
+		(
+			Diff_arglist:args(locallist[1]),
+			flat_Indifflist:[],
+			for j:1 thru length(Diff_arglist) do
+			(
+				if not atom(Diff_arglist[j]) and string(op(Diff_arglist[j]))="Eq" then
+				(
+					Diff_arglist[j]:args(Diff_arglist[j])
+				)
+				else
+				(
+					if atom(Diff_arglist[j]) then
+					(
+						Diff_arglist[j]:[Diff_arglist[j]]
+					)
+					else
+					(
+						print("Error in format - #2"),
+						return()
+					)
+				)
+			),
+			flat_Indifflist:append(flat_Indifflist,[Diff_arglist])
+		)
+		else
+		(
+			if not atom(locallist[1]) and string(op(locallist[1]))="Eq" then
+			(
+				Diff_arglist:args(locallist[1]),
+				flat_Indifflist:[],
+				flat_Indifflist:append(flat_Indifflist,[[Diff_arglist]])
+			)
+			else
+			(
+				if atom(locallist[1]) then
+				(
+					flat_Indifflist:[],
+					flat_Indifflist:append(flat_Indifflist,[[[locallist[1]]]])
+				)
+				else
+				(
+					print("Error in format - #1"),
+					return()
+				)
+			)
+		)
+	),
+	flat_caseslist:append(flat_caseslist,[flat_Indifflist])
+  ), /* list of variables created - format [ [ [[I,J],[K]], [[IP,JP],[L]] ] , ... ] */
+  print("#2 full_caseslist is ", full_caseslist),
+  print("#2 caseslist is ", caseslist),	
+  for i:1 thru length(flat_caseslist) do 
+  (
+	for j:1 thru length(flat_caseslist[i]) do
+	(
+		for k:1 thru length(flat_caseslist[i][j]) do
+		(
+			flat_caseslist[i][j][k]:sort(flat_caseslist[i][j][k])
+		),	
+		flat_caseslist[i][j]:sort(flat_caseslist[i][j])
+	),
+	flat_caseslist[i]:sort(flat_caseslist[i])
+  ), /* sorted list of variables -- each In sorted */
+
+  print("#3 caseslist is ", caseslist),
+  print("flat_caseslist = ",flat_caseslist), 
+
+  copy_flatlist:[], copy_flatlist:copylist(flat_caseslist),
+  for i:1 thru length(copy_flatlist) do
+  (
+	for j:1 thru length(copy_flatlist[i]) do
+	(
+		for k:1 thru length(copy_flatlist[i][j]) do
+		(
+			for l:1 thru length(copy_flatlist[i][j][k]) do
+			(
+				checklist:[],
+				for m:1 thru length(copy_flatlist[i][j][k]) do
+				(
+					if not equal(l,m) then /* is(notequal( .. */
+					(
+						checklist:append(checklist,[copy_flatlist[i][j][k][m]])				
+					)
+				),
+				if member(copy_flatlist[i][j][k][l],checklist) then
+				(
+					print("error - duplicate case inside Eq ie RVs \n ", copy_flatlist),
+					return()
+				)
+			)
+		)
+	)
+  ), /* checks duplicate indices inside Eq */
+  
+  print("#4 caseslist is ", caseslist),
+  copy_flatlist:[], copy_flatlist:copylist(flat_caseslist),
+  for i:1 thru length(copy_flatlist) do
+  (
+	for j:1 thru length(copy_flatlist[i]) do
+	(
+		for k:1 thru length(copy_flatlist[i][j]) do
+		(
+			checklist:[],
+			for l:1 thru length(copy_flatlist[i][j]) do
+			(
+				if not equal(l,k) then /* is(notequal( .. */
+				(
+					checklist:append(checklist,[copy_flatlist[i][j][l]])				
+				)
+			),
+			if member(copy_flatlist[i][j][k],checklist) then
+			(
+				print("Error - duplicate case inside Df ie Eq"),
+				return()
+			)
+		)
+	)
+  ), /* checks duplicate Eq inside Df */
+
+  copy_flatlist:[], copy_flatlist:copylist(flat_caseslist),
+  for i:1 thru length(copy_flatlist) do
+  (
+	for j:1 thru length(copy_flatlist[i]) do
+	(
+		checklist:[],
+		for k:1 thru length(copy_flatlist[i]) do
+		(
+			if not equal(k,j) then /* is(notequal( .. */
+			(
+				checklist:append(checklist,[copy_flatlist[i][k]])				
+			)
+		),
+		
+		if member(copy_flatlist[i][j],checklist) then
+		(
+			print("Error - duplicate case inside In ie Df"),
+			return()
+		)
+	)
+  ), /* checks duplicate Df inside In */
+
+  copy_flatlist:[], copy_flatlist:copylist(flat_caseslist),
+  for i:1 thru length(copy_flatlist) do
+  (
+	checklist:[],
+	for j:1 thru length(copy_flatlist) do
+	(
+		if not equal(j,i) then /* is(notequal( .. */
+		(
+			checklist:append(checklist,[copy_flatlist[j]])				
+		)
+	),
+	if member(copy_flatlist[i],checklist) then
+	(
+		print("Error - duplicate case of In "),
+		return()
+	)
+  ), /* checks duplicate In's */
+
+  copy_flatlist:[], copy_flatlist:copylist(flat_caseslist),
+  for i:1 thru length(copy_flatlist) do
+  (
+	checklist:[], checklist:set(setify(flatten(copy_flatlist[i]))),
+	for j:1 thru length(checklist) do
+	(
+		for k:1 thru length(checklist) do
+		(
+			if not equal(j,k) then
+			(
+				if equal(checklist[j],checklist[k]) then
+				(
+					print("Error - duplicate indices in an In"),
+					return()
+				)
+			)
+		)
+	)
+  ), /* each index variable can be present in a case max once */
+
+/*  
+  copy_flatlist:[], copy_flatlist:copylist(flat_caseslist),
+  for i:1 thru length(copy_flatlist) do
+  (
+	checklist:[], checklist:copylist(flatten(copy_flatlist[i])),
+ 	print("index list is ", indexlist),
+	print("checklist is ", checklist),	
+	if not equal(length(indexlist), length(checklist)) then
+	(
+		print(" Error - all variables are not used")	
+	)
+  ), /* each random index variable should be present in each case atleast once - combined with above for loop ensures exists once */ 
+*/
+    
+  for i:1 thru length(flat_caseslist) do 
+  (
+	new_DiffCases:[],
+	for j:1 thru length(flat_caseslist[i]) do 
+	(
+		temp_DiffCases:[],
+		for k:1 thru length(flat_caseslist[i][j]) do 
+		(
+			temp_DiffCases:append(temp_DiffCases,[apply(Eq,flat_caseslist[i][j][k])])
+		),
+		new_DiffCases:append(new_DiffCases,[apply(Df,temp_DiffCases)])
+	),
+	new_Cases:append(new_Cases,[[apply(In,new_DiffCases)]])
+  ), /*recreates in In(Df.. form */
+ print("new_Cases is ", new_Cases), 
+ print("caseslist is ", caseslist),
+ caseslist:new_Cases,
+ print("now caseslist is ", caseslist), 
+ return (new_Cases)		  	
+);
+
+/*final canonize ends*/
+
+/******************************************************************************************************/
+

@@ -1,0 +1,254 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.1'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[      6518,        180]*)
+(*NotebookOutlinePosition[      7147,        202]*)
+(*  CellTagsIndexPosition[      7103,        198]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell[BoxData[
+    \(F[a_, b_]\  := \ 
+      Sum[\ \((f[x[i], a, b] - y[i])\)^2, {i, 1, n}]\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(f[x_, a_, b_]\  := \ 
+      Exp[\ \(-a\)\ x]\ /\((1 + b\ Exp[\ 1 - x])\)\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(d1\  := \ D[\ F[a, b], a]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\(\(Simplify\)\([\)\(\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \)\(\[Sum]\)\)\+\(i = 1\)\%n - \(2\ \
+\[ExponentialE]\^\(\(-a\)\ x[i]\)\ x[i]\ \((\[ExponentialE]\^\(\(-a\)\ x[i]\)\
+\/\(1 + b\ \[ExponentialE]\^\(1 - x[i]\)\) - y[i])\)\)\/\(1 + b\ \
+\[ExponentialE]\^\(1 - x[i]\)\)\)\(]\)\)\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(Syntax::"bktmop"\), \(\(:\)\(\ \)\), "\<\"Expression \\\"\\!\\(\
+\\(\\(\\(Simplify[\[Sum]\\)\\+\\(i = 1\\)\\%n - \\(2 \[ExponentialE]\\^\\(\\(\
+\\(-a\\)\\)\\(\\(x[i]\\)\\)\\) \\(\\(x[i]\\)\\) \
+\\(\\((\[ExponentialE]\\^\\(\\(\\(-a\\)\\)\\(\\(x[i]\\)\\)\\)\\/\\(1 + \
+\\(\\(b \[ExponentialE]\\^\\(1 \\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\) \
+\\(\\(x \\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\) \\(\\(\[LeftSkeleton] \
+1 \[RightSkeleton]\\)\\)]\\)\\)\\)\\)\\)\\) - \
+\\(\\(y[i]\\)\\))\\)\\)\\)\\/\\(1 + \\(\\(b \[ExponentialE]\\^\\(1 - \
+\\(\\(x[i]\\)\\)\\)\\)\\)\\)\\)\\)]\\)\\\" has no opening \\\"\\!\\(\\\"[\\\"\
+\\)\\\".\\!\\(\\\"\\\"\\) \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::bktmop\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    StyleBox[
+      ErrorBox[\(\(\(\(Simplify\)\([\)\(\[Sum]\)\)\+\(i = 1\)\%n - \(2 \( \
+\[ExponentialE]\^\(\(-a\) x[i]\)\) x[i] \((\[ExponentialE]\^\(\(-a\) x[i]\)\/\
+\(1 + b  \[ExponentialE]\^\(1 - x[i]\)\) - y[i])\)\)\/\(1 + b  \
+\[ExponentialE]\^\(1 - x[i]\)\)\)\(]\)\)],
+      ShowStringCharacters->True]], "Message"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(F[a, b]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\[Sum]\+\(i = 1\)\%n\((f[x[i], a, b] - y[i])\)\^2\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Simplify[\ %10]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\[Sum]\+\(i = 1\)\%n\(-\(\(2\ \[ExponentialE]\^\(\(-a\)\ x[i]\)\ x[
+                i]\ \((\[ExponentialE]\^\(\(-a\)\ x[i]\)\/\(1 + b\ \
+\[ExponentialE]\^\(1 - x[i]\)\) - y[i])\)\)\/\(1 + 
+              b\ \[ExponentialE]\^\(1 - x[i]\)\)\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(d1\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\[Sum]\+\(i = 1\)\%n\(-\(\(2\ \[ExponentialE]\^\(\(-a\)\ x[i]\)\ x[
+                i]\ \((\[ExponentialE]\^\(\(-a\)\ x[i]\)\/\(1 + b\ \
+\[ExponentialE]\^\(1 - x[i]\)\) - y[i])\)\)\/\(1 + 
+              b\ \[ExponentialE]\^\(1 - x[i]\)\)\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(d2\  := \ D[\ F[a, b], \ b]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(d2\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\[Sum]\+\(i = 1\)\%n\(-\(\(2\ \[ExponentialE]\^\(1 - x[i] - a\ x[i]\)\ \
+\((\[ExponentialE]\^\(\(-a\)\ x[i]\)\/\(1 + b\ \[ExponentialE]\^\(1 - \
+x[i]\)\) - 
+                  y[i])\)\)\/\((1 + b\ \[ExponentialE]\^\(1 - \
+x[i]\))\)\^2\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Minimize[\ F[a, b]\ , \ {a, b}]\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(Minimize::"objv"\), \(\(:\)\(\ \)\), "\<\"The objective \
+function \\!\\(\\(\[Sum]\\+\\(i = 1\\)\\%n\\) \
+\\((\[ExponentialE]\\^\\(\\(\\(-a\\)\\)\\\\ \\(\\(x[i]\\)\\)\\)\\/\\(1 + \
+\\(\\(b\\\\ \\(\\(Power[\\(\\(\[LeftSkeleton] 2 \[RightSkeleton]\\)\\)]\\)\\)\
+\\)\\)\\) - \\(\\(y[i]\\)\\))\\)\\^2\\) contains a nonconstant expression \\!\
+\\(x[i]\\) independent of variables \\!\\({a, b}\\). \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"Minimize::objv\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    \(Minimize[\[Sum]\+\(i = 1\)\%n\((\[ExponentialE]\^\(\(-a\)\ x[i]\)\/\(1 \
++ b\ \[ExponentialE]\^\(1 - x[i]\)\) - y[i])\)\^2, {a, b}]\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \({d1, d2}\)], "Input"],
+
+Cell[BoxData[
+    \({\[Sum]\+\(i = 1\)\%n\(-\(\(2\ \[ExponentialE]\^\(\(-a\)\ x[i]\)\ x[
+                  i]\ \((\[ExponentialE]\^\(\(-a\)\ x[i]\)\/\(1 + b\ \
+\[ExponentialE]\^\(1 - x[i]\)\) - y[i])\)\)\/\(1 + 
+                b\ \[ExponentialE]\^\(1 - x[i]\)\)\)\), \[Sum]\+\(i = \
+1\)\%n\(-\(\(2\ \[ExponentialE]\^\(1 - x[i] - a\ x[i]\)\ \((\[ExponentialE]\^\
+\(\(-a\)\ x[i]\)\/\(1 + b\ \[ExponentialE]\^\(1 - x[i]\)\) - 
+                    y[i])\)\)\/\((1 + b\ \[ExponentialE]\^\(1 - \
+x[i]\))\)\^2\)\)}\)], "Output"]
+}, Open  ]]
+},
+FrontEndVersion->"5.1 for X",
+ScreenRectangle->{{0, 2720}, {0, 1024}},
+WindowSize->{1272, 994},
+WindowMargins->{{Automatic, 0}, {Automatic, 0}}
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1754, 51, 103, 2, 27, "Input"],
+Cell[1860, 55, 136, 2, 43, "Input"],
+Cell[1999, 59, 58, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[2082, 64, 364, 5, 60, "Input"],
+Cell[2449, 71, 843, 12, 54, "Message"],
+Cell[3295, 85, 337, 6, 54, "Message"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3669, 96, 71, 1, 43, "Input"],
+Cell[3743, 99, 83, 1, 51, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3863, 105, 79, 1, 43, "Input"],
+Cell[3945, 108, 275, 4, 65, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[4257, 117, 66, 1, 43, "Input"],
+Cell[4326, 120, 275, 4, 65, "Output"]
+}, Open  ]],
+Cell[4616, 127, 60, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[4701, 132, 66, 1, 43, "Input"],
+Cell[4770, 135, 271, 5, 65, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[5078, 145, 64, 1, 27, "Input"],
+Cell[5145, 148, 586, 9, 51, "Message"],
+Cell[5734, 159, 165, 2, 61, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[5936, 166, 41, 1, 27, "Input"],
+Cell[5980, 169, 522, 8, 65, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

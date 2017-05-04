@@ -1,0 +1,86 @@
+file_search_maxima: ["/exports/adobra/cvs/CASEY/maxima/###.mac","C:\\cygwin\\home\\dp2\\cvs\\CASEY\\maxima\\###.mac"];
+load("delta");
+P : 1/n;
+expectations : [ 	expectation(X(I,K)) = P,
+			expectation(X(I,K)*X(J,L)) = Cases(	
+								Case(In(Df(Eq(K,L)), Df(Eq(I,J))), P),
+								Case(In(Df(Eq(K,L)), Df(Eq(I),Eq(J))), P^2),
+								Case(In(Df(Eq(K),Eq(L)), Df(Eq(I,J))), 0),
+								Case(In(Df(Eq(K),Eq(L)), Df(Eq(I),Eq(J))), P^2)),
+			expectation(X(I,K)*X(J,K)*X(IP,L)) = Cases(	
+							/***K = L ***/
+								Case(In(Df(Eq(K,L)), Df(Eq(I,J,IP))), P),
+		  						/* symmetric cases */
+								SymCase(In(Df(Eq(K,L)), Df(Eq(I,J),Eq(IP))), P^2),
+								/*******/
+								Case(In(Df(Eq(K,L)), Df(Eq(J),Eq(IP),Eq(I))), P^3),
+
+							/***K # L ***/
+								Case(In(Df(Eq(K),Eq(L)), Df(Eq(I,J,IP))), 0),
+		  						/* symmetric cases */
+								SymCase(In(Df(Eq(K),Eq(L)), Df(Eq(I,IP),Eq(J))), 0),
+								/*******/
+								Case(In(Df(Eq(K),Eq(L)), Df(Eq(I,J),Eq(IP))), P^2),
+								Case(In(Df(Eq(K),Eq(L)), Df(Eq(J),Eq(IP),Eq(I))), P^3)),
+
+			expectation(X(I,K)*X(J,K)*X(IP,L)*X(JP,L)) = Cases(	
+							/***K = L ***/
+								Case(In(Df(Eq(K,L)), Df(Eq(I,J,IP,JP))), P),
+		  						/* symmetric cases */
+								SymCase(In(Df(Eq(K,L)), Df(Eq(I,J,IP),Eq(JP))), P^2),
+								/*******/
+		  						/* symmetric cases */
+								SymCase(In(Df(Eq(K,L)), Df(Eq(I,J),Eq(IP,JP))), P^2),
+								/*******/
+		  						/* symmetric cases */
+								SymCase(In(Df(Eq(K,L)), Df(Eq(I,J),Eq(IP),Eq(JP))), P^3),
+								/*******/
+								Case(In(Df(Eq(K,L)), Df(Eq(J),Eq(IP),Eq(I),Eq(JP))), P^4),
+
+							/***K # L ***/
+								Case(In(Df(Eq(K),Eq(L)), Df(Eq(I,J,IP,JP))), 0),
+		  						/* symmetric cases */
+								SymCase(In(Df(Eq(K),Eq(L)), Df(Eq(I,J,IP),Eq(JP))), 0),
+								/*******/
+		  						/* otherwise */
+								Case(In(Df(Eq(K),Eq(L)), Df(Eq(I,J),Eq(IP,JP))), P^2),
+								Case(In(Df(Eq(K),Eq(L)), Df(Eq(I,IP),Eq(J,JP))), 0),
+								Case(In(Df(Eq(K),Eq(L)), Df(Eq(I,JP),Eq(J,IP))), 0),
+								/*******/
+		  						/* otherwisw*/
+								Case(In(Df(Eq(K),Eq(L)), Df(Eq(I,J),Eq(IP),Eq(JP))), P^3),
+								Case(In(Df(Eq(K),Eq(L)), Df(Eq(I,IP),Eq(J),Eq(JP))), 0),
+								Case(In(Df(Eq(K),Eq(L)), Df(Eq(I,JP),Eq(IP),Eq(J))), 0),
+								Case(In(Df(Eq(K),Eq(L)), Df(Eq(J,IP),Eq(I),Eq(JP))), 0),
+								Case(In(Df(Eq(K),Eq(L)), Df(Eq(J,JP),Eq(I),Eq(IP))), 0),
+								Case(In(Df(Eq(K),Eq(L)), Df(Eq(IP,JP),Eq(I),Eq(J))), P^3),
+								/*******/
+								Case(In(Df(Eq(K),Eq(L)), Df(Eq(J),Eq(IP),Eq(I),Eq(JP))), P^4))];
+
+expectations2 : [	expectation(Y(I)) = 0,
+			expectation(Y(I)*Y(J)) = Cases(
+							Case (In(Df(Eq(I,J))),1),
+							Case (In(Df(Eq(I),Eq(J))), 0)),
+			expectation(Y(I)*Y(J)*Y(K)*Y(L)) = Cases (
+							Case (In(Df(Eq(I,J,K,L))), 1),
+							SymCase (In (Df( Eq(I,J), Eq(K,L))), 1) ) ];
+
+							/* All the other cases are zero*/
+makeRVFamily(X, randomHistogram, [P], expectations );
+makeRVFamily(Y, XI, [], expectations2 );
+makeRV(X,randomHistogram,[P]);
+makeRV(Y,XI,[]);
+
+sumexpand:true;
+W : sum(f(i)*Y(i),i,1,N) * sum(g(j)*Y(j),j,1,N);
+
+ZZ : sum(sum(X(i,l)*X(j,k),l,1,n),k,1,n);
+Z : sum( sum(f(i)*X(i,l)*Y(i),i,1,N) * sum(g(j)*X(j,l)*Y(j),j,1,N) ,l,1,n);
+
+print("Input : ",Z^2);
+res : ex1(Z^2);
+print("Result1 of ex: ",res);
+res2 : dRewrite ( dsimplify (res) );
+print("Result of ex: ",res2);
+
+

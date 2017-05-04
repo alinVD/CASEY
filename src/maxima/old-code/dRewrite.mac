@@ -1,0 +1,46 @@
+dRewrite(eq2):=
+block(
+[niceVars:[i1,i2,i3,i4,i5,i6,i7]],
+dRewrite2(eq2,niceVars)
+);
+
+/*****************************************************************************************************************************************************/
+dRewrite2(eq2,niceVars):=
+block(
+[leq2:eq2, lniceVars:niceVars, eqop1:0, result:eq2, argsIneq:[eq2], tempresult:0, templist:[]],
+
+if (not atom(leq2)) and length(lniceVars)>0 then
+(
+ 	eqop1:op(eq2), argsIneq:args(eq2),
+	if string(eqop1)="sum" then 
+	(
+		if length(lniceVars)>0 then
+		(
+			leq2:subst(lniceVars[1],argsIneq[2],leq2),
+			lniceVars:rest(lniceVars),
+			tempresult:ev(dRewrite2(args(leq2)[1],lniceVars)),
+			result:apply("sum",[tempresult,args(leq2)[2],args(leq2)[3],args(leq2)[4]]),
+			return (result)
+		)
+		else 
+		(
+			return (leq2)
+		)
+	) /* test for powers --reminder */
+	elseif eqop1="*" or eqop1="+" or eqop1="-" or eqop1="//" then
+	(
+		for _index:1 thru length(argsIneq) step 1 do
+		(
+			templist:append(templist,[ev(dRewrite2(argsIneq[_index],lniceVars))])
+		),
+		result:apply(eqop1,templist)
+	)
+	else
+	(
+		result:leq2
+	),
+	return (result)
+)
+else 
+return (leq2)
+);

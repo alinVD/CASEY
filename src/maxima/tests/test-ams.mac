@@ -1,0 +1,42 @@
+/*load("/exports/adobra/cvs/CASEY/maxima/casey.mac"); */
+
+/* need four families */
+makeRV(X,AMS,[]);
+makeRV(Y,AMS,[]);
+makeRV(Z,AMS,[]);
+makeRV(W,AMS,[]);
+
+RvX: sum(Rx[i]*X[i],i,1,n);
+RvY: sum(Ry[i]*Y[i],i,1,n);
+RvZ: sum(Rz[i]*Z[i],i,1,n);
+RvW: sum(Rw[i]*W[i],i,1,n);
+
+Rv1: sum(R[i]*X[i],i,1,n);
+Rv2: sum(sum(R[i,j]*X[i]*Y[j],j,1,n),i,1,n);
+Rv3: sum(sum(sum(R[i,j,k]*X[i]*Y[j]*Z[k],k,1,n),j,1,n),i,1,n);
+Rv4: sum(sum(sum(sum(R[i,j,k,l]*X[i]*Y[j]*Z[k]*W[l],l,1,n),k,1,n),j,1,n),i,1,n);
+
+P1: RvX*Rv1;
+P2: RvX*RvY*Rv2;
+P3: RvX*RvY*RvZ*Rv3;
+P4: RvX*RvY*RvZ*RvW*Rv4;
+
+EP1: dsimplify(E(P1));
+EP2: dsimplify(E(P2));
+EP3: dsimplify(E(P3));
+EP4: dsimplify(E(P4));
+
+print("E(P1):", EP1);
+print("E(P2):", EP2);
+print("E(P3):", EP3);
+print("E(P4):", EP4);
+
+VP1: dsimplify(var(P1));
+VP2: dsimplify(var(P2));
+/*VP3: dsimplify(var(P3));
+VP4: dsimplify(var(P4)); */
+
+print("var(P1):", VP1);
+print("var(P2):", VP2);
+print("var(P3):", VP3);
+print("var(P4):", VP4);

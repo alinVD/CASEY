@@ -1,0 +1,597 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.1'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     20874,        517]*)
+(*NotebookOutlinePosition[     21504,        539]*)
+(*  CellTagsIndexPosition[     21460,        535]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[{
+    \(InitRV[]\), "\[IndentingNewLine]", 
+    \(LIST\), "\[IndentingNewLine]", 
+    \(Definition[ExBase]\)}], "Input"],
+
+Cell[BoxData[
+    \({}\)], "Output"],
+
+Cell[BoxData[
+    InterpretationBox["Null",
+      Definition[ ExBase],
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \($IterationLimit\  = \ 20\), "\[IndentingNewLine]", 
+    \($RecursionLimit\  = \ 20\), "\[IndentingNewLine]", 
+    \(Trace[
+      MakeRVFamily[
+        X, "\<RandomHistogram\>", {Expectation[X] == 5}]]\)}], "Input"],
+
+Cell[BoxData[
+    \(20\)], "Output"],
+
+Cell[BoxData[
+    \(20\)], "Output"],
+
+Cell[BoxData[
+    RowBox[{"{", 
+      RowBox[{
+        TagBox[\(MakeRVFamily[X, 
+            "RandomHistogram", {Expectation[X] \[Equal] 5}]\),
+          HoldForm], ",", 
+        TagBox[\(Module[{TEMP$}, TEMP$ = LIST; Clear[LIST]; 
+            LIST = MakeRVFamily2[X, "RandomHistogram", 
+                TEMP$, {Expectation[X] \[Equal] 5}]; 
+            ExecuteRules[{Expectation[X] \[Equal] 5}]]\),
+          HoldForm], ",", 
+        RowBox[{"{", 
+          RowBox[{
+            
+            TagBox[\(TEMP$651 = LIST; Clear[LIST]; 
+              LIST = MakeRVFamily2[X, "RandomHistogram", 
+                  TEMP$651, {Expectation[X] \[Equal] 5}]; 
+              ExecuteRules[{Expectation[X] \[Equal] 5}]\),
+              HoldForm], ",", 
+            RowBox[{"{", 
+              RowBox[{
+                RowBox[{"{", 
+                  RowBox[{
+                    TagBox["LIST",
+                      HoldForm], ",", 
+                    TagBox[\({}\),
+                      HoldForm]}], "}"}], ",", 
+                TagBox[\(TEMP$651 = {}\),
+                  HoldForm], ",", 
+                TagBox[\({}\),
+                  HoldForm]}], "}"}], ",", 
+            RowBox[{"{", 
+              RowBox[{
+                TagBox[\(Clear[LIST]\),
+                  HoldForm], ",", 
+                TagBox["Null",
+                  HoldForm]}], "}"}], ",", 
+            RowBox[{"{", 
+              RowBox[{
+                RowBox[{"{", 
+                  RowBox[{
+                    RowBox[{"{", 
+                      RowBox[{
+                        TagBox["TEMP$651",
+                          HoldForm], ",", 
+                        TagBox[\({}\),
+                          HoldForm]}], "}"}], ",", 
+                    
+                    TagBox[\(MakeRVFamily2[X, 
+                        "RandomHistogram", {}, {Expectation[X] \[Equal] 5}]\),
+                      
+                      HoldForm], ",", 
+                    
+                    TagBox[\(MakeRVFamily2[X, 
+                        "RandomHistogram", {{X, 
+                            "RandomHistogram", {Expectation[X] \[Equal] 
+                                5}}}, {}]\),
+                      HoldForm], ",", 
+                    
+                    TagBox[\({{X, 
+                          "RandomHistogram", {Expectation[X] \[Equal] 5}}}\),
+                      HoldForm]}], "}"}], ",", 
+                
+                TagBox[\(LIST = {{X, 
+                        "RandomHistogram", {Expectation[X] \[Equal] 5}}}\),
+                  HoldForm], ",", 
+                
+                TagBox[\({{X, 
+                      "RandomHistogram", {Expectation[X] \[Equal] 5}}}\),
+                  HoldForm]}], "}"}], ",", 
+            RowBox[{"{", 
+              RowBox[{
+                TagBox[\(ExecuteRules[{Expectation[X] \[Equal] 5}]\),
+                  HoldForm], ",", 
+                TagBox[\(Module[{}, ExBase[X] := 5; ExecuteRules[{}]]\),
+                  HoldForm], ",", 
+                RowBox[{"{", 
+                  RowBox[{
+                    TagBox[\(ExBase[X] := 5; ExecuteRules[{}]\),
+                      HoldForm], ",", 
+                    RowBox[{"{", 
+                      RowBox[{
+                        TagBox[\(ExBase[X] := 5\),
+                          HoldForm], ",", 
+                        TagBox["Null",
+                          HoldForm]}], "}"}], ",", 
+                    RowBox[{"{", 
+                      RowBox[{
+                        TagBox[\(ExecuteRules[{}]\),
+                          HoldForm], ",", 
+                        TagBox["Done",
+                          HoldForm]}], "}"}], ",", 
+                    TagBox["Done",
+                      HoldForm]}], "}"}], ",", 
+                TagBox["Done",
+                  HoldForm]}], "}"}], ",", 
+            TagBox["Done",
+              HoldForm]}], "}"}], ",", 
+        TagBox["Done",
+          HoldForm]}], "}"}]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(LIST\)], "Input"],
+
+Cell[BoxData[
+    \({{X, 
+        "RandomHistogram", {Expectation[X[i_, l_]] \[Equal] R[l], 
+          Expectation[X[i_, l_]\ X[j_, k_]] \[Equal] 
+            d[i, j]\ d[l, k]\ R[l] + \((1 - d[i, j])\)\ \((1 - d[l, k])\)\ R[
+                  k]\ R[l] + \((1 - d[i, j])\)\ d[l, k]\ R[l]\ R[l, 1], 
+          Expectation[
+              X[i_, l_]\ X[j_, l_]\ X[m_, k_]\ X[n_, 
+                  k_]] \[Equal] \((1 - d[i, m])\)\ \((1 - d[i, n])\)\ \((1 - 
+                    d[j, m])\)\ \((1 - d[j, n])\)\ \((1 - 
+                    d[l, k])\)\ \((d[m, n]\ R[k] + \((1 - d[m, n])\)\ R[k]\ R[
+                        k, 1])\)\ \((d[i, j]\ R[l] + \((1 - d[i, j])\)\ R[
+                        l]\ R[l, 1])\) + 
+              d[l, k]\ \((\((\((1 - d[i, j])\)\ \((1 - d[i, m])\)\ d[i, 
+                              n]\ \((1 - d[j, m])\) + \((1 - d[i, j])\)\ d[i, 
+                              m]\ \((1 - d[i, n])\)\ \((1 - 
+                                d[j, n])\) + \((1 - d[i, j])\)\ \((1 - 
+                                d[i, n])\)\ d[j, 
+                              m]\ \((1 - d[j, n])\) + \((1 - 
+                                d[i, j])\)\ \((1 - d[i, m])\)\ \((1 - 
+                                d[j, m])\)\ d[j, n] + 
+                          d[i, j]\ \((1 - d[i, m])\)\ \((1 - 
+                                d[i, n])\)\ \((1 - d[m, n])\) + \((1 - 
+                                d[i, j])\)\ \((1 - d[i, m])\)\ \((1 - 
+                                d[j, m])\)\ d[m, n])\)\ R[l]\ R[l, 1]\ R[l, 
+                        2]\ \((1 - R[l, 3])\) + 
+                    R[l]\ R[l, 1]\ R[l, 2]\ R[l, 
+                        3] + \((d[i, j]\ d[i, m]\ \((1 - d[i, n])\) + 
+                          d[i, j]\ \((1 - d[i, m])\)\ d[i, 
+                              n] + \((1 - d[i, j])\)\ d[i, m]\ d[i, 
+                              n] + \((1 - d[i, j])\)\ d[i, n]\ d[j, 
+                              m] + \((1 - d[i, j])\)\ d[i, m]\ d[j, 
+                              n] + \((1 - d[i, j])\)\ d[j, m]\ d[j, n] + 
+                          d[i, j]\ \((1 - d[i, m])\)\ d[m, n])\)\ R[l]\ R[l, 
+                        1]\ \((1 - R[l, 2]\ R[l, 3])\) + 
+                    d[i, j]\ d[i, m]\ d[i, n]\ R[
+                        l]\ \((1 - 
+                          R[l, 1]\ R[l, 2]\ R[l, 3])\))\)}}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Definition[ExBase]\)], "Input"],
+
+Cell[BoxData[
+    InterpretationBox[GridBox[{
+          {GridBox[{
+                {\(ExBase[X[i_, l_]] := R[l]\)},
+                {" "},
+                {\(ExBase[X[i_, l_]\ X[j_, k_]] := 
+                    d[i, j]\ d[l, k]\ R[
+                          l] + \((1 - d[i, j])\)\ \((1 - d[l, k])\)\ R[k]\ R[
+                          l] + \((1 - d[i, j])\)\ d[l, k]\ R[l]\ R[l, 1]\)},
+                {" "},
+                {\(ExBase[
+                      X[i_, l_]\ X[j_, l_]\ X[m_, k_]\ X[n_, 
+                          k_]] := \((1 - d[i, m])\)\ \((1 - 
+                            d[i, n])\)\ \((1 - d[j, m])\)\ \((1 - 
+                            d[j, n])\)\ \((1 - 
+                            d[l, k])\)\ \((d[m, n]\ R[
+                                k] + \((1 - d[m, n])\)\ R[k]\ R[k, 
+                                1])\)\ \((d[i, j]\ R[
+                                l] + \((1 - d[i, j])\)\ R[l]\ R[l, 1])\) + 
+                      d[l, k]\ \((\((\((1 - d[i, j])\)\ \((1 - d[i, m])\)\ d[
+                                      i, n]\ \((1 - d[j, m])\) + \((1 - 
+                                        d[i, j])\)\ d[i, 
+                                      m]\ \((1 - d[i, n])\)\ \((1 - 
+                                        d[j, n])\) + \((1 - 
+                                        d[i, j])\)\ \((1 - d[i, n])\)\ d[j, 
+                                      m]\ \((1 - d[j, n])\) + \((1 - 
+                                        d[i, j])\)\ \((1 - d[i, m])\)\ \((1 - 
+                                        d[j, m])\)\ d[j, n] + 
+                                  d[i, j]\ \((1 - d[i, m])\)\ \((1 - 
+                                        d[i, n])\)\ \((1 - 
+                                        d[m, n])\) + \((1 - 
+                                        d[i, j])\)\ \((1 - d[i, m])\)\ \((1 - 
+                                        d[j, m])\)\ d[m, n])\)\ R[l]\ R[l, 
+                                1]\ R[l, 2]\ \((1 - R[l, 3])\) + 
+                            R[l]\ R[l, 1]\ R[l, 2]\ R[l, 
+                                3] + \((d[i, j]\ d[i, m]\ \((1 - d[i, n])\) + 
+                                  d[i, j]\ \((1 - d[i, m])\)\ d[i, 
+                                      n] + \((1 - d[i, j])\)\ d[i, m]\ d[i, 
+                                      n] + \((1 - d[i, j])\)\ d[i, n]\ d[j, 
+                                      m] + \((1 - d[i, j])\)\ d[i, m]\ d[j, 
+                                      n] + \((1 - d[i, j])\)\ d[j, m]\ d[j, 
+                                      n] + d[i, j]\ \((1 - d[i, m])\)\ d[m, 
+                                      n])\)\ R[l]\ R[l, 
+                                1]\ \((1 - R[l, 2]\ R[l, 3])\) + 
+                            d[i, j]\ d[i, m]\ d[i, n]\ R[
+                                l]\ \((1 - R[l, 1]\ R[l, 2]\ R[l, 3])\))\)\)}
+                },
+              GridBaseline->{Baseline, {1, 1}},
+              ColumnWidths->0.999,
+              ColumnAlignments->{Left}]}
+          },
+        GridBaseline->{Baseline, {1, 1}},
+        ColumnAlignments->{Left}],
+      Definition[ ExBase],
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(ExecuteRules[{Expectation[X] \[Equal] 5}]\)], "Input"],
+
+Cell[BoxData[
+    \(Done\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Trace[DeleteRVFamily[X, "\<RandomHistogram\>"]]\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{"{", 
+      RowBox[{
+        TagBox[\(DeleteRVFamily[X, "RandomHistogram"]\),
+          HoldForm], ",", 
+        TagBox[\(Module[{TEMP$}, TEMP$ = LIST; Clear[LIST]; 
+            LIST := DeleteRVFamily2[X, "RandomHistogram", TEMP$]; 
+            DeleteRules[X, "RandomHistogram", TEMP$]; ]\),
+          HoldForm], ",", 
+        RowBox[{"{", 
+          RowBox[{
+            
+            TagBox[\(TEMP$81 = LIST; Clear[LIST]; 
+              LIST := DeleteRVFamily2[X, "RandomHistogram", TEMP$81]; 
+              DeleteRules[X, "RandomHistogram", TEMP$81]; \),
+              HoldForm], ",", 
+            RowBox[{"{", 
+              RowBox[{
+                RowBox[{"{", 
+                  RowBox[{
+                    TagBox["LIST",
+                      HoldForm], ",", 
+                    
+                    TagBox[\(MakeRVFamily2[X, "RandomHistogram", 
+                        TEMP$79, {Expectation[X] \[Equal] 5}]\),
+                      HoldForm], ",", 
+                    RowBox[{"{", 
+                      RowBox[{
+                        TagBox["TEMP$79",
+                          HoldForm], ",", 
+                        TagBox[\({}\),
+                          HoldForm]}], "}"}], ",", 
+                    
+                    TagBox[\(MakeRVFamily2[X, 
+                        "RandomHistogram", {}, {Expectation[X] \[Equal] 5}]\),
+                      
+                      HoldForm], ",", 
+                    
+                    TagBox[\(MakeRVFamily2[X, 
+                        "RandomHistogram", {{X, 
+                            "RandomHistogram", {Expectation[X] \[Equal] 
+                                5}}}, {}]\),
+                      HoldForm], ",", 
+                    
+                    TagBox[\({{X, 
+                          "RandomHistogram", {Expectation[X] \[Equal] 5}}}\),
+                      HoldForm]}], "}"}], ",", 
+                
+                TagBox[\(TEMP$81 = {{X, 
+                        "RandomHistogram", {Expectation[X] \[Equal] 5}}}\),
+                  HoldForm], ",", 
+                
+                TagBox[\({{X, 
+                      "RandomHistogram", {Expectation[X] \[Equal] 5}}}\),
+                  HoldForm]}], "}"}], ",", 
+            RowBox[{"{", 
+              RowBox[{
+                TagBox[\(Clear[LIST]\),
+                  HoldForm], ",", 
+                TagBox["Null",
+                  HoldForm]}], "}"}], ",", 
+            RowBox[{"{", 
+              RowBox[{
+                
+                TagBox[\(LIST := 
+                    DeleteRVFamily2[X, "RandomHistogram", TEMP$81]\),
+                  HoldForm], ",", 
+                TagBox["Null",
+                  HoldForm]}], "}"}], ",", 
+            RowBox[{"{", 
+              RowBox[{
+                RowBox[{"{", 
+                  RowBox[{
+                    TagBox["TEMP$81",
+                      HoldForm], ",", 
+                    
+                    TagBox[\({{X, 
+                          "RandomHistogram", {Expectation[X] \[Equal] 5}}}\),
+                      HoldForm]}], "}"}], ",", 
+                
+                TagBox[\(DeleteRules[X, 
+                    "RandomHistogram", {{X, 
+                        "RandomHistogram", {Expectation[X] \[Equal] 5}}}]\),
+                  HoldForm], ",", 
+                
+                TagBox[\(Module[{}, \((ExBase[X])\) =. ; 
+                    DeleteRules[X, 
+                      "RandomHistogram", {{X, "RandomHistogram", {}}}]; ]\),
+                  HoldForm], ",", 
+                RowBox[{"{", 
+                  RowBox[{
+                    
+                    TagBox[\(\((ExBase[X])\) =. ; 
+                      DeleteRules[X, 
+                        "RandomHistogram", {{X, "RandomHistogram", {}}}]; \),
+                      HoldForm], ",", 
+                    RowBox[{"{", 
+                      RowBox[{
+                        TagBox[\(\((ExBase[X])\) =. \),
+                          HoldForm], ",", 
+                        TagBox["Null",
+                          HoldForm]}], "}"}], ",", 
+                    RowBox[{"{", 
+                      RowBox[{
+                        
+                        TagBox[\(DeleteRules[X, 
+                            "RandomHistogram", {{X, 
+                                "RandomHistogram", {}}}]\),
+                          HoldForm], ",", 
+                        TagBox["Done",
+                          HoldForm]}], "}"}], ",", 
+                    TagBox["Null",
+                      HoldForm]}], "}"}], ",", 
+                TagBox["Null",
+                  HoldForm]}], "}"}], ",", 
+            TagBox["Null",
+              HoldForm]}], "}"}], ",", 
+        TagBox["Null",
+          HoldForm]}], "}"}]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[""], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(MakeRVFamily[
+      X, "\<RandomHistogram\>", {Expectation[X[i_, l_]]\  == \ 
+          R[l], \[IndentingNewLine]Expectation[X[i_, l_] X[j_, k_]]\  == \ 
+          R[l] d[l, k] d[i, j] + R[l]\ R[l, 1] d[l, k] \((1 - d[i, j])\) + 
+            R[l] R[k]\ \((1 - d[i, j])\)\ \((1 - 
+                  d[l, k])\), \[IndentingNewLine]Expectation[
+            X[i_, l_] X[j_, l_] X[m_, k_] X[n_, k_]]\  == \ 
+          d[l, k] \((R[l] \((1 - R[l, 1] R[l, 2] R[l, 3])\) d[i, j] d[i, m] 
+                    d[i, n] + 
+                  R[l] R[l, 
+                      1] \((1 - 
+                        R[l, 2] R[l, 3])\) \((d[i, j] 
+                          d[i, m] \((1 - d[i, n])\) + 
+                        d[i, j] d[i, n] \((1 - d[i, m])\) + 
+                        d[i, m] d[i, n] \((1 - d[i, j])\) + 
+                        d[j, m] d[j, n] \((1 - d[i, j])\) + 
+                        d[i, j] d[m, n] \((1 - d[i, m])\) + 
+                        d[i, m] d[j, n] \((1 - d[i, j])\) + 
+                        d[i, n] d[j, m] \((1 - d[i, j])\))\)\  + \ 
+                  R[l] R[l, 1] 
+                    R[l, 2] \((1 - 
+                        R[l, 3])\) \((d[i, 
+                            j] \((1 - d[i, m])\) \((1 - d[i, n])\) \((1 - 
+                              d[m, n])\) + 
+                        d[i, m] \((1 - d[i, j])\) \((1 - d[i, n])\) \((1 - 
+                              d[j, n])\) + 
+                        d[i, n] \((1 - d[i, j])\) \((1 - d[i, m])\) \((1 - 
+                              d[j, m])\)\  + \ 
+                        d[j, m] \((1 - d[i, j])\) \((1 - d[j, n])\) \((1 - 
+                              d[i, n])\)\  + \ 
+                        d[j, n] \((1 - d[i, j])\) \((1 - d[j, m])\) \((1 - 
+                              d[i, m])\) + 
+                        d[m, n] \((1 - d[i, m])\) \((1 - d[j, m])\) \((1 - 
+                              d[i, j])\))\)\  + \ 
+                  R[l] R[l, 1] R[l, 2] R[l, 3]\ )\) + \((1 - 
+                  d[l, k])\) \((1 - d[i, m])\) \((1 - d[i, n])\) \((1 - 
+                  d[j, m])\) \((1 - d[j, n])\) \((\ 
+                R[l] d[i, j] + 
+                  R[l] R[l, 1] \((1 - d[i, j])\))\) \((R[k] d[m, n] + 
+                  R[k] R[k, 1] \((1 - d[m, n])\))\)}]\)], "Input"],
+
+Cell[BoxData[
+    \(Done\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(\(Av[f_, l_]\  := \ 
+      Module[\ {i}, \ 
+        Sum[\ X[i, l]\ f[i], \ {i, N}]/J[l]]\)\(\[IndentingNewLine]\)
+    \) (*\ 
+      estimate\ of\ the\ size\ of\ the\ join\ *) \), "\[IndentingNewLine]", 
+    \(M\  := \ 
+      Module[\ {l}, \ Sum[\ Av[f, l]\ Av[g, l]\ J[l], \ {l, n}]]\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(Clear[R, J]\[IndentingNewLine] (*\ 
+      J[l_]\  := \ N/n\ \ *) \), "\[IndentingNewLine]", 
+    \(R[l_]\  := \ J[l]/N\), "\[IndentingNewLine]", 
+    \(R[l_, i_]\  := R[l]\  (*\((J[l] - i)\)/\((N - i)\)\ \ *) \  (*\ 
+      Should\ be\  - 
+        i\ both\ up\ and\ down\ *) \[IndentingNewLine] (*\[IndentingNewLine]R[
+          l_]\  := \ \(1/n\[IndentingNewLine]
+        R[l_, i_]\  := \ 
+          1/n\)\[IndentingNewLine]*) \), "\[IndentingNewLine]", 
+    \(M\), "\[IndentingNewLine]", 
+    \(MM = Ex[M]\), "\[IndentingNewLine]", 
+    \(DSimplify[MM]\)}], "Input"],
+
+Cell[BoxData[
+    \(\[Sum]\+\(l$561 = 1\)\%n\(\( 
+          1\/J[l$561]\)\((\((\[Sum]\+\(i$579 = 1\)\%N f[i$579]\ X[i$579, 
+                  l$561])\)\ \(\[Sum]\+\(i$586 = 1\)\%N g[i$586]\ X[i$586, 
+                l$561]\))\)\)\)], "Output"],
+
+Cell[BoxData[
+    \(\[Sum]\+\(l$593 = 1\)\%n\(\[Sum]\+\(i$611 = 1\)\%N\(\[Sum]\+\(i$618 = 1\
+\)\%N\(\( 1\/J[l$593]\)\((f[i$611]\ g[
+                i$618]\ \((\(d[i$611, i$618]\ J[l$593]\)\/N + \(\((1 - \
+d[i$611, i$618])\)\ J[l$593]\^2\)\/N\^2)\))\)\)\)\)\)], "Output"],
+
+Cell[BoxData[
+    \(\(P[f\ g]\ \((n\ N - S[J])\) + S[f]\ S[g]\ S[J]\)\/N\^2\)], "Output"]
+}, Open  ]]
+},
+FrontEndVersion->"5.1 for X",
+ScreenRectangle->{{0, 1600}, {0, 1200}},
+WindowSize->{520, 600},
+WindowMargins->{{68, Automatic}, {Automatic, 30}}
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[1776, 53, 133, 3, 59, "Input"],
+Cell[1912, 58, 36, 1, 27, "Output"],
+Cell[1951, 61, 105, 3, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2093, 69, 235, 5, 75, "Input"],
+Cell[2331, 76, 36, 1, 27, "Output"],
+Cell[2370, 79, 36, 1, 27, "Output"],
+Cell[2409, 82, 3912, 99, 347, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[6358, 186, 37, 1, 27, "Input"],
+Cell[6398, 189, 2320, 37, 363, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[8755, 231, 51, 1, 27, "Input"],
+Cell[8809, 234, 3111, 54, 421, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[11957, 293, 74, 1, 27, "Input"],
+Cell[12034, 296, 38, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[12109, 302, 80, 1, 27, "Input"],
+Cell[12192, 305, 4721, 118, 427, "Output"]
+}, Open  ]],
+Cell[16928, 426, 26, 0, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[16979, 430, 2279, 40, 443, "Input"],
+Cell[19261, 472, 38, 1, 27, "Output"]
+}, Open  ]],
+Cell[19314, 476, 320, 7, 59, "Input"],
+
+Cell[CellGroupData[{
+Cell[19659, 487, 588, 12, 203, "Input"],
+Cell[20250, 501, 243, 4, 112, "Output"],
+Cell[20496, 507, 270, 4, 155, "Output"],
+Cell[20769, 513, 89, 1, 44, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

@@ -1,0 +1,54 @@
+main(filename):=
+block
+(
+   makeRVFamily(x, randomHistogram, [f], explist2),
+   print("******************************"),
+   print("rvflist:",rvflist),
+   [explst:makeRV(x1,randomHistogram,[f])],
+   print("rvlistBase:",rvlistBase),
+   print("rvlist:",rvlist),
+   print("eq:",eq),
+   print("explst:",explst),
+   res1:ex1(eq,explst),
+   res2:drewrite(res1),
+   res3:factor(res2),
+   print("After Simplification:",res3)
+
+/*******
+
+   makeRVFamily(z,histogram,[v,w],[expectation(I,L)=r(v,w)]),
+   makeRVFamily(z,histogram,[m,n],[expectation(z)=d(m,n)]),
+   makeRV(rh,histogram,[a,b,c,d]),
+   print("After MakeRV1:",rvlist,rvflist)
+*******/
+
+/*******
+   print("******************************"),
+   print("Input:",eq),
+   makeRVFamily(x, randomHistogram, [r], explist1),
+   print("******************************"),
+   print("rvflist:",rvflist),
+   makeRV(x,randomHistogram,[r]),
+   print("******************************"),
+   print("rvlist:",rvlist),
+   print("******************************"),
+   print("explist:",explist),
+*******/
+
+/******** latest
+   makeRVFamily(x, randomHistogram, [r], explist2),
+   print("******************************"),
+   print("rvflist:",rvflist),
+   [explst:makeRV(x1,randomHistogram,[r1])],
+   print("rvlistBase:",rvlistBase),
+   print("rvlist:",rvlist),
+   res1:ex1(eq,explst),
+   res1:covar(eq,eq,explst),
+   res2:drewrite(res1),
+   print("After Simplification:",res2) 
+
+   res3:var(eq),
+   res4:drewrite(res3),
+   print("After Simplification:",res4)
+*********/
+);	

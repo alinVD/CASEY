@@ -1,0 +1,328 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.1'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     12416,        278]*)
+(*NotebookOutlinePosition[     13048,        300]*)
+(*  CellTagsIndexPosition[     13004,        296]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell[BoxData[""], "Input"],
+
+Cell[BoxData[{
+    \(\(Clear[d];\)\), "\[IndentingNewLine]", 
+    \(d[i_, j_] := 1 /; i \[Equal] j\), "\[IndentingNewLine]", 
+    \(d[i_, j_] := 0 /; i \[NotEqual] j\), "\[IndentingNewLine]", 
+    \(SetAttributes[d, \ Orderless]\), "\[IndentingNewLine]", 
+    \(\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(Clear[dsimpf, dExp, \ dRewrite, \ dsmpf];\)\[IndentingNewLine] (*\ 
+      function\ to\ expand\ terms\ under\ sums\ so\ that\ dsimpf\ can\ take\ \
+care\ of\ them\ *) \[IndentingNewLine] (*\ 
+      breaks\ large\ sums\ into\ little\ sums\ as\ well\ *) \), "\
+\[IndentingNewLine]", 
+    \(dExp[HoldPattern[Sum[x_, {i_, N__}, \ \ L__]]]\  := \ 
+      Sum[Evaluate[dExp[Sum[x, L]], \ {i, N}]]\), "\[IndentingNewLine]", 
+    \(dExp[HoldPattern[Sum[x_, {i_, N__}]]]\  := \ 
+      dBreakSum[\ 
+        Sum[Evaluate[dExp[Expand[x]]], \ {i, N}]]\), "\[IndentingNewLine]", 
+    \(dExp[x_\ y_]\  := \ dExp[x]\ dExp[y]\), "\[IndentingNewLine]", 
+    \(dExp[x_\  + \ y_]\  := \ dExp[x]\  + dExp[y]\), "\[IndentingNewLine]", 
+    \(dExp[x_^n_]\  := \ dExp[x]^n /; \ n > 0\), "\[IndentingNewLine]", 
+    \(\(\(dExp[x_]\  := \ x\)\(\[IndentingNewLine]\)\(\[IndentingNewLine]\)
+    \)\  (*\ 
+      push\ the\ sums\ inside\ as\ much\ as\ possible\ *) \), "\
+\[IndentingNewLine]", 
+    \(dBreakSum[HoldPattern[Sum[c_\ x_, {i_, N__}]]]\  := \ 
+      c\ dBreakSum[Sum[x, {i, N}]] /; \ 
+        FreeQ[c, i]\), "\[IndentingNewLine]", 
+    \(dBreakSum[HoldPattern[Sum[x_ + y_, L__]]]\  := \ 
+      dBreakSum[Sum[x, L]] + dBreakSum[Sum[y, L]]\), "\[IndentingNewLine]", 
+    \(\(\(dBreakSum[x_]\  := \ 
+      x\)\(\[IndentingNewLine]\)\(\[IndentingNewLine]\)
+    \) (*\ rewriting\ rules\ to\ simplify\ formulas; \ 
+      can\ apply\ only\ on\ clean\ formulas\ *) \), "\[IndentingNewLine]", 
+    \(dRewrite[HoldPattern[Sum[f_[i_], {i_, N__}]]]\  := \ 
+      P[f]\), "\[IndentingNewLine]", 
+    \(dRewrite[HoldPattern[Sum[f_[i_]^n_, {i_, N__}]]] := 
+      P[f^n]\), "\[IndentingNewLine]", 
+    \(dRewrite[HoldPattern[Sum[f_[i_] g_[i_], {i_, N__}]]] := 
+      P[f\ g]\), "\[IndentingNewLine]", 
+    \(dRewrite[HoldPattern[Sum[f_[i_]^n_\ g_[i_], {i_, N__}]]]\  := \ 
+      P[f^n\ g]\), "\[IndentingNewLine]", 
+    \(dRewrite[HoldPattern[Sum[f_[i_]^n_\ g_[i_]^m_, {i_, N__}]]] := 
+      P[f^n\ g^m]\), "\[IndentingNewLine]", 
+    \(dRewrite[HoldPattern[Sum[x_\ f_[i_]^n_\ g_[i_]^m_, {i_, N__}]]] := 
+      x\ P[f^n\ g^m] /; \ FreeQ[x, i]\), "\[IndentingNewLine]", 
+    \(dRewrite[x_\ y_]\  := \ 
+      dRewrite[x]\ dRewrite[y]\), "\[IndentingNewLine]", 
+    \(dRewrite[x_^n_]\  := \ 
+      dRewrite[x]^n\  /; \ n > 0\), "\[IndentingNewLine]", 
+    \(dRewrite[x_ + y_]\  := \ 
+      dRewrite[x]\  + \ dRewrite[y]\), "\[IndentingNewLine]", 
+    \(\(\(dRewrite[x_]\  := \ x\)\(\[IndentingNewLine]\)
+    \)\), "\[IndentingNewLine]", 
+    \(dRewriteCleanIndex[HoldPattern[Sum[x_, {i_, N__}]], {h_, t__}] := 
+      Sum[Evaluate[dRewriteCleanIndex[x /. {i \[Rule] h}, {t}]], {h, 
+          N}]\), "\n", 
+    \(dRewriteCleanIndex[HoldPattern[Sum[x_, {i_, N__}, R__]], {h_, t__}] := 
+      Sum[Evaluate[dRewriteCleanIndex[Sum[x /. {i \[Rule] h}, R], {t}]], {h, 
+          N}]\), "\n", 
+    \(dRewriteCleanIndex[x_\ y_, l__] := 
+      dRewriteCleanIndex[x, l]\ dRewriteCleanIndex[y, l]\), "\n", 
+    \(dRewriteCleanIndex[x_ + y_, l__] := 
+      dRewriteCleanIndex[x, l] + dRewriteCleanIndex[y, l]\), "\n", 
+    \(dRewriteCleanIndex[x_^n_Integer, l__] := 
+      dRewriteCleanIndex[x, l]^n\), "\n", 
+    \(\(\(dRewriteCleanIndex[x_, __] := x\)\(\[IndentingNewLine]\)
+    \)\), "\[IndentingNewLine]", 
+    \(dsmpf[d[i_, j_]^n_]\  := \ 
+      d[i, j] /; \ n > 0\), "\[IndentingNewLine]", 
+    \(dsmpf[HoldPattern[Sum[\ d[i_, j_], {i_, N__}]]] := 
+      d[j, j]\), "\[IndentingNewLine]", 
+    \(dsmpf[HoldPattern[Sum[\ d[j_, i_], {i_, N__}]]] := 
+      d[j, j]\), "\[IndentingNewLine]", 
+    \(dsmpf[HoldPattern[Sum[x_\ d[i_, j_], {i_, N__}]]] := \ 
+      dsmpf[x /. {i \[Rule] j}]\ \), "\[IndentingNewLine]", 
+    \(dsmpf[HoldPattern[Sum[x_\ d[j_, i_], {i_, N__}]]] := \ 
+      dsmpf[x /. {i \[Rule] j}]\), "\[IndentingNewLine]", 
+    \(dsmpf[HoldPattern[Sum[x_\ , \ {i_, N__}]]]\  := \ 
+      Sum[Evaluate[dsmpf[x]], {i, N}]\  (*\ 
+      need\ fixed\ point\ call\ otherwise\ some\ simplifications\ are\ missed\
+\ *) \), "\[IndentingNewLine]", 
+    \(dsmpf[x_\ y_]\  := \ dsmpf[x]\ dsmpf[y]\), "\[IndentingNewLine]", 
+    \(dsmpf[x_\  + y_]\  := \ 
+      dsmpf[x]\  + \ dsmpf[y]\), "\[IndentingNewLine]", 
+    \(dsmpf[x_^n_]\  := \ dsmpf[x]^n\  /; \ n > 0\), "\[IndentingNewLine]", 
+    \(dsmpf[x_]\  := \ x\), "\[IndentingNewLine]", 
+    \(\)}], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(General::"spell1"\), \(\(:\)\(\ \)\), "\<\"Possible spelling \
+error: new symbol name \\\"\\!\\(dExp\\)\\\" is similar to existing symbol \\\
+\"\\!\\(Exp\\)\\\". \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\
+\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::spell1\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"spell1"\), \(\(:\)\(\ \)\), "\<\"Possible spelling \
+error: new symbol name \\\"\\!\\(dsmpf\\)\\\" is similar to existing symbol \
+\\\"\\!\\(dsimpf\\)\\\". \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::spell1\\\"]\\)\"\>"}]], "Message"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(\(DSimplify[x_] := \ 
+      Module[\ {y, z}, \ y = FixedPoint[dExp, x]; \ 
+        z = FixedPoint[dsmpf, \ y]; \ 
+        Simplify[dRewrite[Simplify[z]]]\ ]\)\(\[IndentingNewLine]\)
+    \)\), "\[IndentingNewLine]", 
+    \(DSimplifyCI[x_] := 
+      Module[{y, z}, y = FixedPoint[dExp, x]; \ z = FixedPoint[dsmpf, y]; \ 
+        Simplify[
+          dRewriteCleanIndex[
+            Simplify[z], {i, j, k, l, m, n, o, p, q}]]]\)}], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(General::"spell1"\), \(\(:\)\(\ \)\), "\<\"Possible spelling \
+error: new symbol name \\\"\\!\\(DSimplify\\)\\\" is similar to existing \
+symbol \\\"\\!\\(Simplify\\)\\\". \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::spell1\\\"]\\)\"\>"}]], "Message"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(DSimplifySJ[x_]\  := \ 
+      Simplify[\ rewriteSJ[DSimplify[x]]]\), "\[IndentingNewLine]", 
+    \(rewriteSJ[x_]\  := \ 
+      x\  /. \ SJ[y_] \[Rule] SqErr[y] + S[y]^2/N\)}], "Input"],
+
+Cell[BoxData[
+    \(\(\( (*\ Definition\ of\ expectation; \ X, Y, Z, 
+      W\ are\ the\ only\ allowed\ random\ vectors; \ 
+      Each\ vector\ is\ independent\ of\ the\ other\ \ \[IndentingNewLine]\
+*) \)\(\[IndentingNewLine]\)\(Clear[Ex, Var, \ Cov, \ URExp, \ 
+      UniqueReplacementsEL, \ UniqueReplacements, 
+      ExU]\[IndentingNewLine]\  (*\ 
+      URExp\ is\ Unique\ Rewrite\ and\ Expansion\ *) \[IndentingNewLine]\
+\[IndentingNewLine]
+    UniqueReplacementsEL[\ {i_, N__}\ ]\  := \ 
+      i \[Rule] \ Unique[]\ \[IndentingNewLine]
+    UniqueReplacements[L_]\  := \ 
+      Map[UniqueReplacementsEL, L]\[IndentingNewLine]\[IndentingNewLine]
+    URExp[\ HoldPattern[Sum[x_, L__]]]\  := \ 
+      Module[{y, r, z, \ Lp}, \ y = \ URExp[x]; \ 
+        r = UniqueReplacements[{L}]; \ \((\ 
+          Sum[Evaluate[y], L] /. r)\)]\[IndentingNewLine] (*\(\ \)\(z := {L} /. 
+            Evaluate[r]; \ 
+        Sum[Evaluate[\ Prepend[\ z, \ y /. r]]]\)\(]\)*) \[IndentingNewLine]
+    URExp[x_^n_]\  := \ 
+      URExp[x]\ URExp[x^\((n - 1)\)] /; \ n > 1\[IndentingNewLine]
+    URExp[\ x_\ y_]\  := \ URExp[x]\ URExp[y]\[IndentingNewLine]
+    URExp[x_ + y_]\  := \ URExp[x]\  + \ URExp[y]\[IndentingNewLine]
+    URExp[x_^n_\ ]\  := 
+      Module[\ {y}, \ y = Evaluate[\ URExp[x]]; \ 
+          y\ \ URExp[x^\((n - 1)\)]]\  /; \ n > 1\[IndentingNewLine]
+    URExp[x_\ ]\  := \ x\[IndentingNewLine]\[IndentingNewLine]
+    ExU[HoldPattern[Sum[x_, L__]]] := 
+      Sum[Evaluate[ExU[x]], 
+        L]\[IndentingNewLine] (*Push\ everything\ inside\ and\ collapse\ \
+multiple\ sums*) \[IndentingNewLine]
+    ExU[x_\ HoldPattern[Sum[y_, L__]]] := 
+      Sum[Evaluate[ExU[x\ y]], L]\[IndentingNewLine] (*\ 
+      Ex[Sum[x_, {i_, N_}]^2]\  := \ 
+        Sum[\ Evaluate[Ex[x\ \((x /. i \[Rule] ip)\)]], {i, N}, {ip, 
+            N}]\ *) \[IndentingNewLine]
+    ExU[x_\ y_] := 
+      ExU[x]\ ExU[
+            y] /; \((MemberQ[x, X[__]] || 
+              MatchQ[x, X[__]])\) && \((FreeQ[y, 
+                X[__]]\  && \ \(! MatchQ[y, X[__]]\))\)\[IndentingNewLine]
+    ExU[x_\ y_]\  := \ 
+      ExU[x]\ ExU[
+            y]\  /; \((MemberQ[x, Y[__]]\  || \ MatchQ[x, Y[__]])\) && \((\ 
+            FreeQ[y, 
+                Y[__]]\  && \ \(! MatchQ[y, Y[__]]\))\)\[IndentingNewLine]
+    ExU[x_\ y_] := 
+      ExU[x]\ ExU[
+            y] /; \((MemberQ[x, Z[__]]\  || \ 
+              MatchQ[x, Z[__]])\) && \((FreeQ[y, 
+                Z[__]]\  && \ \(! MatchQ[y, Z[__]]\))\)\[IndentingNewLine]
+    ExU[x_\ y_] := 
+      ExU[x]\ ExU[
+            y] /; \((MemberQ[x, W[__]]\  || \ 
+              MatchQ[x, W[__]])\) && \((FreeQ[y, 
+                W[__]]\  && \ \(! MatchQ[y, W[__]]\))\)\[IndentingNewLine]
+    ExU[x_\  + \ y_]\  := \ ExU[x] + ExU[y]\[IndentingNewLine]
+    ExU[c_\ \ x_]\  := \ 
+      c\ ExU[x] /; \ 
+        FreeQ[c, X]\  && \ FreeQ[c, Y]\  && \ FreeQ[c, Z]\  && \ 
+          FreeQ[c, W]\[IndentingNewLine]
+    ExU[c_]\  := \ 
+      c\  /; \ FreeQ[c, X] && FreeQ[c, Y] && FreeQ[c, Z] && 
+          FreeQ[c, W]\[IndentingNewLine]
+    ExU[x_]\  := 
+      Module[\ {y}, \ \ y = Expand[x]; \ 
+        If[\ x === y, \ ExBase[x]\ , \ ExU[y]]\ ]\  (*\ 
+      apply\ the\ base\ rules\ if\ no\ simplification\ works\ \
+*) \[IndentingNewLine]\[IndentingNewLine]
+    Ex[x_]\  := \ 
+      Module[\ {y}, \ y = URExp[x]; \ 
+        ExU[y]\ ]\[IndentingNewLine]\[IndentingNewLine] (*\ 
+      defining\ variance\ and\ \(\(covariance\)\(.\)\)\ \
+*) \[IndentingNewLine]
+    Var[x_]\  := \ Ex[x^2] - Ex[x]^2\[IndentingNewLine]
+    Cov[\ x_, \ y_]\  := \ Ex[\ x\ y]\  - \ Ex[x]\ Ex[y]\)\)\)], "Input"],
+
+Cell[BoxData[{
+    \(Clear[\ CleanupSums\ ]\), "\[IndentingNewLine]", 
+    \(CleanupSums[\ HoldPattern[Sum[x_, {i_, N__}]]] := 
+      N\ x /; \ FreeQ[x, i]\), "\n", 
+    \(CleanupSums[\ HoldPattern[Sum[x_, {i_, N__}, \ \ L__]]]\  := \ 
+      N\ Sum[x, L] /; \ FreeQ[x, i]\), "\[IndentingNewLine]", 
+    \(CleanupSums[x_\ y_]\  := \ CleanupSums[x]\ CleanupSums[y]\), "\n", 
+    \(CleanupSums[x_^n_]\  := \ CleanupSums[x]^n\  /; \ n > 0\), "\n", 
+    \(CleanupSums[x_ + y_]\  := \ 
+      CleanupSums[x]\  + \ CleanupSums[y]\), "\n", 
+    \(CleanupSums[x_]\  := \ x\)}], "Input"],
+
+Cell[BoxData[""], "Input"]
+},
+FrontEndVersion->"5.1 for X",
+ScreenRectangle->{{0, 2720}, {0, 1024}},
+WindowSize->{1106, 882},
+WindowMargins->{{114, Automatic}, {Automatic, 19}}
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1754, 51, 26, 0, 27, "Input"],
+Cell[1783, 53, 276, 5, 91, "Input"],
+
+Cell[CellGroupData[{
+Cell[2084, 62, 4333, 80, 747, "Input"],
+Cell[6420, 144, 355, 5, 20, "Message"],
+Cell[6778, 151, 359, 5, 20, "Message"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[7174, 161, 459, 10, 75, "Input"],
+Cell[7636, 173, 365, 5, 20, "Message"]
+}, Open  ]],
+Cell[8016, 181, 205, 4, 43, "Input"],
+Cell[8224, 187, 3580, 75, 555, "Input"],
+Cell[11807, 264, 576, 10, 123, "Input"],
+Cell[12386, 276, 26, 0, 27, "Input"]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

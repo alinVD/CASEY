@@ -1,0 +1,24 @@
+
+/* Given three relations R1, R2 and S
+   copmpute estimates of sampling Z1(R1,S) adn Z2(R2,S)
+   then compute variances and covariance
+
+*/
+
+makeRV(X1, UniformSamplingWithoutReplacement, [N1,N1p]);
+makeRV(X2, UniformSamplingWithoutReplacement, [N2,N2p]);
+makeRV(Y, UniformSamplingWithoutReplacement, [M,Mp]);
+
+Z1:  N1*M/(N1p*Mp)*sum( sum( f(i,j)*X1(i)*Y(j), i,1,N1), j,1,M);
+Z2:  N2*M/(N2p*Mp)*sum( sum( f(i,j)*X2(i)*Y(j), i,1,N2), j,1,M);
+
+print("E(Z1)",makeTensor(dsimplify(E(Z1))));
+print("E(Z1)",makeTensor(dsimplify(E(Z1))));
+
+
+print("Var(Z1)", makeTensor(dsimplify(var(Z1)))),
+print("Var(Z2)", makeTensor(dsimplify(var(Z2)))),
+print("Cov(Z1,Z2)", makeTensor(dsimplify(covar(Z1,Z2)))),
+true;
+
+

@@ -1,0 +1,92 @@
+/* Specifications for various types of sampling random variables */
+/* X(i) is the frequency random variable. For most sampling */
+
+/* Bernouli sampling */
+/* Parameters:
+     p: probability that item I is sampled
+*/
+expectations : [
+  expectation(X[I]) = p,
+  expectation(X[I]*X[J]) = Cases(
+    Case( In( Df( Eq(I,J) ) ), p),
+    Case( In( Df( Eq(I), Eq(J) ) ), p^2)
+    )
+  ];
+
+makeRVFamily(X, BernouliSampling, [p], expectations);
+
+/* Sampling without replacement */
+/* Parameters:
+     N:  size of the population
+     Np: size of the sample
+
+   Np has to be smaller or equal to N
+*/
+expectations : [
+  expectation(X[I]) = Np/N,
+  expectation(X[I]*X[J]) = Cases(
+    Case( In( Df( Eq(I,J) ) ), Np/N),
+    Case( In( Df( Eq(I), Eq(J) ) ), Np/N*(Np-1)/(N-1))
+    )
+  ];
+
+makeRVFamily(X, UniformSamplingWithoutReplacement, [N,Np], expectations);
+
+
+/* Generic sampling */
+/* Parameters:
+    e,a,b
+ */
+
+expectations : [
+  expectation(X[I]) = e,
+  expectation(X[I]*X[J]) = Cases(
+    Case( In( Df( Eq(I,J) ) ), b),
+    Case( In( Df( Eq(I), Eq(J) ) ), a)
+    )
+  ];
+
+makeRVFamily(X, GenericSampling, [a,b,e], expectations);
+
+
+/* Sampling with replacement */
+/* Parameters:
+     N:  size of the population
+     Np: size of the sample
+*/
+
+expectations : [
+  expectation(X[I]) = Np/N,
+  expectation(X[I]*X[J]) = Cases(
+    Case( In( Df( Eq(I,J) ) ), Np*(N-1+Np)/N^2),
+    Case( In( Df( Eq(I), Eq(J) ) ), Np^2/N^2)
+    )
+  ];
+
+makeRVFamily(X, UniformSamplingWithReplacement, [N,Np], expectations);
+
+
+
+/* Poisson sampling. Like Bernouli but has different probabilities/event */
+/* Parameters:
+    p: vector of probabilities, one for each tuple i
+*/
+
+
+expectations : [
+  expectation(X[I]) = p[I],
+  expectation(X[I]*X[J]) = Cases (
+    Case( In( Df( Eq(I,J) ) ), p[I] ),
+    Case( In( Df( Eq(I), Eq(J)) ), p[I]*p[J] )
+    ),
+
+  expectation(X[I]*X[J]*X[K]*X[L]) = Cases (
+    Case( In( Df( Eq(I,J,K,L) ) ), p[I]),
+    SymCase( In( Df( Eq(I,J,K), Eq(L) ) ), p[I]*p[K] ),
+    SymCase( In( Df( Eq(I,J), Eq(K), Eq(L) ) ), p[I]*p[K]*p[L]),
+    Symcase( In( Df( Eq(I,J), Eq(K,L) ) ), p[I]*p[K] ),
+    Case( In( Df( Eq(I), Eq(J), Eq(K), Eq(L) ) ), p[I]*p[J]*p[K]*p[L])
+    )
+];
+
+makeRVFamily(X, PoissonSampling, [p], expectations);
